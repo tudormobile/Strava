@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strava", "src\Strava\Strava.csproj", "{22323455-161D-4515-9509-675A3663FEB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strava.Tests", "src\Strava.Tests\Strava.Tests.csproj", "{693B1AB8-3D1E-4C87-B526-BEE1728BD166}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22323455-161D-4515-9509-675A3663FEB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22323455-161D-4515-9509-675A3663FEB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22323455-161D-4515-9509-675A3663FEB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22323455-161D-4515-9509-675A3663FEB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693B1AB8-3D1E-4C87-B526-BEE1728BD166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693B1AB8-3D1E-4C87-B526-BEE1728BD166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693B1AB8-3D1E-4C87-B526-BEE1728BD166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693B1AB8-3D1E-4C87-B526-BEE1728BD166}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12D19AB5-50A8-4413-ABDE-3610705A6351}
+	EndGlobalSection
+EndGlobal

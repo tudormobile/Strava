@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <MajorMinorVer>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\..\version.txt').Trim())</MajorMinorVer>
+    <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
+    <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
+    <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
+    <FileVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
+    <Authors>WH Tudor</Authors>
+    <Title>Strava API Library</Title>
+    <Description>Strava API libraries and clients</Description>
+    <Copyright>COPYRIGHT © TUDORMOBILE</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Strava;Tudormobile</PackageTags>
+    <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
+  </PropertyGroup>
+
+  <!-- For unit testing (change later ?? ) -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Strava.Tests" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'!='Release'">
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <WriteLinesToFile Lines="$(PackageVersion)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
+  </Target>
+</Project>
