@@ -7,7 +7,8 @@ on:
   pull_request:
     branches: [ "main" ]
 permissions: write-all
-env: SOURCE_ROOT: src/Strava
+env: 
+  SOURCE_ROOT: src/Strava
 jobs:
   build:
     name: Build and Test Library
