@@ -1,9 +1,12 @@
 # Strava
 Strava API libraries and clients
 
-[ Workflow Badges go here ]
+[![Build and Deploy](https://github.com/tudormobile/Strava/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tudormobile/Strava/actions/workflows/dotnet.yml)  
+[![Publish Docs](https://github.com/tudormobile/Strava/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/Strava/actions/workflows/docs.yml)  
 
-Note: This repo/code is experimental, incomplete, in its initial draft state.
+Copyright&copy;Tudormobile  
+> [!NOTE]  
+> This repo/code is experimental, incomplete, in its initial draft state.
 
 ### Quick Start - Client
 ```
