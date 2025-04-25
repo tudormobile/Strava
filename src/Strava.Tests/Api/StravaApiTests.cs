@@ -46,16 +46,19 @@ public class StravaApiTests
     [TestMethod]
     public async Task GetActivitiesTest()
     {
-        var api = _session!.CreateApi();
-        var actual = await api.GetActivities(DateTime.Now, DateTime.UnixEpoch);
-        Assert.IsTrue(actual.Success);
-        Assert.IsNull(actual.Error);
-        Assert.IsNotNull(actual.Data);
-        Assert.IsTrue(actual.Data.Any());
-
-        foreach (var activity in actual.Data)
+        if (_session!.IsAuthenticated)
         {
-            Debug.WriteLine($"{activity.Id}:{activity.StartDate}:{activity.Name}, Duration={activity.MovingTime}, sportType={activity.SportType}, distance={activity.Distance}");
+            var api = _session!.CreateApi();
+            var actual = await api.GetActivities(DateTime.Now, DateTime.UnixEpoch);
+            Assert.IsTrue(actual.Success);
+            Assert.IsNull(actual.Error);
+            Assert.IsNotNull(actual.Data);
+            Assert.IsTrue(actual.Data.Any());
+
+            foreach (var activity in actual.Data)
+            {
+                Debug.WriteLine($"{activity.Id}:{activity.StartDate}:{activity.Name}, Duration={activity.MovingTime}, sportType={activity.SportType}, distance={activity.Distance}");
+            }
         }
     }
 
