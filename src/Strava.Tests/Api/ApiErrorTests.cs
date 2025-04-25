@@ -1,4 +1,5 @@
 ﻿using Tudormobile.Strava.Api;
+using Tudormobile.Strava.Model;
 
 namespace Strava.Tests.Api
 {
@@ -14,6 +15,14 @@ namespace Strava.Tests.Api
             Assert.AreEqual(message, target.Message);
             Assert.AreEqual(error, target.Exception);
             Assert.AreNotEqual(message, target.Exception.Message);
+        }
+
+        [TestMethod]
+        public void ConstructorTestWithFault()
+        {
+            var fault = new Fault();
+            var target = new ApiError(fault);
+            Assert.AreEqual(fault, target.Fault);
         }
 
         [TestMethod]

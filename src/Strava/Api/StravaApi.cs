@@ -50,21 +50,65 @@ internal class StravaApiImpl : IStravaApi
         _session = session;
     }
 
-    Task<ApiResult<DetailedActivity>> IStravaApi.GetActivity(long id, bool? includeAllEfforts)
+    async Task<ApiResult<DetailedActivity>> IStravaApi.GetActivity(long id, bool? includeAllEfforts)
     {
-        throw new NotImplementedException();
+        // try and authenticate first
+        if (!_session.IsAuthenticated)
+        {
+            var result = await _session.RefreshAsync();
+            if (!result.Success)
+            {
+                return new ApiResult<DetailedActivity>(error: result.Error);
+            }
+        }
+        return new ApiResult<DetailedActivity>(error: new ApiError(new NotImplementedException()));
     }
 
-    Task<ApiResult<DetailedActivity>> IStravaApi.UpdateActivity(long id, UpdatableActivity activity)
+    async Task<ApiResult<DetailedActivity>> IStravaApi.UpdateActivity(long id, UpdatableActivity activity)
     {
-        throw new NotImplementedException();
+        // try and authenticate first
+        if (!_session.IsAuthenticated)
+        {
+            var result = await _session.RefreshAsync();
+            if (!result.Success)
+            {
+                return new(error: result.Error);
+            }
+        }
+        return new ApiResult<DetailedActivity>(error: new ApiError(new NotImplementedException()));
+
     }
 
-    Task<ApiResult<List<SummaryActivity>>> IStravaApi.GetActivities(DateTime before, DateTime after, int? page, int? perPage)
+    // http get "https://www.strava.com/api/v3/athlete/activities?before=&after=&page=&per_page=" "Authorization: Bearer [[token]]"
+    async Task<ApiResult<List<SummaryActivity>>> IStravaApi.GetActivities(DateTime before, DateTime after, int? page, int? perPage)
     {
-        //ToUnixTimeSeconds()
-        new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
-        return Task.FromResult(new ApiResult<List<SummaryActivity>>(null, new ApiError(new NotImplementedException())));
+        if (!_session.IsAuthenticated)
+        {
+            var result = await _session.RefreshAsync();
+            if (!result.Success)
+            {
+                return new(error: result.Error);
+            }
+        }
+        var client = new HttpClient();
+        var beforeOffset = new DateTimeOffset(before).ToUnixTimeSeconds();
+        var afterOffset = new DateTimeOffset(after).ToUnixTimeSeconds();
+        var uri = new Uri($"https://www.strava.com/api/v3/athlete/activities?before={beforeOffset}&after={afterOffset}&page={page}&per_page={perPage}");
+
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_session.Authorization.AccessToken}");
+
+        var data = await client.GetAsync(uri);
+
+        if (data.IsSuccessStatusCode)
+        {
+
+            if (StravaSerializer.TryDeserialize(data.Content.ReadAsStream(), out SummaryActivity[]? activities, out var exception))
+            {
+                return new([.. activities!]);
+            }
+            return new ApiResult<List<SummaryActivity>>(null, new ApiError(error: exception!));
+        }
+        return new ApiResult<List<SummaryActivity>>(null, new ApiError(data.ReasonPhrase));
     }
 
 }

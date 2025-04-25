@@ -14,4 +14,12 @@ public class AthleteIdTests
         Assert.AreEqual(134815, actual.Id);
         Assert.AreEqual(1, actual.ResourceState);
     }
+
+    [TestMethod]
+    public void FromInvalidJsonTest()
+    {
+        var json = "this is not valid json";
+        var actual = AthleteId.FromJson(json);
+        Assert.AreEqual(0, actual.Id);
+    }
 }

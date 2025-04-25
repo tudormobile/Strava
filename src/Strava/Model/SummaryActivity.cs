@@ -53,7 +53,7 @@ public class SummaryActivity
     /// <summary>
     /// The activity's workout type
     /// </summary>
-    public string? WorkoutType { get; set; }
+    public int? WorkoutType { get; set; }
 
     /// <summary>
     /// The time at which the activity was started.

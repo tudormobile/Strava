@@ -37,15 +37,29 @@ public static class StravaSerializer
     /// <param name="result">Resulting object if successful; otherwise (null).</param>
     /// <returns>True if successful; otherwise false.</returns>
     public static bool TryDeserialize<T>(Stream utf8Json, out T? result)
+        => TryDeserialize(utf8Json, out result, out _);
+
+    /// <summary>
+    /// Converts a UTF8 json stream to a model object.
+    /// </summary>
+    /// <typeparam name="T">Type of model object.</typeparam>
+    /// <param name="utf8Json">UTF8 json stream</param>
+    /// <param name="result">Resulting object if successful; otherwise includes exception.</param>
+    /// <param name="exception">Resulting exception or (null) if no errors.</param>
+    /// <returns>True if successful; otherwise false.</returns>
+    public static bool TryDeserialize<T>(Stream utf8Json, out T? result, out JsonException? exception)
     {
         try
         {
             result = JsonSerializer.Deserialize<T>(utf8Json, _options);
+            exception = null;
             return true;
         }
-        catch (JsonException) { }
-
-        result = default;
+        catch (JsonException je)
+        {
+            result = default;
+            exception = je;
+        }
         return false;
     }
 }

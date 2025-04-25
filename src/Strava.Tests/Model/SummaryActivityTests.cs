@@ -7,6 +7,16 @@ namespace Strava.Tests.Model;
 [TestClass]
 public class SummaryActivityTests
 {
+    [TestMethod, DeploymentItem("activities.json")]
+    public void FromJsonArrayTest()
+    {
+        string path = "activities.json";
+        var utf8Json = File.OpenRead(path);
+        StravaSerializer.TryDeserialize(utf8Json, out SummaryActivity[]? activities);
+        Assert.IsNotNull(activities);
+        Assert.AreNotEqual(0, activities.Length);
+    }
+
     [TestMethod]
     public void FromJsonTest()
     {
@@ -145,7 +155,7 @@ public class SummaryActivityTests
         Assert.AreEqual(0, item.TotalElevationGain);
         Assert.AreEqual("Ride", item.Type);
         Assert.AreEqual("MountainBikeRide", item.SportType);
-        Assert.AreEqual(null, item.WorkoutType);
+        Assert.IsNull(item.WorkoutType);
         Assert.AreEqual(new DateTime(2018, 04, 30, 12, 35, 51, DateTimeKind.Utc), item.StartDate);
         Assert.AreEqual(4.385, item.AverageSpeed);
         Assert.AreEqual(8.8, item.MaxSpeed);

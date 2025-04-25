@@ -6,6 +6,14 @@ namespace Strava.Tests.Model;
 public class AthleteTests
 {
     [TestMethod]
+    public void InvalidJsonTest()
+    {
+        var json = "this is invalid json";
+        var target = Athlete.FromJson(json);
+        Assert.IsNull(target);
+    }
+
+    [TestMethod]
     public void FullAthleteTest()
     {
         var json = @"
