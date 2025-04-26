@@ -8,7 +8,7 @@ on:
     branches: [ "main" ]
 permissions: write-all
 env: 
-  SOURCE_ROOT: src/Strava
+  SOURCE_ROOT: src\Strava
 jobs:
   build:
     name: Build and Test Library
@@ -49,7 +49,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: package
-        path: $env:SOURCE_ROOT/bin/release/*.nupkg
+        path: $env:SOURCE_ROOT\bin\release\*.nupkg
 
     - name: Create Zip for Release
       run: compress-archive -Path $env:SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
