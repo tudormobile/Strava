@@ -28,27 +28,29 @@ jobs:
 
     - name: Build
       run: dotnet build -c Release
-    - name: Documentation
-      run: |
-        dotnet tool update -g docfx
-        docfx docs/docfx.json
 
     - name: Unit Test Annotations
       run: |
         dotnet tool update -g dotnet-Coverage
         dotnet tool update -g dotnet-reportgenerator-globaltool
-        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
-        reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
+        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output\output.xml
+        reportgenerator -reports:"output\output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
         echo "### Test Results" >> "$env:GITHUB_STEP_SUMMARY"
         Get-ChildItem -Recurse -Filter *.trx | ForEach-Object {get-content $_.FullName | select-string 'executed=\"(\d+)\" passed=\"(\d+)\" failed=\"(\d+)\"' | ForEach-Object {":purple_circle: Tests: " + $_.Matches[0].Groups[1].Value + " :green_circle: Passed: " + $_.Matches[0].Groups[2].Value + " :red_circle: Failed: " + $_.Matches[0].Groups[3].Value}} >> "$env:GITHUB_STEP_SUMMARY"
         echo "### Code Coverage" >> "$env:GITHUB_STEP_SUMMARY"
         get-content output\SummaryGithub.md | select-string '<summary>(.+%)</summary>' | ForEach-Object {$_.Matches[0].Groups[1].Value} >> "$env:GITHUB_STEP_SUMMARY"
+
+    - name: Documentation
+      run: |
+        dotnet tool update -g docfx
+        docfx docs/docfx.json
 
     - name: Upload Package
       uses: actions/upload-artifact@v4
       with:
         name: package
         path: $SOURCE_ROOT/bin/release/*.nupkg
+
     - name: Create Zip for Release
       run: compress-archive -Path $SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
     - name: Get version
