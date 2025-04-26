@@ -29,7 +29,6 @@
     <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
   </PropertyGroup>
 
-  <!-- For unit testing (change later ?? ) -->
   <ItemGroup>
     <InternalsVisibleTo Include="Strava.Tests" />
   </ItemGroup>

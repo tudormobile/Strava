@@ -49,14 +49,14 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: package
-        path: $SOURCE_ROOT/bin/release/*.nupkg
+        path: $env:SOURCE_ROOT/bin/release/*.nupkg
 
     - name: Create Zip for Release
-      run: compress-archive -Path $SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
+      run: compress-archive -Path $env:SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
     - name: Get version
       id: vars
       run: |
-        $env:ver = Get-Content $SOURCE_ROOT\bin\release\ver.txt
+        $env:ver = Get-Content $env:SOURCE_ROOT\bin\release\ver.txt
         echo version=$env:ver >> $env:GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
@@ -78,4 +78,4 @@ jobs:
         echo "Adding local repo as nuget source"
         dotnet nuget add source --username tudormobile --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/tudormobile/index.json"
         echo "Pushing package"
-        dotnet nuget push "$SOURCE_ROOT\bin\release\*.nupkg" --source "github" --skip-duplicate
+        dotnet nuget push "$env:SOURCE_ROOT\bin\release\*.nupkg" --source "github" --skip-duplicate
