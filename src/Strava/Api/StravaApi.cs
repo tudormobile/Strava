@@ -8,6 +8,17 @@ namespace Tudormobile.Strava.Api;
 public interface IStravaApi
 {
     /// <summary>
+    /// Retrieve Athlete record by Id for logged in user.
+    /// </summary>
+    /// <param name="athleteId">Optional; Athlete Id (default = logged in user).</param>
+    /// <returns>Athlete record associated with the Id.</returns>
+    /// <remarks>
+    /// Returns the currently authenticated athlete. Tokens with profile:read_all scope will 
+    /// receive a detailed athlete representation; all others will receive a summary representation.
+    /// </remarks>
+    Task<ApiResult<Athlete>> GetAthlete(long? athleteId = 0);
+
+    /// <summary>
     /// List Athlete Activities
     /// </summary>
     /// <param name="before">Filtering activities that have taken place before a certain time.</param>
@@ -48,6 +59,36 @@ internal class StravaApiImpl : IStravaApi
     public StravaApiImpl(StravaSession session)
     {
         _session = session;
+    }
+
+    async Task<ApiResult<Athlete>> IStravaApi.GetAthlete(long? athleteId)
+    {
+        // try and authenticate first
+        if (!_session.IsAuthenticated)
+        {
+            var result = await _session.RefreshAsync();
+            if (!result.Success)
+            {
+                return new ApiResult<Athlete>(error: result.Error);
+            }
+        }
+        var client = new HttpClient();
+        var uri = new Uri($"https://www.strava.com/api/v3/athlete");
+        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_session.Authorization.AccessToken}");
+        var data = await client.GetAsync(uri);
+        if (data.IsSuccessStatusCode)
+        {
+            try
+            {
+                var json = await data.Content.ReadAsStringAsync();
+                return new ApiResult<Athlete>(Athlete.FromJson(json));
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<Athlete>(null, new ApiError(error: ex));
+            }
+        }
+        return new ApiResult<Athlete>(null, new ApiError(data.ReasonPhrase));
     }
 
     async Task<ApiResult<DetailedActivity>> IStravaApi.GetActivity(long id, bool? includeAllEfforts)

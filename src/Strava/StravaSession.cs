@@ -39,7 +39,7 @@ public class StravaSession
     /// <returns></returns>
     public async Task<ApiResult<StravaAuthorization>> RefreshAsync()
     {
-        var client = new HttpClient();
+        using var client = new HttpClient();
         KeyValuePair<string, string>[] data =
             [
                 new ("client_id", Authorization.ClientId),

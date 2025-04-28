@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Tudormobile.Strava.UI.Views.AthleteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Tudormobile.Strava.UI.Views"
+             mc:Ignorable="d" Background="#FFFAFAFA"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#FFFFFFFF" Margin="10">
+        <Grid.Resources>
+            <SolidColorBrush x:Key="StravaColor" Color="#FFFC5200"/>
+            <SolidColorBrush x:Key="LightBackground" Color="#FFFAFAFA"/>
+            <SolidColorBrush x:Key="MediumBackground" Color="#FFDFDFE8"/>
+            <SolidColorBrush x:Key="TableBackground" Color="#FFFFFFFF"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Rectangle Fill="{StaticResource LightBackground}" Grid.ColumnSpan="3"/>
+        <Ellipse Grid.ColumnSpan="3" Grid.RowSpan="2" Width="50" Height="50" StrokeThickness="0.5" Stroke="{StaticResource StravaColor}" Fill="LightGray"/>
+        <TextBlock Grid.ColumnSpan="3" Grid.RowSpan="2" FontFamily="Segoe Fluent Icons" Text="&#xE77B;" FontSize="28" TextAlignment="Center" VerticalAlignment="Center"/>
+        
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center" TextElement.FontSize="20" TextElement.FontWeight="SemiBold">
+            <TextBlock Margin="2,4" Text="{Binding FirstName, FallbackValue='[ first name ]'}"/>
+            <TextBlock Margin="2,4" Text="{Binding LastName, FallbackValue='[ last name ]'}"/>
+        </StackPanel>
+        
+        <!--Statistics Section -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Following" HorizontalAlignment="Center" Margin="2"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="Followers" HorizontalAlignment="Center" Margin="2"/>
+        <Separator Grid.Row="3" Grid.Column="1" Margin="-1,0,0,0" Width="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" HorizontalAlignment="Left" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" FontSize="20" Margin="4" Text="{Binding FriendCount, FallbackValue=0}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="20" Margin="4" Text="{Binding FollowerCount, FallbackValue=0}" HorizontalAlignment="Center"/>
+
+        <!-- Footer -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Left" TextElement.FontSize="8" Grid.ColumnSpan="10" VerticalAlignment="Bottom">
+            <TextBlock Margin="1,4, 1, 1" Text="{Binding Username, FallbackValue='[ username ]'}"/>
+            <TextBlock Margin="1,4, 1, 1" Text="{Binding Id, FallbackValue='[ xxxxxxxxx ]', StringFormat='{}(id={0})'}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

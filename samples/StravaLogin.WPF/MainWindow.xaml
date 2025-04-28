@@ -1,0 +1,35 @@
+﻿<Window x:Class="StravaLogin.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StravaLogin.WPF"
+        xmlns:ui="clr-namespace:Tudormobile.Strava.UI.Views;assembly=Tudormobile.Strava.UI"
+        mc:Ignorable="d" Background="#FFFAFAFA" ResizeMode="CanResizeWithGrip"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ui:AthleteView MinWidth="200" x:Name="athleteView" Margin="10,0" DataContext="{Binding Athlete}" HorizontalAlignment="Stretch"/>
+        <GridSplitter Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Right" Grid.RowSpan="2"/>
+        <Button Grid.Column="1" Width="150" Height="50" Command="{Binding LoginCommand}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontFamily="Segoe Fluent Icons" Text="&#xE748;" FontSize="16" Margin="5,8"/>
+                <TextBlock Text="Login" FontSize="16" Margin="5"/>
+            </StackPanel>
+        </Button>
+        <!-- Activities List -->
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" AutoGenerateColumns="True" ItemsSource="{Binding Activities}"/>
+        <!-- Lower status bar -->
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="100">
+            <TextBlock Text="{Binding StatusMessage, FallbackValue='[ status message ]'}"/>
+        </StatusBar>
+    </Grid>
+</Window>

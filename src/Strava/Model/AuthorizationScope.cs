@@ -15,8 +15,14 @@
 /// <para>activity:read_all: the same access as activity:read, plus privacy zone data and access to read the user's activities with visibility set to Only You</para>
 /// <para>activity:write: access to create manual activities and uploads, and access to edit any activities that are visible to the app, based on activity read access level</para>
 /// </remarks>
-public class Scope
+public class AuthorizationScope
 {
+    /// <summary>
+    /// Read public data only.
+    /// </summary>
+    /// <remarks>These are the minimal meaningful permissions.</remarks>
+    public static readonly AuthorizationScope READ = new AuthorizationScope(ScopePermission.read, ScopePermission.read, ScopePermission.read);
+
     /// <summary>
     /// General scope.
     /// </summary>
@@ -60,7 +66,7 @@ public class Scope
     /// <param name="publicScope">General scope.</param>
     /// <param name="profileScope">Profile scope.</param>
     /// <param name="activityScope">Activity scope.</param>
-    public Scope(ScopePermission publicScope = 0, ScopePermission profileScope = 0, ScopePermission activityScope = 0)
+    public AuthorizationScope(ScopePermission publicScope = 0, ScopePermission profileScope = 0, ScopePermission activityScope = 0)
     {
         PublicScope = publicScope;
         ProfileScope = profileScope;
@@ -73,9 +79,11 @@ public class Scope
     /// <returns></returns>
     public override string ToString()
     {
+        var profile = ProfileScope == ScopePermission.read ? ScopePermission.read_all : ProfileScope;
+        var global = (PublicScope == ScopePermission.read || PublicScope == ScopePermission.read_all) ? PublicScope : ScopePermission.read_all;
         return string.Join(",",
-            PublicScope.ToString().Split(',', StringSplitOptions.TrimEntries)
-            .Concat(ProfileScope.ToString().Split(',', StringSplitOptions.TrimEntries).Select(s => $"profile:{s}"))
+            global.ToString().Split(',', StringSplitOptions.TrimEntries)
+            .Concat(profile.ToString().Split(',', StringSplitOptions.TrimEntries).Select(s => $"profile:{s}"))
             .Concat(ActivityScope.ToString().Split(',', StringSplitOptions.TrimEntries).Select(s => $"activity:{s}"))
             );
     }

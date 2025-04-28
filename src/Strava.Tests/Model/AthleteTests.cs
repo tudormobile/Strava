@@ -36,7 +36,7 @@ public class AthleteTests
   ""friend"" : null,
   ""follower"" : null,
   ""follower_count"" : 5,
-  ""friend_count"" : 5,
+  ""friend_count"" : 15,
   ""mutual_friend_count"" : 0,
   ""athlete_type"" : 1,
   ""date_preference"" : ""%m/%d/%Y"",
@@ -66,5 +66,7 @@ public class AthleteTests
         Assert.AreEqual("Marianne", actual.FirstName);
         Assert.AreEqual("Teutenberg", actual.LastName);
         Assert.AreEqual(3, actual.ResourceState);
+        Assert.AreEqual(5, actual.FollowerCount);
+        Assert.AreEqual(5, actual.FriendCount);
     }
 }
