@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <MajorMinorVer>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\..\version.txt').Trim())</MajorMinorVer>
+    <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
+    <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
+    <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
+    <FileVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
+    <Authors>WH Tudor</Authors>
+    <Title>Strava API UI Library</Title>
+    <Description>Strava UI Library</Description>
+    <Copyright>COPYRIGHT © TUDORMOBILE</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Strava;Tudormobile</PackageTags>
+    <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Strava\Strava.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Views\AthleteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <Target Name="WriteVersion" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <WriteLinesToFile Lines="$(PackageVersion)" File="$(BaseOutputPath)\$(Configuration)\ver.txt" Overwrite="true" />
+  </Target>
+
+</Project>

@@ -1,4 +1,6 @@
-﻿namespace Tudormobile.Strava;
+﻿using Tudormobile.Strava.Model;
+
+namespace Tudormobile.Strava;
 
 /// <summary>
 /// Client Authorization Record.
@@ -45,6 +47,28 @@ public class StravaAuthorization
         AccessToken = accessToken ?? String.Empty;
         RefreshToken = refreshToken ?? String.Empty;
         Expires = expires ?? DateTime.MinValue;
+    }
+
+    /// <summary>
+    /// Update the authorization record from a stream.
+    /// </summary>
+    /// <param name="stream">Strava API V3 response stream.</param>
+    /// <exception cref="Exception">throws on any error.</exception>
+    /// <returns>An Athlete Id object, if successful; otherwise (null)</returns>
+    public AthleteId? UpdateFromResponse(Stream stream)
+    {
+        if (StravaSerializer.TryDeserialize<AuthorizationResponse>(stream, out var auth))
+        {
+            if (auth == null) throw new Exception("Failed to deserialize StravaAuthorization");
+            if (auth.access_token == null) throw new Exception("Failed to deserialize StravaAuthorization");
+            if (auth.refresh_token == null) throw new Exception("Failed to deserialize StravaAuthorization");
+            AccessToken = auth.access_token;
+            RefreshToken = auth.refresh_token;
+            Expires = DateTime.UnixEpoch.AddSeconds(auth.expires_at ?? 0);
+
+            return auth.athlete;
+        }
+        throw new Exception("Failed to deserialize StravaAuthorization");
     }
 }
 

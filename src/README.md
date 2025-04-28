@@ -6,6 +6,8 @@ Copyright&copy;Tudormobile
 ### Install the package
 ```
 dotnet add Tudormobile.Strava
+-or-
+dotnet add Tudormobile.Straca.UI
 ```
 ### Prerequisites
 ***None.***

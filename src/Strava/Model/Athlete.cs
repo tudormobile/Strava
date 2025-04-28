@@ -1,4 +1,6 @@
-﻿namespace Tudormobile.Strava.Model;
+﻿using System.Text.Json;
+
+namespace Tudormobile.Strava.Model;
 
 /// <summary>
 /// A Strava User (Athlete)
@@ -32,6 +34,16 @@ public class Athlete
     /// </summary>
     public string LastName => _athlete.lastname!;
 
+    /// <summary>
+    /// Following count of the athlete.
+    /// </summary>
+    public int FriendCount => _athlete.friend_count ?? 0;
+
+    /// <summary>
+    /// Follower count of the athlete.
+    /// </summary>
+    public int FollowerCount => _athlete.follower_count ?? 0;
+
     private Athlete(_athleteRecord athlete)
     {
         _athlete = athlete;
@@ -49,6 +61,24 @@ public class Athlete
             return new Athlete(record!);
         }
         return null;
+    }
+
+    /// <summary>
+    /// UTF8 json string representing the athlete.
+    /// </summary>
+    /// <returns>Json representation of the athlete.</returns>
+    public string ToJson()
+    {
+        return JsonSerializer.Serialize(_athlete);
+    }
+
+    /// <summary>
+    /// Create an empty athlete object.
+    /// </summary>
+    /// <returns>Empty Athlete object.</returns>
+    public static Athlete Empty()
+    {
+        return new Athlete(new _athleteRecord());
     }
 }
 
