@@ -8,7 +8,7 @@ public class ScopeTests
     [TestMethod]
     public void ToStringTest()
     {
-        var expected = "read_all,write,profile:read_all,profile:write,activity:read_all";
+        var expected = "read_all,profile:read_all,profile:write,activity:read_all";
         var target = new AuthorizationScope()
         {
             PublicScope = AuthorizationScope.ScopePermission.read_all | AuthorizationScope.ScopePermission.write,
