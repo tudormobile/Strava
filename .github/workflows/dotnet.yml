@@ -8,7 +8,7 @@ on:
     branches: [ "main" ]
 permissions: write-all
 env: 
-  SOURCE_ROOT: src/Strava
+  SOURCE_ROOT: src\Strava
 jobs:
   build:
     name: Build and Test Library
@@ -28,33 +28,35 @@ jobs:
 
     - name: Build
       run: dotnet build -c Release
-    - name: Documentation
-      run: |
-        dotnet tool update -g docfx
-        docfx docs/docfx.json
 
     - name: Unit Test Annotations
       run: |
         dotnet tool update -g dotnet-Coverage
         dotnet tool update -g dotnet-reportgenerator-globaltool
-        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output.xml
-        reportgenerator -reports:"output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
+        dotnet-coverage merge **\*.coverage --remove-input-files --output-format xml --output output\output.xml
+        reportgenerator -reports:"output\output.xml" -targetdir:"output" -reporttypes:"MarkdownSummaryGithub"
         echo "### Test Results" >> "$env:GITHUB_STEP_SUMMARY"
         Get-ChildItem -Recurse -Filter *.trx | ForEach-Object {get-content $_.FullName | select-string 'executed=\"(\d+)\" passed=\"(\d+)\" failed=\"(\d+)\"' | ForEach-Object {":purple_circle: Tests: " + $_.Matches[0].Groups[1].Value + " :green_circle: Passed: " + $_.Matches[0].Groups[2].Value + " :red_circle: Failed: " + $_.Matches[0].Groups[3].Value}} >> "$env:GITHUB_STEP_SUMMARY"
         echo "### Code Coverage" >> "$env:GITHUB_STEP_SUMMARY"
         get-content output\SummaryGithub.md | select-string '<summary>(.+%)</summary>' | ForEach-Object {$_.Matches[0].Groups[1].Value} >> "$env:GITHUB_STEP_SUMMARY"
 
+    - name: Documentation
+      run: |
+        dotnet tool update -g docfx
+        docfx docs/docfx.json
+
     - name: Upload Package
       uses: actions/upload-artifact@v4
       with:
         name: package
-        path: $SOURCE_ROOT/bin/release/*.nupkg
+        path: ${{ env.SOURCE_ROOT }}\bin\Release\*.nupkg
+
     - name: Create Zip for Release
-      run: compress-archive -Path $SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
+      run: compress-archive -Path $env:SOURCE_ROOT\bin\release\*.nupkg -Destination package.zip -Force
     - name: Get version
       id: vars
       run: |
-        $env:ver = Get-Content $SOURCE_ROOT\bin\release\ver.txt
+        $env:ver = Get-Content $env:SOURCE_ROOT\bin\release\ver.txt
         echo version=$env:ver >> $env:GITHUB_OUTPUT
     - name: Test output
       run: echo ${{ steps.vars.outputs.version }}      
@@ -76,4 +78,4 @@ jobs:
         echo "Adding local repo as nuget source"
         dotnet nuget add source --username tudormobile --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/tudormobile/index.json"
         echo "Pushing package"
-        dotnet nuget push "$SOURCE_ROOT\bin\release\*.nupkg" --source "github" --skip-duplicate
+        dotnet nuget push "$env:SOURCE_ROOT\bin\release\*.nupkg" --source "github" --skip-duplicate

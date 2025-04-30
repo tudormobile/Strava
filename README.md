@@ -1,27 +1,54 @@
 # Strava
 Strava API libraries and clients
 
-[ Workflow Badges go here ]
+[![Build and Deploy](https://github.com/tudormobile/Strava/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tudormobile/Strava/actions/workflows/dotnet.yml)  
+[![Publish Docs](https://github.com/tudormobile/Strava/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/Strava/actions/workflows/docs.yml)  
 
-Note: This repo/code is experimental, incomplete, in its initial draft state.
+Copyright&copy;Tudormobile  
+> [!NOTE]  
+> Th current state is experimental (initial v0.XXX draft state).
 
 ### Quick Start - Client
 ```
+using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
+using Tudormobile.Strava.Model;
+
+// Strava Authorization
+var auth = new StravaAuthorization(
+    client_id,          // Client Id
+    client_secret,      // Client secret
+    access_token,       // Current access token
+    refresh_token);     // Current refresh token
+
+var session = new StravaSession(auth);
+
+if (!session.IsAuthenticated)
+{
+    await session.RefreshAsync();
+}
+
+var result = _session.RefreshAsync();
+
+// Get user activities (last 30 days)
+var api = _session!.CreateApi();
+var activities = await api.GetActivities(DateTime.Now, DateTime.Now.AddDays(-30));
+
+Debug.WriteLine($"{activities.Count():N0} activities found.")'
+```
+### Quick Start - Client
+
+```
+using Tudormobile.Strava;
 using Tudormobile.Strava.Client;
 using Tudormobile.Strava.Model;
 
-Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
-
-var apiInstance = new ActivitiesApi();
-var activities = apiInstance.GetActivities();
-
-Debug.WriteLine($"{activities.Count():N0} activities.")'
+// add code here
 ```
 ### Quick Start - Service
 
 ```
-using Tudormobile.Strava.Api;
+using Tudormobile.Strava;
 using Tudormobile.Strava.Service;
 using Tudormobile.Strava.Model;
 
