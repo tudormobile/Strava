@@ -41,4 +41,13 @@ public class StravaSessionTests
             Assert.AreEqual("Application", actual.Error.Fault.Errors[0].Resource);
         }
     }
+
+    [TestMethod, ExcludeFromCodeCoverage]
+    public async Task RefreshTokensWhenNotAuthenticatedTest()
+    {
+        var target = new StravaSession(new StravaAuthorization());
+        var actual = await target.RefreshTokens();
+        Assert.AreSame(target, actual, "Should return the same instance.");
+        Assert.IsFalse(target.IsAuthenticated, "Should not be authenticated.");
+    }
 }

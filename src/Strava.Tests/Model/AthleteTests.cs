@@ -65,7 +65,7 @@ public class AthleteTests
         Assert.AreEqual("marianne_t", actual.Username);
         Assert.AreEqual("Marianne", actual.FirstName);
         Assert.AreEqual("Teutenberg", actual.LastName);
-        Assert.AreEqual(3, actual.ResourceState);
+        Assert.AreEqual(ResourceStates.Detail, actual.ResourceState);
         Assert.AreEqual(5, actual.FollowerCount);
         Assert.AreEqual(15, actual.FriendCount);
     }

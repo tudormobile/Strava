@@ -3,7 +3,7 @@
 namespace Tudormobile.Strava.UI.Views
 {
     /// <summary>
-    /// Interaction logic for AthleteView.xaml
+    /// A UI control that displays information about an athlete.
     /// </summary>
     public partial class AthleteView : UserControl
     {

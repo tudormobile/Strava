@@ -1,8 +1,7 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
-using System.IO;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json.Nodes;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,12 +9,11 @@ using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.UI.Views
 {
+
     /// <summary>
-    /// Strava Login View
+    /// A UI control that allows the user to login to Strava.
+    /// Allows the user to Authenticate with Strava. Internally, it uses the WebView2 control to display the Strava login page.
     /// </summary>
-    /// <remarks>
-    /// Allows the user to Authenticate with Strava.
-    /// </remarks>
     public class LoginView : Control
     {
         private readonly string REDIRECT_URI = "http://localhost/exchange_token";
@@ -49,13 +47,6 @@ namespace Tudormobile.Strava.UI.Views
         }
 
         /// <summary>
-        /// Login completed event arguments.
-        /// </summary>
-        /// <param name="sender">Sender of the event.</param>
-        /// <param name="e">Event arguments.</param>
-        public delegate void LoginCompletedEventHandler(object sender, LoginCompletedEventArgs e);
-
-        /// <summary>
         /// Granted Authorization.
         /// </summary>
         public StravaAuthorization Authorization
@@ -72,21 +63,6 @@ namespace Tudormobile.Strava.UI.Views
             get => (AuthorizationScope)GetValue(ScopeProperty);
             set => SetValue(ScopeProperty, value);
         }
-
-        /// <summary>
-        /// Logged-in Athlete Identifier.
-        /// </summary>
-        public AthleteId? LoggedInAthlete
-        {
-            get { return (AthleteId)GetValue(LoggedInAthleteProperty); }
-            set { SetValue(LoggedInAthleteProperty, value); }
-        }
-
-        /// <summary>
-        /// Logged-in Athlete Identifier Dependency Property.
-        /// </summary>
-        public static readonly DependencyProperty LoggedInAthleteProperty
-            = DependencyProperty.Register("LoggedInAthlete", typeof(AthleteId), typeof(LoginView), new PropertyMetadata(null));
 
         /// <summary>
         /// Authorization Scope to request for login.
@@ -189,8 +165,17 @@ namespace Tudormobile.Strava.UI.Views
                     {
                         try
                         {
-                            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
-                            LoggedInAthlete = Authorization.UpdateFromResponse(ms);
+                            var jo = JsonObject.Parse(json);
+                            var access_token = jo!["access_token"]?.GetValue<string>()!;
+                            var refresh_token = jo!["refresh_token"]?.GetValue<string>()!;
+                            var id = jo!["athlete"]?["id"]?.GetValue<long>() ?? 0;
+                            var expires_at = jo!["expires_at"]?.GetValue<long>() ?? 0;
+
+                            Authorization.AccessToken = access_token;
+                            Authorization.RefreshToken = refresh_token;
+                            Authorization.Id = id;
+                            Authorization.Expires = DateTime.UnixEpoch.AddSeconds(expires_at);
+                            Authorization.Id = id;
                             _messageView!.Text = "Login successful!";
                             loginCompleted(success: true);
                         }
