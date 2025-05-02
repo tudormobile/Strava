@@ -21,7 +21,7 @@ public class StravaApiTests
         string refresh_token = Environment.GetEnvironmentVariable("STRAVA_REFRESH_TOKEN") ?? string.Empty;
 
         var auth = new StravaAuthorization(client_id, client_secret, access_token, refresh_token);
-        _session = new StravaSession(auth).RefreshTokens().Result;
+        _session = new StravaSession(auth);
         var result = _session.RefreshAsync();
         result.Wait();
         if (result.IsCompletedSuccessfully && _session.IsAuthenticated)

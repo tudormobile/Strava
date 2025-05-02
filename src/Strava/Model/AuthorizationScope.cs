@@ -21,22 +21,22 @@ public class AuthorizationScope
     /// Read public data only.
     /// </summary>
     /// <remarks>These are the minimal meaningful permissions.</remarks>
-    public static readonly AuthorizationScope READ = new AuthorizationScope(ScopePermission.read, ScopePermission.read, ScopePermission.read);
+    public static readonly AuthorizationScope READ = new AuthorizationScope(PublicScopes.read, ProfileScopes.read_all, ActivityScopes.read);
 
     /// <summary>
     /// General scope.
     /// </summary>
-    public ScopePermission PublicScope { get; set; }
+    public PublicScopes PublicScope { get; set; }
 
     /// <summary>
     /// Profile scope.
     /// </summary>
-    public ScopePermission ProfileScope { get; set; }
+    public ProfileScopes ProfileScope { get; set; }
 
     /// <summary>
     /// Activity scope.
     /// </summary>
-    public ScopePermission ActivityScope { get; set; }
+    public ActivityScopes ActivityScope { get; set; }
 
     /// <summary>
     /// Scope permission flags.
@@ -61,12 +61,66 @@ public class AuthorizationScope
     }
 
     /// <summary>
+    /// Valid public scopes
+    /// </summary>
+    public enum PublicScopes
+    {
+        /// <summary>
+        /// Read permissions
+        /// </summary>
+        read = ScopePermission.read,
+        /// <summary>
+        /// Read all permissions
+        /// </summary>
+        read_all = ScopePermission.read_all,
+    }
+
+    /// <summary>
+    /// Valid profile scopes
+    /// </summary>
+    [Flags]
+    public enum ProfileScopes
+    {
+        /// <summary>
+        /// Read all permissions
+        /// </summary>
+        read_all = 2,
+
+        /// <summary>
+        /// Write permissions
+        /// </summary>
+        write = 4
+    }
+
+    /// <summary>
+    /// Activity scopes
+    /// </summary>
+    [Flags]
+    public enum ActivityScopes
+    {
+        /// <summary>
+        /// Read permissions
+        /// </summary>
+        read = ScopePermission.read,
+
+        /// <summary>
+        /// Read all permissions
+        /// </summary>
+        read_all = ScopePermission.read_all,
+
+        /// <summary>
+        /// Write permissions
+        /// </summary>
+        write = ScopePermission.write
+    }
+
+    /// <summary>
     /// Create and initialize a new instance.
     /// </summary>
     /// <param name="publicScope">General scope.</param>
     /// <param name="profileScope">Profile scope.</param>
     /// <param name="activityScope">Activity scope.</param>
-    public AuthorizationScope(ScopePermission publicScope = 0, ScopePermission profileScope = 0, ScopePermission activityScope = 0)
+    public AuthorizationScope(PublicScopes publicScope = 0, ProfileScopes profileScope = 0, ActivityScopes activityScope = 0)
     {
         PublicScope = publicScope;
         ProfileScope = profileScope;
@@ -79,12 +133,38 @@ public class AuthorizationScope
     /// <returns></returns>
     public override string ToString()
     {
-        var profile = ProfileScope == ScopePermission.read ? ScopePermission.read_all : ProfileScope;
-        var global = (PublicScope == ScopePermission.read || PublicScope == ScopePermission.read_all) ? PublicScope : ScopePermission.read_all;
-        return string.Join(",",
-            global.ToString().Split(',', StringSplitOptions.TrimEntries)
-            .Concat(profile.ToString().Split(',', StringSplitOptions.TrimEntries).Select(s => $"profile:{s}"))
-            .Concat(ActivityScope.ToString().Split(',', StringSplitOptions.TrimEntries).Select(s => $"activity:{s}"))
-            );
+        var scopes = new List<string>();
+
+        // global scope
+        if (PublicScope != 0)
+        {
+            scopes.Add(PublicScope.HasFlag(PublicScopes.read_all) ? "read_all" : "read");
+        }
+
+        // profile scope
+        if (ProfileScope.HasFlag(ProfileScopes.read_all))
+        {
+            scopes.Add("profile:read_all");
+        }
+        if (ProfileScope.HasFlag(ProfileScopes.write))
+        {
+            scopes.Add("profile:write");
+        }
+
+        // activity scope
+        if (ActivityScope.HasFlag(ActivityScopes.read_all))
+        {
+            scopes.Add("activity:read_all");
+        }
+        else if (ActivityScope.HasFlag(ActivityScopes.read))
+        {
+            scopes.Add("activity:read");
+        }
+        if (ActivityScope.HasFlag(ActivityScopes.write))
+        {
+            scopes.Add("activity:write");
+        }
+
+        return string.Join(",", scopes);
     }
 }
