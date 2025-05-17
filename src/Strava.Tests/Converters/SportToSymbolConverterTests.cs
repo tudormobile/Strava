@@ -13,7 +13,7 @@ public class SportToSymbolConverterTests
         var converter = new SportToSymbolConverter();
 
         // Act
-        var actual = converter.Convert(sport, null, null, null);
+        var actual = converter.Convert(sport, typeof(StreamGeometry), null, null);
 
         // Assert
         Assert.IsInstanceOfType<StreamGeometry>(actual);

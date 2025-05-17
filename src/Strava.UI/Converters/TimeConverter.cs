@@ -18,7 +18,7 @@ public class TimeConverter : IValueConverter
     /// <param name="parameter">Optional parameter for the converter. Not used in this implementation.</param>
     /// <param name="culture">The culture to use in the converter. Not used in this implementation.</param>
     /// <returns>A formatted string representation of the time value.</returns>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo? culture = null)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         var seconds = value switch
         {
@@ -50,7 +50,7 @@ public class TimeConverter : IValueConverter
     /// <param name="culture">The culture to use in the converter. Not used in this implementation.</param>
     /// <returns>Throws a <see cref="NotImplementedException"/>.</returns>
     /// <exception cref="NotImplementedException">Thrown because this method is not implemented.</exception>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture)
     {
         throw new NotImplementedException();
     }

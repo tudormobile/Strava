@@ -16,7 +16,7 @@ public class AddConverter : IValueConverter
     /// <param name="parameter">The value to add to the input value.</param>  
     /// <param name="culture">The culture information (not used).</param>  
     /// <returns>The result of adding the parameter to the input value.</returns>  
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         return System.Convert.ToDouble(value ?? 0) + double.Parse(parameter?.ToString() ?? "0");
     }
@@ -30,7 +30,7 @@ public class AddConverter : IValueConverter
     /// <param name="culture">The culture information (not used).</param>  
     /// <returns>Throws a <see cref="NotImplementedException"/>.</returns>  
     /// <exception cref="NotImplementedException">Always thrown as this method is not implemented.</exception>  
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         throw new NotImplementedException();
     }

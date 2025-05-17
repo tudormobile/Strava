@@ -6,7 +6,7 @@ namespace Strava.Tests.Converters;
 [TestClass]
 public class AddConverterTests
 {
-    private AddConverter _converter;
+    private AddConverter? _converter;
 
     [TestInitialize]
     public void Setup()
@@ -23,7 +23,7 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter.Convert(value, typeof(double), parameter, culture);
+        var result = _converter?.Convert(value, typeof(double), parameter, culture);
 
         // Assert
         Assert.AreEqual(8.0, result);
@@ -38,7 +38,7 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter.Convert(value, typeof(int), parameter, culture);
+        var result = _converter?.Convert(value, typeof(int), parameter, culture);
 
         // Assert
         Assert.AreEqual(2.0, result);
@@ -53,7 +53,7 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter.Convert(value, typeof(int), parameter, culture);
+        var result = _converter?.Convert(value, typeof(int), parameter, culture);
 
         // Assert
         Assert.AreEqual(7.0, result);
@@ -69,7 +69,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<FormatException>(() =>
-            _converter.Convert(value, typeof(int), parameter, culture));
+            _converter?.Convert(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -82,7 +82,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<FormatException>(() =>
-            _converter.Convert(value, typeof(int), parameter, culture));
+            _converter?.Convert(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -95,7 +95,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter.ConvertBack(value, typeof(int), parameter, culture));
+            _converter?.ConvertBack(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -108,7 +108,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter.ConvertBack(value, typeof(int), parameter, culture));
+            _converter?.ConvertBack(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -121,7 +121,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter.ConvertBack(value, typeof(int), parameter, culture));
+            _converter?.ConvertBack(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -134,7 +134,7 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter.ConvertBack(value, typeof(int), parameter, culture));
+            _converter?.ConvertBack(value, typeof(int), parameter, culture));
     }
 
     [TestMethod]
@@ -147,6 +147,6 @@ public class AddConverterTests
 
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter.ConvertBack(value, typeof(int), parameter, culture));
+            _converter?.ConvertBack(value, typeof(int), parameter, culture));
     }
 }

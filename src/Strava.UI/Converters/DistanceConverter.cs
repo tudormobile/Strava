@@ -18,7 +18,7 @@ public class DistanceConverter : IValueConverter
     /// <param name="parameter">An optional parameter specifying the unit ("meters" or "feet").</param>  
     /// <param name="culture">The culture information (optional).</param>  
     /// <returns>A formatted string representing the distance in the specified unit.</returns>  
-    public object Convert(object value, Type targetType, object parameter, CultureInfo? culture = null)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         var useMeters = false;
         var distance = 0.0;
@@ -65,7 +65,7 @@ public class DistanceConverter : IValueConverter
     /// <param name="parameter">An optional parameter specifying the unit ("meters" or "feet").</param>  
     /// <param name="culture">The culture information.</param>  
     /// <returns>Throws a <see cref="NotImplementedException"/> as this method is not implemented.</returns>  
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         throw new NotImplementedException();
     }

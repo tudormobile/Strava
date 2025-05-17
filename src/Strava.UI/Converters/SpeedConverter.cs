@@ -19,7 +19,7 @@ public class SpeedConverter : IValueConverter
     /// <param name="culture">The culture to use in the converter.</param>
     /// <returns>A formatted string representing the speed in either km/h or mph.</returns>
     /// <exception cref="NotSupportedException">Thrown if the value type is not supported.</exception>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo? culture = null)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         var useMeters = parameter?.ToString() == "meters";
         var data = value switch
@@ -45,7 +45,7 @@ public class SpeedConverter : IValueConverter
     /// <param name="culture">The culture to use in the converter.</param>
     /// <returns>Throws a <see cref="NotImplementedException"/>.</returns>
     /// <exception cref="NotImplementedException">Always thrown as this method is not implemented.</exception>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo? culture = null)
     {
         throw new NotImplementedException();
     }
