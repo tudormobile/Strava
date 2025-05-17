@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:web="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     xmlns:converters="clr-namespace:Tudormobile.Strava.UI.Converters"
+    xmlns:controls="clr-namespace:Tudormobile.Strava.UI.Controls"
     xmlns:local="clr-namespace:Tudormobile.Strava.UI.Views">
 
     <Style TargetType="{x:Type local:LoginView}">
@@ -103,5 +104,15 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:Measurement}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+    <Style TargetType="{x:Type controls:Speed}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+    <Style TargetType="{x:Type controls:Duration}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>
 </ResourceDictionary>
