@@ -3,7 +3,7 @@
     /// <summary>
     /// something something something...
     /// </summary>
-    public class ClientClass1
+    public class StravaClient
     {
     }
 }

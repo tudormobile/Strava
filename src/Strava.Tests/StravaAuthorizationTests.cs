@@ -14,24 +14,27 @@ namespace Strava.Tests
             Assert.IsTrue(target.Expires < DateTime.Now, "Must already be expired.");
             Assert.IsNotNull(target.AccessToken, "Access token cannot be (null).");
             Assert.IsNotNull(target.RefreshToken, "Refresh secret cannot be (null).");
+            Assert.AreEqual(0, target.Id, "Id must be zero.");
         }
 
         [TestMethod]
         public void ConstructorTest2()
         {
+            var id = 123456789;
             var expires = new DateTime(2025, 1, 1);
-            var id = "some id";
+            var clientId = "some id";
             var secret = "some secret";
             var token = "access token";
             var refresh = "refresh token";
 
-            var target = new StravaAuthorization(id, secret, token, refresh, expires);
+            var target = new StravaAuthorization(clientId, secret, token, refresh, expires) { Id = id };
 
-            Assert.AreEqual(target.ClientId, id);
-            Assert.AreEqual(target.ClientSecret, secret);
-            Assert.AreEqual(target.Expires, expires);
-            Assert.AreEqual(target.AccessToken, token);
-            Assert.AreEqual(target.RefreshToken, refresh);
+            Assert.AreEqual(id, target.Id);
+            Assert.AreEqual(clientId, target.ClientId);
+            Assert.AreEqual(secret, target.ClientSecret);
+            Assert.AreEqual(expires, target.Expires);
+            Assert.AreEqual(token, target.AccessToken);
+            Assert.AreEqual(refresh, target.RefreshToken);
         }
 
     }

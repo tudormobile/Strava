@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Tudormobile.Strava.UI.Converters"
+                    >
+    <converters:SportToSymbolConverter x:Key="SportToSymbolConverter"/>
+    <converters:AddConverter x:Key="AddConverter"/>
+    <converters:DistanceConverter x:Key="DistanceConverter"/>
+    <converters:TimeConverter x:Key="TimeConverter"/>
+    <converters:SpeedConverter x:Key="SpeedConverter"/>
+</ResourceDictionary>

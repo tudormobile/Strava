@@ -70,12 +70,11 @@ namespace StravaLogin.WPF
                 {
                     Scope = AuthorizationScope.READ,
                     Authorization = _authorization,
-                    LoggedInAthlete = new AthleteId(),
                 },
             };
             if (loginWindow.ShowDialog() == true)
             {
-                _ = startSession(loginWindow.Authorization, loginWindow.LoggedInAthlete?.Id ?? 0L);
+                _ = startSession(loginWindow.Authorization);
                 OnCanExecuteChanged();
             }
         }
@@ -91,7 +90,7 @@ namespace StravaLogin.WPF
             {
                 _viewModel.StatusMessage = "Loading acivities ...";
 
-                var api = _session.CreateApi();
+                var api = _session.ActivitiesApi();
                 var result = await api.GetAthlete(id);
                 if (result.Success)
                 {

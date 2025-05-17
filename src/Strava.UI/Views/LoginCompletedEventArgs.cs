@@ -3,7 +3,14 @@
 namespace Tudormobile.Strava.UI.Views
 {
     /// <summary>
-    /// Event arguments for the login completed event.
+    /// Login completed event arguments.
+    /// </summary>
+    /// <param name="sender">Sender of the event.</param>
+    /// <param name="e">Event arguments.</param>
+    public delegate void LoginCompletedEventHandler(object sender, LoginCompletedEventArgs e);
+
+    /// <summary>
+    /// Event arguments for the login completed event used to indicate success or failure of a login attempt.
     /// </summary>
     public class LoginCompletedEventArgs : RoutedEventArgs
     {

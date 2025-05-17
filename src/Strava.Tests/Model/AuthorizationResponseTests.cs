@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Tudormobile.Strava;
 using Tudormobile.Strava.Model;
 
 namespace Strava.Tests.Model;
@@ -46,7 +47,7 @@ public class AuthorizationResponseTests
   }
 }
 ";
-        var actual = JsonSerializer.Deserialize<AuthorizationResponse>(json);
+        _ = StravaSerializer.TryDeserialize<AuthorizationResponse>(json, out var actual);
 
         Assert.IsNotNull(actual);
 

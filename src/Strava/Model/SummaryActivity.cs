@@ -1,7 +1,7 @@
 ﻿namespace Tudormobile.Strava.Model;
 
 /// <summary>
-/// An summary (short) activity object.
+/// A summary activity, which is a shortened record of an Athlete activity.
 /// </summary>
 public class SummaryActivity
 {

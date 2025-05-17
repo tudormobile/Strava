@@ -3,7 +3,7 @@
 namespace Tudormobile.Strava.Model;
 
 /// <summary>
-/// A Strava User (Athlete)
+/// A Strava user, a.k.a "Athlete".
 /// </summary>
 public class Athlete
 {
@@ -17,7 +17,7 @@ public class Athlete
     /// <summary>
     /// Resource state, indicates level of detail. Possible values: 1 -> "meta", 2 -> "summary", 3 -> "detail"
     /// </summary>
-    public long ResourceState => _athlete.resource_state;
+    public ResourceStates ResourceState => (ResourceStates)_athlete.resource_state;
 
     /// <summary>
     /// The username of the athlete.
@@ -35,12 +35,12 @@ public class Athlete
     public string LastName => _athlete.lastname!;
 
     /// <summary>
-    /// Following count of the athlete.
+    /// Friend count of the athlete, i.e., number of people the athlete is following.
     /// </summary>
     public int FriendCount => _athlete.friend_count ?? 0;
 
     /// <summary>
-    /// Follower count of the athlete.
+    /// Follower count of the athlete, i.e., number of people following the athlete.
     /// </summary>
     public int FollowerCount => _athlete.follower_count ?? 0;
 

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Tudormobile.Strava;
 using Tudormobile.Strava.Model;
 
 namespace Strava.Tests.Model;
@@ -10,13 +10,12 @@ public class ErrorResponseTests
     public void FromJsonTest()
     {
         var json = "{\"message\":\"Bad Request\",\"errors\":[{\"resource\":\"Application\",\"field\":\"client_id\",\"code\":\"invalid\"}]}";
-        var options = JsonSerializerOptions.Default;
-        var actual = JsonSerializer.Deserialize<ErrorResponse>(json);
+        var success = StravaSerializer.TryDeserialize<ErrorResponse>(json, out var actual);
 
         Assert.IsNotNull(actual);
-        Assert.AreEqual("Bad Request", actual.message);
-        Assert.AreEqual("Application", actual.errors[0].resource);
-        Assert.AreEqual("client_id", actual.errors[0].field);
-        Assert.AreEqual("invalid", actual.errors[0].code);
+        Assert.AreEqual("Bad Request", actual.Message);
+        Assert.AreEqual("Application", actual.Errors[0].Resource);
+        Assert.AreEqual("client_id", actual.Errors[0].Field);
+        Assert.AreEqual("invalid", actual.Errors[0].Code);
     }
 }

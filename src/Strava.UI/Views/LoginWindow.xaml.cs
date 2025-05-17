@@ -4,7 +4,12 @@ using Tudormobile.Strava.Model;
 namespace Tudormobile.Strava.UI.Views
 {
     /// <summary>
-    /// Interaction logic for LoginWindow.xaml
+    /// A window for user login.
+    /// <para>
+    /// This window contains a LoginView control hosted in a window that allows drag, resize, and close. Upon
+    /// succesful login, the window will close and return the granted authorization. The DialogResult is set to
+    /// indicate success or failure.
+    /// </para>
     /// </summary>
     public partial class LoginWindow : Window
     {
@@ -25,21 +30,6 @@ namespace Tudormobile.Strava.UI.Views
             get => (AuthorizationScope)GetValue(ScopeProperty);
             set => SetValue(ScopeProperty, value);
         }
-
-        /// <summary>
-        /// Logged-in Athlete Identifier.
-        /// </summary>
-        public AthleteId? LoggedInAthlete
-        {
-            get { return (AthleteId)GetValue(LoggedInAthleteProperty); }
-            set { SetValue(LoggedInAthleteProperty, value); }
-        }
-
-        /// <summary>
-        /// Logged-in Athlete Identifier Dependency Property.
-        /// </summary>
-        public static readonly DependencyProperty LoggedInAthleteProperty
-            = DependencyProperty.Register("LoggedInAthlete", typeof(AthleteId), typeof(LoginWindow), new PropertyMetadata(null));
 
         /// <summary>
         /// Authorization Scope to request for login.

@@ -6,6 +6,32 @@ namespace Strava.Tests.Model;
 public class AthleteTests
 {
     [TestMethod]
+    public void EmptyTest()
+    {
+        var actual = Athlete.Empty();
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(0, actual.Id);
+    }
+
+    [TestMethod]
+    public void JsonRoundTripTest()
+    {
+        var target = Athlete.FromJson(_json);
+        Assert.IsNotNull(target);
+        var json = target.ToJson();
+        var actual = Athlete.FromJson(json);
+        Assert.IsNotNull(actual);
+
+        Assert.AreEqual(target.Id, actual.Id);
+        Assert.AreEqual(target.LastName, actual.LastName);
+        Assert.AreEqual(target.FirstName, actual.FirstName);
+        Assert.AreEqual(target.Username, actual.Username);
+        Assert.AreEqual(target.FollowerCount, actual.FollowerCount);
+        Assert.AreEqual(target.FriendCount, actual.FriendCount);
+        Assert.AreEqual(target.ResourceState, actual.ResourceState);
+    }
+
+    [TestMethod]
     public void InvalidJsonTest()
     {
         var json = "this is invalid json";
@@ -16,7 +42,18 @@ public class AthleteTests
     [TestMethod]
     public void FullAthleteTest()
     {
-        var json = @"
+        var actual = Athlete.FromJson(_json);
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(1234567890987654321, actual.Id);
+        Assert.AreEqual("marianne_t", actual.Username);
+        Assert.AreEqual("Marianne", actual.FirstName);
+        Assert.AreEqual("Teutenberg", actual.LastName);
+        Assert.AreEqual(ResourceStates.Detail, actual.ResourceState);
+        Assert.AreEqual(5, actual.FollowerCount);
+        Assert.AreEqual(15, actual.FriendCount);
+    }
+
+    private static string _json = @"
 {
   ""id"" : 1234567890987654321,
   ""username"" : ""marianne_t"",
@@ -59,14 +96,5 @@ public class AthleteTests
     ""distance"" : 4904
   } ]
 }";
-        var actual = Athlete.FromJson(json);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(1234567890987654321, actual.Id);
-        Assert.AreEqual("marianne_t", actual.Username);
-        Assert.AreEqual("Marianne", actual.FirstName);
-        Assert.AreEqual("Teutenberg", actual.LastName);
-        Assert.AreEqual(3, actual.ResourceState);
-        Assert.AreEqual(5, actual.FollowerCount);
-        Assert.AreEqual(15, actual.FriendCount);
-    }
+
 }

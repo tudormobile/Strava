@@ -2,6 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:web="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+    xmlns:converters="clr-namespace:Tudormobile.Strava.UI.Converters"
+    xmlns:controls="clr-namespace:Tudormobile.Strava.UI.Controls"
     xmlns:local="clr-namespace:Tudormobile.Strava.UI.Views">
 
     <Style TargetType="{x:Type local:LoginView}">
@@ -21,5 +23,96 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:ActivityView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ActivityView}">
+                    <ControlTemplate.Resources>
+                        <converters:SportToSymbolConverter x:Key="SportToSymbolConverter"/>
+                        <converters:AddConverter x:Key="AddConverter"/>
+                        <converters:DistanceConverter x:Key="DistanceConverter"/>
+                        <converters:TimeConverter x:Key="TimeConverter"/>
+                        <converters:SpeedConverter x:Key="SpeedConverter"/>
+                    </ControlTemplate.Resources>
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel>
+                            <!-- Top Row - the name -->
+                            <TextBlock FontSize="{Binding ElementName=tb, Path=FontSize, Converter={StaticResource AddConverter}, ConverterParameter=6}" 
+                                       Text="{Binding Path=Activity.Name, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=name}" 
+                                       FontWeight="SemiBold" 
+                                       Margin="4,4,4,0"/>
+                            <!-- Second row, symbol and information -->
+                            <StackPanel Orientation="Horizontal">
+                                <Path Grid.Column="0" 
+                                          Data="{TemplateBinding Activity, Converter={StaticResource SportToSymbolConverter}}" 
+                                          Fill="{TemplateBinding Foreground}" Stretch="Uniform"
+                                          Height="{Binding ElementName=tb, Path=FontSize}"
+                                          Width="{Binding ElementName=tb, Path=FontSize}"
+                                          />
+                                <TextBlock x:Name="tb" Text="{Binding Path=Activity.StartDate, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=date_and_time}" Margin="4,4,14,4"/>
+                            </StackPanel>
+                            <!-- Third row, measurement details -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="4,0" Grid.Column="0" Text="Distance"/>
+                                <TextBlock Margin="4,0" Grid.Column="1" Text="Time"/>
+                                <TextBlock Margin="4,0" Grid.Column="2" Text="Avg Speed"/>
+                                <TextBlock Margin="4,0" Grid.Column="0" Grid.Row="1" FontWeight="SemiBold" FontSize="{Binding ElementName=tb, Path=FontSize, Converter={StaticResource AddConverter}, ConverterParameter=2}" 
+                                           Text="{TemplateBinding Activity, Converter={StaticResource DistanceConverter}}"/>
+                                <TextBlock Margin="4,0" Grid.Column="1" Grid.Row="1" FontWeight="SemiBold" FontSize="{Binding ElementName=tb, Path=FontSize, Converter={StaticResource AddConverter}, ConverterParameter=2}" 
+                                           Text="{TemplateBinding Activity, Converter={StaticResource TimeConverter}}"/>
+                                <TextBlock Margin="4,0" Grid.Column="2" Grid.Row="1" FontWeight="SemiBold" FontSize="{Binding ElementName=tb, Path=FontSize, Converter={StaticResource AddConverter}, ConverterParameter=2}" 
+                                           Text="{TemplateBinding Activity, Converter={StaticResource SpeedConverter}}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type local:SportTypeView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:SportTypeView}">
+                    <ControlTemplate.Resources>
+                        <converters:SportToSymbolConverter x:Key="SportToSymbolConverter"/>
+                    </ControlTemplate.Resources>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{Binding Path=., Converter={StaticResource SportToSymbolConverter}}" 
+                                  Fill="{TemplateBinding Foreground}" Stretch="Uniform"
+                                  Height="{Binding ElementName=tb, Path=FontSize}"
+                                  Width="{Binding ElementName=tb, Path=FontSize}"
+                             />
+                            <TextBlock Visibility="Hidden" x:Name="tb" Text="{Binding Path=., FallbackValue=sport_type}" Margin="4,4,14,4" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:Measurement}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+    <Style TargetType="{x:Type controls:Speed}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+    </Style>
+    <Style TargetType="{x:Type controls:Duration}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
     </Style>
 </ResourceDictionary>

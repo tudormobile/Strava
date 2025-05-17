@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Tudormobile.Strava.Model;
+﻿namespace Tudormobile.Strava.Model;
 
 /// <summary>
 /// Strava Athlete Identifier.
@@ -10,13 +8,11 @@ public class AthleteId()
     /// <summary>
     /// Unique identifer of the Athlete.
     /// </summary>
-    [JsonPropertyName("id")]
     public long Id { get; init; }
 
     /// <summary>
     /// Resource state.
     /// </summary>
-    [JsonPropertyName("resource_state")]
     public long ResourceState { get; init; }
 
     /// <summary>
@@ -29,7 +25,7 @@ public class AthleteId()
         var a = Athlete.FromJson(json);
         if (a != null)
         {
-            return new AthleteId() { Id = a.Id, ResourceState = a.ResourceState };
+            return new AthleteId() { Id = a.Id, ResourceState = (long)a.ResourceState };
         }
         return new AthleteId();
     }

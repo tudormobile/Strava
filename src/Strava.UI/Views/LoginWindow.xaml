@@ -76,7 +76,6 @@
         <local:LoginView x:Name="loginView" Margin="10,28,10,20"
                          Scope="{Binding Scope}"
                          Authorization="{Binding Authorization}"
-                         LoggedInAthlete="{Binding LoggedInAthlete}"
                          />
         <!-- Provides the user with a close box  -->
         <Button Style="{DynamicResource ButtonStyle1}" BorderThickness="0" 

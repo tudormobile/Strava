@@ -3,11 +3,20 @@
 namespace Tudormobile.Strava;
 
 /// <summary>
-/// Serializer for Strava model objects.
+/// Serializer for Tudormobile.Strava model objects.
 /// </summary>
+/// <remarks>
+/// The serializer uses the <see cref="JsonSerializer"/> class to convert between JSON and model objects.
+/// Serialization options include snake case (lower) property names and case insensitivity. Some specific
+/// model objects may include custom serialization. Strava API dates and times are converted to DateTime objects.
+/// </remarks>
 public static class StravaSerializer
 {
-    private static readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
+    private static readonly JsonSerializerOptions _options = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+    };
 
     /// <summary>
     /// Converts UTF8 json string to a model object.

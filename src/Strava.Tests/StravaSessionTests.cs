@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Tudormobile.Strava;
+using Tudormobile.Strava.Api;
 
 namespace Strava.Tests;
 
@@ -40,5 +41,23 @@ public class StravaSessionTests
             Assert.AreEqual("invalid", actual.Error.Fault.Errors[0].Code);
             Assert.AreEqual("Application", actual.Error.Fault.Errors[0].Resource);
         }
+    }
+
+    [TestMethod, ExcludeFromCodeCoverage]
+    public async Task RefreshTokensWhenNotAuthenticatedTest()
+    {
+        var target = new StravaSession(new StravaAuthorization());
+        var actual = await target.RefreshTokens();
+        Assert.AreSame(target, actual, "Should return the same instance.");
+        Assert.IsFalse(target.IsAuthenticated, "Should not be authenticated.");
+    }
+
+    [TestMethod]
+    public void StravaAPITest()
+    {
+        var target = new StravaSession(new StravaAuthorization());
+        var actual = target.StravaApi();
+        Assert.IsInstanceOfType<IStravaApi>(actual);
+        Assert.AreSame(actual, target.StravaApi(), "Failed to cache the api result.");
     }
 }

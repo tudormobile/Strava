@@ -44,11 +44,25 @@ public class StravaApiTests
     }
 
     [TestMethod]
+    public async Task RefreshTokensTest()
+    {
+        if (_session!.IsAuthenticated)
+        {
+            var result = await _session.RefreshTokens();
+            Assert.AreSame(_session, result, "Should return the same instance.");
+            Assert.IsTrue(result.IsAuthenticated);
+            Assert.IsNotNull(result.Authorization);
+            Assert.IsNotNull(result.Authorization.AccessToken);
+            Assert.IsNotNull(result.Authorization.RefreshToken);
+        }
+    }
+
+    [TestMethod]
     public async Task GetActivitiesTest()
     {
         if (_session!.IsAuthenticated)
         {
-            var api = _session!.CreateApi();
+            var api = _session!.ActivitiesApi();
             var actual = await api.GetActivities(DateTime.Now, DateTime.UnixEpoch);
             Assert.IsTrue(actual.Success);
             Assert.IsNull(actual.Error);
@@ -67,7 +81,7 @@ public class StravaApiTests
     {
         var clientAuthorization = new StravaAuthorization();
         var session = new StravaSession(clientAuthorization);
-        var api = session.CreateApi();
+        var api = session.ActivitiesApi();
         var actual = await api.GetActivities(DateTime.Now, DateTime.MinValue);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
@@ -77,7 +91,7 @@ public class StravaApiTests
     [TestMethod]
     public async Task GetActivitiesTestBadPage()
     {
-        var api = _session!.CreateApi();
+        var api = _session!.ActivitiesApi();
         var actual = await api.GetActivities(DateTime.Now, DateTime.MinValue, page: -5);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
@@ -89,7 +103,7 @@ public class StravaApiTests
     {
         var clientAuthorization = new StravaAuthorization();
         var session = new StravaSession(clientAuthorization);
-        var api = session.CreateApi();
+        var api = session.ActivitiesApi();
         var id = 123;
         var actual = await api.UpdateActivity(id, new UpdatableActivity());
         Assert.IsFalse(actual.Success);
@@ -102,7 +116,7 @@ public class StravaApiTests
     {
         var clientAuthorization = new StravaAuthorization();
         var session = new StravaSession(clientAuthorization);
-        var api = session.CreateApi();
+        var api = session.ActivitiesApi();
         var id = 123;
         var actual = await api.GetActivity(id, includeAllEfforts: false);
         Assert.IsFalse(actual.Success);

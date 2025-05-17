@@ -1,22 +1,35 @@
 # Getting Started
-
-### Install the package
+## Install the package
 ```
-dotnet add package Tudormobile.Strava
+dotnet package add Tudormobile.Strava
 ```
-### Prerequisites
-**NONE**
-
-### Dependencies
-**NONE**
-
-### Using the Library
+-or-
+```
+dotnet package add Tudormobile.Strava.UI
+```
+## Using the Library
 
 ```
-; add code here
+using Tudormobile.Strava;
+using Tudormobile.Strava.Api;
+using Tudormobile.Strava.Model;
+
+// Strava Authorization
+var auth = new StravaAuthorization(
+    client_id,          // Client Id
+    client_secret,      // Client secret
+    access_token,       // Current access token
+    refresh_token);     // Current refresh token
+
+var session = await new StravaSession(auth).RefreshTokens();
+
+// Get user activities
+var api = session.CreateApi();
+var activities = await api.GetActivities();
 ```
 ### Key Features
-- Key feature 1
-- Key feature 2
-- Key feature 3
-- Key feature 4
+- Authentication and Authorization with the Strava V3 API
+- Strava object model including serialization/deserialization
+- Service component for hosting web applications and services
+- Client component for authenticating with Strava and consuming the API
+- UI elements for building GUI applications (windows).
