@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:StravaLogin.WPF"
         xmlns:converters="clr-namespace:Tudormobile.Strava.UI.Converters;assembly=Tudormobile.Strava.UI"
         xmlns:ui="clr-namespace:Tudormobile.Strava.UI.Views;assembly=Tudormobile.Strava.UI"
+        xmlns:controls="clr-namespace:Tudormobile.Strava.UI.Controls;assembly=Tudormobile.Strava.UI"
         mc:Ignorable="d" Background="#FFFAFAFA" ResizeMode="CanResizeWithGrip"
         Title="MainWindow" Height="450" Width="800">
     <Grid >
@@ -48,6 +49,13 @@
             <ui:ActivityView Grid.Row="1" x:Name="activityView" Margin="10,0" Activity="{Binding SelectedItem, ElementName=list}" />
             <Button Content="Edit" Height="24" Width="90" Margin="10" Command="{Binding EditCommand}" CommandParameter="{Binding SelectedItem, ElementName=list}" />
             <ui:SportTypeView Grid.Row="1" DataContext="{Binding SelectedItem.SportType, ElementName=list}" ShowText="True" VerticalAlignment="Bottom" Margin="10,0,0,2"/>
+        <!--<ui:SportTypeView Grid.Row="1" DataContext="Golf" ShowText="True" VerticalAlignment="Bottom"/>-->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
+            <controls:Measurement Value="123.45"  controls:Measurement.Preference="meters" Margin="2,0"/>
+            <controls:Measurement Value="123.45"  controls:Measurement.Preference="feet" Margin="2,0"/>
+            <controls:Speed Value="123.45"  controls:Measurement.Preference="meters" Margin="2,0"/>
+            <controls:Speed Value="123.45"  controls:Measurement.Preference="feet" Margin="2,0"/>
+        </StackPanel>
         </StackPanel>
         <!-- Activities List -->
         <DataGrid x:Name="list" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Activities}">

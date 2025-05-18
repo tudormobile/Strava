@@ -1,4 +1,5 @@
-﻿using Tudormobile.Strava.UI.Converters;
+﻿using System.Windows.Media;
+using Tudormobile.Strava.UI.Converters;
 namespace Strava.Tests.Converters;
 
 [TestClass]
@@ -7,10 +8,14 @@ public class SportToSymbolConverterTests
     [TestMethod]
     public void ConvertTest()
     {
+        // Arrange
         var sport = "AlpineSki";
         var converter = new SportToSymbolConverter();
-        var actual = converter.Convert(sport, null, null, null);
 
-        Assert.Fail();
+        // Act
+        var actual = converter.Convert(sport, typeof(StreamGeometry), null, null);
+
+        // Assert
+        Assert.IsInstanceOfType<StreamGeometry>(actual);
     }
 }
