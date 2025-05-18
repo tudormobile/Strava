@@ -34,6 +34,7 @@ namespace StravaLogin.WPF
 
             _viewModel.Athlete = File.Exists("athlete.json") ? Athlete.FromJson(File.ReadAllText(_filename)) : Athlete.Empty();
             _viewModel.LoginCommand = this;
+            _viewModel.EditCommand = this;
             _viewModel.StatusMessage = "Login required.";
 
             MainWindow = new MainWindow
@@ -63,19 +64,26 @@ namespace StravaLogin.WPF
 
         public void Execute(object? parameter)
         {
-            // Login...
-            var loginWindow = new LoginWindow()
+            if (parameter is SummaryActivity)
             {
-                DataContext = new
+
+            }
+            else
+            {
+                // Login...
+                var loginWindow = new LoginWindow()
                 {
-                    Scope = AuthorizationScope.READ,
-                    Authorization = _authorization,
-                },
-            };
-            if (loginWindow.ShowDialog() == true)
-            {
-                _ = startSession(loginWindow.Authorization);
-                OnCanExecuteChanged();
+                    DataContext = new
+                    {
+                        Scope = AuthorizationScope.READ,
+                        Authorization = _authorization,
+                    },
+                };
+                if (loginWindow.ShowDialog() == true)
+                {
+                    _ = startSession(loginWindow.Authorization);
+                    OnCanExecuteChanged();
+                }
             }
         }
 
