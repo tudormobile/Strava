@@ -5,6 +5,7 @@
 /// </summary>
 public class UpdatableActivity
 {
+
     /// <summary>
     /// Gets or sets a value indicating whether this activity is a commute.
     /// </summary>
@@ -40,4 +41,5 @@ public class UpdatableActivity
         Name = name ?? string.Empty;
         Description = description ?? string.Empty;
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows.Input;
 using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.UI.ViewModels;
@@ -80,7 +81,15 @@ public class ActivityViewModel : INotifyPropertyChanged
     /// </summary>
     public double MaxSpeed => _activity.MaxSpeed;
 
-    // Updatable properties
+    /// <summary>
+    /// Gets or sets the command to update the activity.
+    /// </summary>
+    public ICommand UpdateCommand { get; set; }
+
+    /// <summary>
+    /// Gets or sets the command to be executed when the "Done" action is triggered.
+    /// </summary>
+    public ICommand DoneCommand { get; set; }
 
     /// <summary>
     /// The name of the activity

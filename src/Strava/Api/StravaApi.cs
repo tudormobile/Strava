@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
@@ -41,7 +43,33 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         {
             return new(error: result.Error);
         }
-        return new ApiResult<DetailedActivity>(error: new ApiError(new NotImplementedException()));
+        var json = JsonSerializer.Serialize<UpdatableActivity>(activity, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            Converters = { new JsonStringEnumConverter() }
+        });
+        var uri = $"https://www.strava.com/api/v3/activities/{id}";
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await result.Data!.PutAsync(uri, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            try
+            {
+                var jsonStream = await response.Content.ReadAsStreamAsync();
+                if (StravaSerializer.TryDeserialize(jsonStream, out DetailedActivity? activityResult, out var exception))
+                {
+                    return new ApiResult<DetailedActivity>(data: activityResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<DetailedActivity>(error: new ApiError(exception: ex));
+            }
+        }
+
+        return new ApiResult<DetailedActivity>(error: new ApiError(response.ReasonPhrase));
     }
 
     // http get "https://www.strava.com/api/v3/athlete/activities?before=&after=&page=&per_page=" "Authorization: Bearer [[token]]"

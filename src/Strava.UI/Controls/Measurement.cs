@@ -100,6 +100,11 @@ public class Measurement : TextBlock
             var p = Measurement.GetPreference(d);
             speed.Text = (string)_speedConverter.Convert(speed.Value, typeof(string), p, null);
         }
+        else if (d is Duration duration)
+        {
+            var p = Measurement.GetPreference(d);
+            duration.Text = (string)_timeConverter.Convert(duration.Value, typeof(string), p, null);
+        }
         else if (d is Measurement measurement)
         {
             var p = Measurement.GetPreference(d);
