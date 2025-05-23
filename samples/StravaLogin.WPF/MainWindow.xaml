@@ -45,6 +45,10 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>-->
+        <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Bottom">
+            <ui:ActivityView Grid.Row="1" x:Name="activityView" Margin="10,0" Activity="{Binding SelectedItem, ElementName=list}" />
+            <Button Content="Edit" Height="24" Width="90" Margin="10" Command="{Binding EditCommand}" CommandParameter="{Binding SelectedItem, ElementName=list}" />
+            <ui:SportTypeView Grid.Row="1" DataContext="{Binding SelectedItem.SportType, ElementName=list}" ShowText="True" VerticalAlignment="Bottom" Margin="10,0,0,2"/>
         <!--<ui:SportTypeView Grid.Row="1" DataContext="Golf" ShowText="True" VerticalAlignment="Bottom"/>-->
         <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
             <controls:Measurement Value="123.45"  controls:Measurement.Preference="meters" Margin="2,0"/>
@@ -52,9 +56,37 @@
             <controls:Speed Value="123.45"  controls:Measurement.Preference="meters" Margin="2,0"/>
             <controls:Speed Value="123.45"  controls:Measurement.Preference="feet" Margin="2,0"/>
         </StackPanel>
-            <ui:ActivityView Grid.Row="1" x:Name="activityView" Margin="10,0" Activity="{Binding Activity}" />
+        </StackPanel>
         <!-- Activities List -->
-        <DataGrid Grid.Row="1" Grid.Column="1" AutoGenerateColumns="True" ItemsSource="{Binding Activities}"/>
+        <DataGrid x:Name="list" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Activities}">
+            <DataGrid.Resources>
+                <converters:DistanceConverter x:Key="DistanceConverter"/>
+                <converters:SpeedConverter x:Key="SpeedConverter"/>
+                <converters:TimeConverter x:Key="TimeConverter"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding StartDate}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Sport" Binding="{Binding SportType}"/>
+                <DataGridTextColumn Header="Distance (m)" Binding="{Binding Distance}"/>
+                <DataGridTextColumn Header="Duration (secs)" Binding="{Binding ElapsedTime}"/>
+                <DataGridTextColumn Header="Moving Time (secs)" Binding="{Binding MovingTime}"/>
+                <DataGridTextColumn Header="Avg Speed (m/s)" Binding="{Binding AverageSpeed}"/>
+                <!-- Additional Columns -->
+                <DataGridTemplateColumn Header="Sport" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:SportTypeView DataContext="{Binding SportType}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Distance" Binding="{Binding Distance, Converter={StaticResource DistanceConverter}}"/>
+                <DataGridTextColumn Header="Duration" Binding="{Binding ElapsedTime, Converter={StaticResource TimeConverter}}"/>
+                <DataGridTextColumn Header="Moving Time" Binding="{Binding MovingTime, Converter={StaticResource TimeConverter}}"/>
+                <DataGridTextColumn Header="Speed" Binding="{Binding AverageSpeed, Converter={StaticResource SpeedConverter}}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <!-- Lower status bar -->
         <StatusBar Grid.Row="2" Grid.ColumnSpan="100">
             <TextBlock Text="{Binding StatusMessage, FallbackValue='[ status message ]'}"/>

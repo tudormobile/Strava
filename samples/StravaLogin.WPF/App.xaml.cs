@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
 using Tudormobile.Strava.Model;
+using Tudormobile.Strava.UI.ViewModels;
 using Tudormobile.Strava.UI.Views;
 
 namespace StravaLogin.WPF
@@ -34,6 +36,7 @@ namespace StravaLogin.WPF
 
             _viewModel.Athlete = File.Exists("athlete.json") ? Athlete.FromJson(File.ReadAllText(_filename)) : Athlete.Empty();
             _viewModel.LoginCommand = this;
+            _viewModel.EditCommand = this;
             _viewModel.StatusMessage = "Login required.";
 
             MainWindow = new MainWindow
@@ -63,19 +66,36 @@ namespace StravaLogin.WPF
 
         public void Execute(object? parameter)
         {
-            // Login...
-            var loginWindow = new LoginWindow()
+            if (parameter is SummaryActivity activity)
             {
-                DataContext = new
+                var w = new Window() { SizeToContent = SizeToContent.WidthAndHeight };
+                var m = new ActivityViewModel(new DetailedActivity(activity))
                 {
-                    Scope = AuthorizationScope.READ,
-                    Authorization = _authorization,
-                },
-            };
-            if (loginWindow.ShowDialog() == true)
+                    DoneCommand = new DoneCommand(w),
+                    UpdateCommand = new UpdateCommand(w, _session),
+                };
+                w.Content = new ActivityEditView()
+                {
+                    DataContext = m
+                };
+                w.ShowDialog();
+            }
+            else
             {
-                _ = startSession(loginWindow.Authorization);
-                OnCanExecuteChanged();
+                // Login...
+                var loginWindow = new LoginWindow()
+                {
+                    DataContext = new
+                    {
+                        Scope = AuthorizationScope.READ,
+                        Authorization = _authorization,
+                    },
+                };
+                if (loginWindow.ShowDialog() == true)
+                {
+                    _ = startSession(loginWindow.Authorization);
+                    OnCanExecuteChanged();
+                }
             }
         }
 
@@ -104,6 +124,79 @@ namespace StravaLogin.WPF
                 _viewModel.StatusMessage = $"{_viewModel.Activities.Count:N0} activities found.";
             }
         }
+    }
+
+    public class UpdateCommand : ICommand
+    {
+        private readonly Window _window;
+        private readonly StravaSession? _session;
+
+        public UpdateCommand(Window w, StravaSession? session)
+        {
+            this._window = w;
+            this._session = session;
+        }
+
+        public event EventHandler? CanExecuteChanged;
+        protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter)
+        {
+            var activity = ((Control)_window.Content).DataContext as ActivityViewModel;
+            if (activity != null)
+            {
+                var updatableActivity = new UpdatableActivity()
+                {
+                    Commute = activity.Commute,
+                    Trainer = activity.Trainer,
+                    Description = activity.Description,
+                    Name = activity.Name,
+                    SportType = activity.SportType,
+                };
+                var api = _session!.ActivitiesApi();
+                _window.Close();
+                api.UpdateActivity(activity.Id, updatableActivity).ContinueWith(async t =>
+                {
+                    ApiResult<DetailedActivity> result = await t;
+                    _window.Dispatcher.Invoke(() =>
+                    {
+                        if (result.Success)
+                        {
+                            //activity.Athlete = result.Data.Athlete;
+                            //activity.Distance = result.Data.Distance;
+                            //activity.ElapsedTime = result.Data.ElapsedTime;
+                            //activity.MovingTime = result.Data.MovingTime;
+                            //activity.StartDate = result.Data.StartDate;
+                            //activity.TotalElevationGain = result.Data.TotalElevationGain;
+                            //activity.Type = result.Data.Type;
+                            //activity.WorkoutType = result.Data.WorkoutType;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Error: {result.Error!.Message}");
+                        }
+                    });
+                });
+            }
+        }
+    }
+    public class DoneCommand : ICommand
+    {
+        private readonly Window _window;
+
+        public DoneCommand(Window w)
+        {
+            this._window = w;
+        }
+
+        public event EventHandler? CanExecuteChanged;
+        protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter) => _window.Close();
     }
 
 }

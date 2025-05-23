@@ -10,6 +10,7 @@ namespace StravaLogin.WPF
         private Athlete? _athlete;
         private string? _statusMessage;
         public ICommand? LoginCommand { get; set; }
+        public ICommand? EditCommand { get; set; }
         public SummaryActivity Activity { get; set; } = new SummaryActivity()
         {
             SportType = "AlpineSki",

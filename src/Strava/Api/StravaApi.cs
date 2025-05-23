@@ -1,74 +1,75 @@
-﻿using Tudormobile.Strava.Model;
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
 internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 {
-    private StravaSession _session;
+    private readonly StravaSession _session;
+    private readonly Lazy<HttpClient> _client;
     public StravaApiImpl(StravaSession session)
     {
         _session = session;
+        _client = new Lazy<HttpClient>(() => updateAuthHeader(new HttpClient()));
     }
 
     async Task<ApiResult<Athlete>> IStravaApi.GetAthlete(long? athleteId)
     {
-        // try and authenticate first
-        if (!_session.IsAuthenticated)
-        {
-            var result = await _session.RefreshAsync();
-            if (!result.Success)
-            {
-                return new ApiResult<Athlete>(error: result.Error);
-            }
-        }
-        var client = new HttpClient();
         var uri = new Uri($"https://www.strava.com/api/v3/athlete");
-        client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_session.Authorization.AccessToken}");
-        var data = await client.GetAsync(uri);
-        if (data.IsSuccessStatusCode)
-        {
-            try
+        return await getRequest(await getAuthenticatedClient(), uri, json =>
             {
-                var json = await data.Content.ReadAsStringAsync();
-                var athlete = Athlete.FromJson(json);
+                var athlete = Athlete.FromJson(new StreamReader(json).ReadToEnd());
                 _session.Authorization.Id = athlete?.Id ?? 0;
                 return new ApiResult<Athlete>(data: athlete);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<Athlete>(error: new ApiError(exception: ex));
-            }
-        }
-        return new ApiResult<Athlete>(error: new ApiError(data.ReasonPhrase));
+            });
     }
 
     async Task<ApiResult<DetailedActivity>> IActivitiesApi.GetActivity(long id, bool? includeAllEfforts)
     {
-        // try and authenticate first
-        if (!_session.IsAuthenticated)
+        var result = await getAuthenticatedClient();
+        if (!result.Success)
         {
-            var result = await _session.RefreshAsync();
-            if (!result.Success)
-            {
-                return new ApiResult<DetailedActivity>(error: result.Error);
-            }
+            return new ApiResult<DetailedActivity>(error: result.Error);
         }
         return new ApiResult<DetailedActivity>(error: new ApiError(new NotImplementedException()));
     }
 
     async Task<ApiResult<DetailedActivity>> IActivitiesApi.UpdateActivity(long id, UpdatableActivity activity)
     {
-        // try and authenticate first
-        if (!_session.IsAuthenticated)
+        var result = await getAuthenticatedClient();
+        if (!result.Success)
         {
-            var result = await _session.RefreshAsync();
-            if (!result.Success)
+            return new(error: result.Error);
+        }
+        var json = JsonSerializer.Serialize<UpdatableActivity>(activity, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+            Converters = { new JsonStringEnumConverter() }
+        });
+        var uri = $"https://www.strava.com/api/v3/activities/{id}";
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await result.Data!.PutAsync(uri, content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            try
             {
-                return new(error: result.Error);
+                var jsonStream = await response.Content.ReadAsStreamAsync();
+                if (StravaSerializer.TryDeserialize(jsonStream, out DetailedActivity? activityResult, out var exception))
+                {
+                    return new ApiResult<DetailedActivity>(data: activityResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<DetailedActivity>(error: new ApiError(exception: ex));
             }
         }
-        return new ApiResult<DetailedActivity>(error: new ApiError(new NotImplementedException()));
 
+        return new ApiResult<DetailedActivity>(error: new ApiError(response.ReasonPhrase));
     }
 
     // http get "https://www.strava.com/api/v3/athlete/activities?before=&after=&page=&per_page=" "Authorization: Bearer [[token]]"
@@ -76,33 +77,63 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
     {
         var beforeDate = before ?? DateTime.Now;                       // default is 'now'
         var afterDate = after ?? DateTimeOffset.UnixEpoch.DateTime;    // default is 'epoch'
+        var beforeOffset = new DateTimeOffset(beforeDate).ToUnixTimeSeconds();
+        var afterOffset = new DateTimeOffset(afterDate).ToUnixTimeSeconds();
+        var uri = new Uri($"https://www.strava.com/api/v3/athlete/activities?before={beforeOffset}&after={afterOffset}&page={page}&per_page={perPage}");
+        return await getRequest<List<SummaryActivity>>(await getAuthenticatedClient(), uri, json =>
+        {
+            if (StravaSerializer.TryDeserialize(json, out SummaryActivity[]? activities, out var exception))
+            {
+                return new([.. activities!]);
+            }
+            throw exception ?? new JsonException("Failed to deserialize activities.");
+        });
+    }
+
+    private async Task<ApiResult<HttpClient>> getAuthenticatedClient()
+    {
         if (!_session.IsAuthenticated)
         {
             var result = await _session.RefreshAsync();
             if (!result.Success)
             {
-                return new(error: result.Error);
+                return new ApiResult<HttpClient>(error: result.Error);
             }
+            updateAuthHeader(_client.Value);
         }
-        var client = new HttpClient();
-        var beforeOffset = new DateTimeOffset(beforeDate).ToUnixTimeSeconds();
-        var afterOffset = new DateTimeOffset(afterDate).ToUnixTimeSeconds();
-        var uri = new Uri($"https://www.strava.com/api/v3/athlete/activities?before={beforeOffset}&after={afterOffset}&page={page}&per_page={perPage}");
+        return new ApiResult<HttpClient>(data: _client.Value);
+    }
 
+    private HttpClient updateAuthHeader(HttpClient client)
+    {
+        if (client.DefaultRequestHeaders.Contains("Authorization"))
+        {
+            client.DefaultRequestHeaders.Remove("Authorization");
+        }
         client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_session.Authorization.AccessToken}");
+        return client;
+    }
 
-        var data = await client.GetAsync(uri);
-
+    private async Task<ApiResult<T>> getRequest<T>(ApiResult<HttpClient> clientResult, Uri uri, Func<Stream, ApiResult<T>> builder)
+    {
+        if (!clientResult.Success || clientResult.Data == null)
+        {
+            return new ApiResult<T>(error: clientResult.Error);
+        }
+        var data = await clientResult.Data.GetAsync(uri);
         if (data.IsSuccessStatusCode)
         {
-
-            if (StravaSerializer.TryDeserialize(data.Content.ReadAsStream(), out SummaryActivity[]? activities, out var exception))
+            try
             {
-                return new([.. activities!]);
+                var jsonStream = await data.Content.ReadAsStreamAsync();
+                return builder(jsonStream);
             }
-            return new ApiResult<List<SummaryActivity>>(null, new ApiError(exception: exception!));
+            catch (Exception ex)
+            {
+                return new ApiResult<T>(error: new ApiError(exception: ex));
+            }
         }
-        return new ApiResult<List<SummaryActivity>>(null, new ApiError(data.ReasonPhrase));
+        return new ApiResult<T>(error: new ApiError(data.ReasonPhrase));
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Tudormobile.Strava.UI.Converters;
+﻿using System.Diagnostics.CodeAnalysis;
+using Tudormobile.Strava.UI.Converters;
 namespace Strava.Tests.Converters;
 
 [TestClass]
@@ -31,13 +32,10 @@ public class DistanceConverterTests
 
     }
 
-    [TestMethod]
+    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotImplementedException))]
     public void ConvertBackTest()
     {
-        Assert.ThrowsException<NotImplementedException>(() =>
-        {
-            var converter = new DistanceConverter();
-            converter.ConvertBack("1.50 km", typeof(double), null, null);
-        });
+        var converter = new DistanceConverter();
+        var actual = converter.ConvertBack("1.50 km", typeof(double), null, null);
     }
 }

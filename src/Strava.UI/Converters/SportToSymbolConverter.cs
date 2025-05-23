@@ -20,6 +20,11 @@ public class SportToSymbolConverter : IValueConverter
         {
             return Geometry.Parse(convertStringToSymbol((string)value)) ?? Geometry.Parse(path);
         }
+        else if (value is SportTypes)
+        {
+            result = Geometry.Parse(convertStringToSymbol(((SportTypes)value).ToString())) ?? result;
+            return result != Geometry.Empty ? result : Geometry.Parse(path);
+        }
         else if (value is SummaryActivity)
         {
             result = Geometry.Parse(convertStringToSymbol(((SummaryActivity)value).SportType)) ?? result;
