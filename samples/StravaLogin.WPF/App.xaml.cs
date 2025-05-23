@@ -128,8 +128,8 @@ namespace StravaLogin.WPF
 
     public class UpdateCommand : ICommand
     {
-        private Window _window;
-        private StravaSession? _session;
+        private readonly Window _window;
+        private readonly StravaSession? _session;
 
         public UpdateCommand(Window w, StravaSession? session)
         {
@@ -138,6 +138,7 @@ namespace StravaLogin.WPF
         }
 
         public event EventHandler? CanExecuteChanged;
+        protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
         public bool CanExecute(object? parameter) => true;
 
@@ -183,7 +184,7 @@ namespace StravaLogin.WPF
     }
     public class DoneCommand : ICommand
     {
-        private Window _window;
+        private readonly Window _window;
 
         public DoneCommand(Window w)
         {
@@ -191,6 +192,7 @@ namespace StravaLogin.WPF
         }
 
         public event EventHandler? CanExecuteChanged;
+        protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
         public bool CanExecute(object? parameter) => true;
 

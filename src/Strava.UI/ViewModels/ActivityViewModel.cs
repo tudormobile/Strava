@@ -13,7 +13,7 @@ namespace Tudormobile.Strava.UI.ViewModels;
 /// description, and type.</remarks>
 public class ActivityViewModel : INotifyPropertyChanged
 {
-    private DetailedActivity _activity;
+    private readonly DetailedActivity _activity;
 
     /// <summary>
     /// Occurs when a property value changes.
@@ -84,12 +84,12 @@ public class ActivityViewModel : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the command to update the activity.
     /// </summary>
-    public ICommand UpdateCommand { get; set; }
+    public ICommand? UpdateCommand { get; set; }
 
     /// <summary>
     /// Gets or sets the command to be executed when the "Done" action is triggered.
     /// </summary>
-    public ICommand DoneCommand { get; set; }
+    public ICommand? DoneCommand { get; set; }
 
     /// <summary>
     /// The name of the activity

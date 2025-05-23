@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Tudormobile.Strava.UI.Converters;
 
 namespace Strava.Tests.Converters;
@@ -6,13 +7,7 @@ namespace Strava.Tests.Converters;
 [TestClass]
 public class SpeedConverterTests
 {
-    private SpeedConverter? _converter;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        _converter = new SpeedConverter();
-    }
+    private SpeedConverter _converter = new SpeedConverter();
 
     [TestMethod]
     public void ConvertMetersTest()
@@ -23,7 +18,7 @@ public class SpeedConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter?.Convert(value, typeof(string), parameter, culture);
+        var result = _converter.Convert(value, typeof(string), parameter, culture);
 
         // Assert
         Assert.AreEqual("18.0km/h", result);
@@ -38,13 +33,13 @@ public class SpeedConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter?.Convert(value, typeof(string), parameter, culture);
+        var result = _converter.Convert(value, typeof(string), parameter, culture);
 
         // Assert
         Assert.AreEqual("11.2mph", result);
     }
 
-    [TestMethod]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void ConvertBackTest()
     {
         Assert.Throws<NotImplementedException>(() => new SpeedConverter().ConvertBack("123", typeof(double), null, null));

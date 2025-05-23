@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Tudormobile.Strava.UI.Converters;
 
 namespace Strava.Tests.Converters;
@@ -6,13 +7,7 @@ namespace Strava.Tests.Converters;
 [TestClass]
 public class AddConverterTests
 {
-    private AddConverter? _converter;
-
-    [TestInitialize]
-    public void Setup()
-    {
-        _converter = new AddConverter();
-    }
+    private AddConverter _converter = new AddConverter();
 
     [TestMethod]
     public void Convert_AddsValueAndParameter_ReturnsSum()
@@ -23,7 +18,7 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter?.Convert(value, typeof(double), parameter, culture);
+        var result = _converter.Convert(value, typeof(double), parameter, culture);
 
         // Assert
         Assert.AreEqual(8.0, result);
@@ -38,7 +33,7 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter?.Convert(value, typeof(int), parameter, culture);
+        var result = _converter.Convert(value, typeof(int), parameter, culture);
 
         // Assert
         Assert.AreEqual(2.0, result);
@@ -53,13 +48,13 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act
-        var result = _converter?.Convert(value, typeof(int), parameter, culture);
+        var result = _converter.Convert(value, typeof(int), parameter, culture);
 
         // Assert
         Assert.AreEqual(7.0, result);
     }
 
-    [TestMethod]
+    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(FormatException))]
     public void Convert_InvalidValue_ThrowsException()
     {
         // Arrange
@@ -68,11 +63,10 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act & Assert
-        Assert.ThrowsException<FormatException>(() =>
-            _converter?.Convert(value, typeof(int), parameter, culture));
+        _converter.Convert(value, typeof(int), parameter, culture);
     }
 
-    [TestMethod]
+    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(FormatException))]
     public void Convert_InvalidParameter_ThrowsException()
     {
         // Arrange
@@ -81,72 +75,15 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act & Assert
-        Assert.ThrowsException<FormatException>(() =>
-            _converter?.Convert(value, typeof(int), parameter, culture));
+        _converter.Convert(value, typeof(int), parameter, culture);
     }
 
-    [TestMethod]
-    public void ConvertBack_SubtractsParameterFromValue_ReturnsDifference()
+    [TestMethod, ExcludeFromCodeCoverage]
+    public void ConvertBack_NotImplemented()
     {
-        // Arrange
-        double value = 10;
-        double parameter = 4;
-        var culture = CultureInfo.InvariantCulture;
-
         // Act & Assert
         Assert.ThrowsException<NotImplementedException>(() =>
-            _converter?.ConvertBack(value, typeof(int), parameter, culture));
+            _converter.ConvertBack(123, typeof(int), null, null));
     }
 
-    [TestMethod]
-    public void ConvertBack_ValueIsNull_ReturnsNegativeParameter()
-    {
-        // Arrange
-        double? value = null;
-        double parameter = 3;
-        var culture = CultureInfo.InvariantCulture;
-
-        // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() =>
-            _converter?.ConvertBack(value, typeof(int), parameter, culture));
-    }
-
-    [TestMethod]
-    public void ConvertBack_ParameterIsNull_ReturnsValue()
-    {
-        // Arrange
-        double value = 5;
-        double? parameter = null;
-        var culture = CultureInfo.InvariantCulture;
-
-        // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() =>
-            _converter?.ConvertBack(value, typeof(int), parameter, culture));
-    }
-
-    [TestMethod]
-    public void ConvertBack_InvalidValue_ThrowsException()
-    {
-        // Arrange
-        var value = "foo";
-        double parameter = 1;
-        var culture = CultureInfo.InvariantCulture;
-
-        // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() =>
-            _converter?.ConvertBack(value, typeof(int), parameter, culture));
-    }
-
-    [TestMethod]
-    public void ConvertBack_InvalidParameter_ThrowsException()
-    {
-        // Arrange
-        double value = 1;
-        var parameter = "bar";
-        var culture = CultureInfo.InvariantCulture;
-
-        // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() =>
-            _converter?.ConvertBack(value, typeof(int), parameter, culture));
-    }
 }
