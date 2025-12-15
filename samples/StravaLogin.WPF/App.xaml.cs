@@ -62,6 +62,8 @@ namespace StravaLogin.WPF
             // Save the data
             if (_session != null)
             {
+                // WARNING: In production, use Windows Credential Manager or encrypted storage
+                // Environment variables are not secure for sensitive tokens. Use the USER level at a minimum.
                 Environment.SetEnvironmentVariable("STRAVA_ACCESS_TOKEN", _session.Authorization.AccessToken, EnvironmentVariableTarget.User);
                 Environment.SetEnvironmentVariable("STRAVA_REFRESH_TOKEN", _session.Authorization.RefreshToken, EnvironmentVariableTarget.User);
             }
