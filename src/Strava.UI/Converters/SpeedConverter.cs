@@ -30,7 +30,7 @@ public class SpeedConverter : IValueConverter
             string s when double.TryParse(s, out var d) => (d, false),
             _ => (0.0, false)
         };
-        var factor = data.Item2 || parameter?.ToString() == "meters" ? 3.6 : 2.23694;
+        var factor = data.Item2 || useMeters ? 3.6 : 2.23694;
         return factor == 3.6
             ? $"{data.Item1 * factor:F1}km/h"
             : $"{data.Item1 * factor:F1}mph";

@@ -19,6 +19,7 @@ public class StravaSession
 {
     internal StravaApiImpl? _api;
     private readonly string STRAVA_TOKEN_ENDPOINT = "https://www.strava.com/oauth/token";
+    private StravaAuthorization _authorization;
     /// <summary>
     /// True if current session is authenticated, i.e., access token is provided and is not expired.
     /// </summary>
@@ -30,7 +31,7 @@ public class StravaSession
     /// <summary>
     /// Current client authorization record.
     /// </summary>
-    public StravaAuthorization Authorization { get; init; }
+    public StravaAuthorization Authorization => _authorization;
 
     /// <summary>
     /// Create and initialize a new instance.
@@ -38,8 +39,8 @@ public class StravaSession
     /// <param name="clientAuthorization">Initial authorization.</param>
     public StravaSession(StravaAuthorization clientAuthorization)
     {
-        if (clientAuthorization == null) throw new ArgumentNullException(nameof(clientAuthorization));
-        Authorization = clientAuthorization;
+        ArgumentNullException.ThrowIfNull(clientAuthorization);
+        _authorization = clientAuthorization;
     }
 
     /// <summary>
@@ -54,7 +55,7 @@ public class StravaSession
     /// <remarks>
     /// If provided (and not expired), the AccessToken and RefreshToken are updated. This method does
     /// not return errors; check the IsAuthenticated property to determine if the session is authenticated.
-    /// This method is provded as a convieniee method to refresh the session with existing credentials.
+    /// This method is provided as a convenience method to refresh the session with existing credentials.
     /// </remarks>
     /// <returns>Reference to the current session.</returns>
     public async Task<StravaSession> RefreshTokens()
@@ -96,17 +97,15 @@ public class StravaSession
                 {
                     if (auth != null && auth.access_token != null && auth.refresh_token != null)
                     {
-                        Authorization.Id = auth.athlete?.Id ?? 0;
-                        Authorization.AccessToken = auth.access_token;
-                        Authorization.RefreshToken = auth.refresh_token;
-                        Authorization.Expires = DateTime.UnixEpoch.AddSeconds(auth.expires_at ?? 0);
+                        _authorization = Authorization.WithTokens(auth.access_token, auth.refresh_token, DateTime.UnixEpoch.AddSeconds(auth.expires_at ?? 0));
+                        _authorization.Id = auth.athlete?.Id ?? 0;
                         return new ApiResult<StravaAuthorization>(Authorization);   // Successful result
                     }
                 }
                 return new ApiResult<StravaAuthorization>(error: new ApiError("Unexpected response received"));
             }
 
-            var reply = await response.Content.ReadAsStringAsync();
+            var reply = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (StravaSerializer.TryDeserialize<Fault>(reply, out var fault))
             {
                 return new ApiResult<StravaAuthorization>(error: new ApiError(fault: fault!));

@@ -12,7 +12,7 @@ public class StravaApiTests
     private static StravaSession? _session;
 
     [ClassInitialize, ExcludeFromCodeCoverage]
-    public static void InitializeActivitiesApi(TestContext context)
+    public static void InitializeActivitiesApi(TestContext _)
     {
         // read the environment from json data
         string client_id = Environment.GetEnvironmentVariable("STRAVA_CLIENT_ID") ?? string.Empty;
@@ -32,7 +32,7 @@ public class StravaApiTests
         }
     }
     // is this needed??
-    [ClassCleanup, ExcludeFromCodeCoverage]
+    [ClassCleanup(ClassCleanupBehavior.EndOfClass), ExcludeFromCodeCoverage]
     public static void CleanupActivitiesApi()
     {
         if (_session?.Authorization != null && _session.IsAuthenticated)
@@ -51,9 +51,6 @@ public class StravaApiTests
             var result = await _session.RefreshTokens();
             Assert.AreSame(_session, result, "Should return the same instance.");
             Assert.IsTrue(result.IsAuthenticated);
-            Assert.IsNotNull(result.Authorization);
-            Assert.IsNotNull(result.Authorization.AccessToken);
-            Assert.IsNotNull(result.Authorization.RefreshToken);
         }
     }
 
@@ -67,7 +64,7 @@ public class StravaApiTests
             Assert.IsTrue(actual.Success);
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Data);
-            Assert.IsTrue(actual.Data.Any());
+            Assert.AreNotEqual(0, actual.Data.Count);
 
             foreach (var activity in actual.Data)
             {

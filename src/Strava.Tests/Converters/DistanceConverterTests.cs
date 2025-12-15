@@ -32,10 +32,10 @@ public class DistanceConverterTests
 
     }
 
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(NotImplementedException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void ConvertBackTest()
     {
         var converter = new DistanceConverter();
-        var actual = converter.ConvertBack("1.50 km", typeof(double), null, null);
+        Assert.ThrowsExactly<NotImplementedException>(() => converter.ConvertBack("1.50 km", typeof(double), null, null));
     }
 }

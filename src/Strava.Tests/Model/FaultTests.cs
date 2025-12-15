@@ -6,6 +6,7 @@ namespace Strava.Tests.Model;
 [TestClass]
 public class FaultTests
 {
+    private static readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
     [TestMethod]
     public void DefaultConstructorTest()
     {
@@ -24,11 +25,7 @@ public class FaultTests
 
         var json = @$"{{""message"":""{message}"",""errors"":[{{""resource"":""{resource}"",""field"":""{@field}"",""code"":""{code}""}}]}}";
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-        var target = JsonSerializer.Deserialize<Fault>(json, options);
+        var target = JsonSerializer.Deserialize<Fault>(json, _options);
 
         Assert.IsNotNull(target);
         Assert.AreEqual(message, target.Message);

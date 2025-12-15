@@ -7,7 +7,7 @@ namespace Strava.Tests.Converters;
 [TestClass]
 public class AddConverterTests
 {
-    private AddConverter _converter = new AddConverter();
+    private readonly AddConverter _converter = new();
 
     [TestMethod]
     public void Convert_AddsValueAndParameter_ReturnsSum()
@@ -54,7 +54,7 @@ public class AddConverterTests
         Assert.AreEqual(7.0, result);
     }
 
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(FormatException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void Convert_InvalidValue_ThrowsException()
     {
         // Arrange
@@ -63,10 +63,11 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act & Assert
-        _converter.Convert(value, typeof(int), parameter, culture);
+        Assert.ThrowsExactly<FormatException>(() =>
+            _converter.Convert(value, typeof(int), parameter, culture));
     }
 
-    [TestMethod, ExcludeFromCodeCoverage, ExpectedException(typeof(FormatException))]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void Convert_InvalidParameter_ThrowsException()
     {
         // Arrange
@@ -75,14 +76,15 @@ public class AddConverterTests
         var culture = CultureInfo.InvariantCulture;
 
         // Act & Assert
-        _converter.Convert(value, typeof(int), parameter, culture);
+        Assert.ThrowsExactly<FormatException>(() =>
+            _converter.Convert(value, typeof(int), parameter, culture));
     }
 
     [TestMethod, ExcludeFromCodeCoverage]
     public void ConvertBack_NotImplemented()
     {
         // Act & Assert
-        Assert.ThrowsException<NotImplementedException>(() =>
+        Assert.ThrowsExactly<NotImplementedException>(() =>
             _converter.ConvertBack(123, typeof(int), null, null));
     }
 

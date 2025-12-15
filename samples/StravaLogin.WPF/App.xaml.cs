@@ -24,7 +24,7 @@ namespace StravaLogin.WPF
 
         protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             _authorization = new StravaAuthorization()
             {
@@ -46,7 +46,14 @@ namespace StravaLogin.WPF
             };
             MainWindow.Show();
 
-            _ = startSession(_authorization);
+            try
+            {
+                await StartSession(_authorization);
+            }
+            catch (Exception ex)
+            {
+                _viewModel.StatusMessage = $"Error: {ex.Message}";
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -93,13 +100,13 @@ namespace StravaLogin.WPF
                 };
                 if (loginWindow.ShowDialog() == true)
                 {
-                    _ = startSession(loginWindow.Authorization);
+                    _ = StartSession(loginWindow.Authorization);
                     OnCanExecuteChanged();
                 }
             }
         }
 
-        private async Task startSession(StravaAuthorization authorization, long? id = 0)
+        private async Task StartSession(StravaAuthorization authorization, long? id = 0)
         {
             _session = new StravaSession(authorization);
             if (!_session.IsAuthenticated)
@@ -144,8 +151,7 @@ namespace StravaLogin.WPF
 
         public void Execute(object? parameter)
         {
-            var activity = ((Control)_window.Content).DataContext as ActivityViewModel;
-            if (activity != null)
+            if (((Control)_window.Content).DataContext is ActivityViewModel activity)
             {
                 var updatableActivity = new UpdatableActivity()
                 {

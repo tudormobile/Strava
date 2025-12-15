@@ -84,14 +84,14 @@ namespace Tudormobile.Strava.UI.Views
             if (_webView != null)
             {
                 // Tap-into some important events
-                _webView.NavigationStarting += webView_NavigationStarting;
-                _webView.Loaded += webView_Loaded;
-                _webView.NavigationCompleted += webView_NavigationCompleted;
+                _webView.NavigationStarting += WebView_NavigationStarting;
+                _webView.Loaded += WebView_Loaded;
+                _webView.NavigationCompleted += WebView_NavigationCompleted;
             }
             base.OnApplyTemplate();
         }
 
-        private void webView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
+        private void WebView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             //throw new NotImplementedException();
             if (!e.IsSuccess)
@@ -106,13 +106,13 @@ namespace Tudormobile.Strava.UI.Views
             }
         }
 
-        private void webView_Loaded(object sender, RoutedEventArgs e)
+        private void WebView_Loaded(object sender, RoutedEventArgs e)
         {
             var uri = new Uri($"{LOGIN_URI}?client_id={Authorization.ClientId}&response_type=code&redirect_uri={REDIRECT_URI}&approval_prompt=force&scope={HttpUtility.UrlEncode(Scope.ToString())}");
             _webView!.Source = uri;
         }
 
-        private void webView_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
+        private void WebView_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {
             if (e.Uri.StartsWith(REDIRECT_URI))
             {
@@ -133,17 +133,17 @@ namespace Tudormobile.Strava.UI.Views
                 // If we got the code and NO error...
                 if (!string.IsNullOrEmpty(code) && string.IsNullOrEmpty(error))
                 {
-                    _ = exchangeCodeForToken(code!, scope);
+                    _ = ExchangeCodeForToken(code!, scope);
                 }
                 else
                 {
                     _messageView!.Text = "Login failed: " + error;
-                    loginCompleted(success: false);
+                    OnLoginCompleted(success: false);
                 }
             }
         }
 
-        private async Task exchangeCodeForToken(string code, string? grantedScope)
+        private async Task ExchangeCodeForToken(string code, string? _ /* grantedScope */)
         {
             using var client = new HttpClient();
             KeyValuePair<string, string>[] data =
@@ -171,18 +171,17 @@ namespace Tudormobile.Strava.UI.Views
                             var id = jo!["athlete"]?["id"]?.GetValue<long>() ?? 0;
                             var expires_at = jo!["expires_at"]?.GetValue<long>() ?? 0;
 
-                            Authorization.AccessToken = access_token;
-                            Authorization.RefreshToken = refresh_token;
-                            Authorization.Id = id;
-                            Authorization.Expires = DateTime.UnixEpoch.AddSeconds(expires_at);
-                            Authorization.Id = id;
+                            Authorization = new StravaAuthorization()
+                            {
+                                Id = id,
+                            }.WithTokens(access_token, refresh_token, DateTime.UnixEpoch.AddSeconds(expires_at));
                             _messageView!.Text = "Login successful!";
-                            loginCompleted(success: true);
+                            OnLoginCompleted(success: true);
                         }
                         catch (Exception ex)
                         {
                             _messageView!.Text = "Login failed: " + ex.Message;
-                            loginCompleted(success: false);
+                            OnLoginCompleted(success: false);
                         }
                     });
                 }
@@ -196,16 +195,27 @@ namespace Tudormobile.Strava.UI.Views
                 this.Dispatcher.Invoke(() =>
                 {
                     _messageView!.Text = "Login failed: " + ex.Message;
-                    loginCompleted(success: false);
+                    OnLoginCompleted(success: false);
                 });
             }
         }
 
-        private void loginCompleted(bool success)
+        private void OnLoginCompleted(bool success)
         {
-            var args = new LoginCompletedEventArgs(LoginCompletedEvent, success);
-            args.Source = this;
-            RaiseEvent(args);
+            var args = new LoginCompletedEventArgs(LoginCompletedEvent, success)
+            {
+                Source = this
+            };
+            OnLoginCompleted(args);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="LoginCompletedEvent"/> with the specified event arguments.
+        /// </summary>
+        /// <param name="e">The <see cref="LoginCompletedEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnLoginCompleted(LoginCompletedEventArgs e)
+        {
+            RaiseEvent(e);
         }
     }
 }

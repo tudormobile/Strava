@@ -7,7 +7,7 @@ namespace Tudormobile.Strava.Model;
 /// </summary>
 public class Athlete
 {
-    private _athleteRecord _athlete;
+    private readonly _athleteRecord _athlete;
 
     /// <summary>
     /// The unique identifier of the athlete.
@@ -84,6 +84,7 @@ public class Athlete
 
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable IDE1006 // Naming Styles
 internal class _athleteRecord
 {
     public long id { get; set; }
@@ -133,6 +134,7 @@ internal class _shoRecord
     public int resource_state { get; set; }
     public int distance { get; set; }
 }
+#pragma warning restore IDE1006 // Naming Styles
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 

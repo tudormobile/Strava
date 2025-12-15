@@ -69,7 +69,7 @@
     </Window.Resources>
     <Grid Background="{StaticResource background}">
         <!-- Provides the user with drag area and some minor instructions  -->
-        <Rectangle Fill ="{StaticResource background}" MouseLeftButtonDown="mouseLeftButtonDown"/>
+        <Rectangle Fill ="{StaticResource background}" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown"/>
         <TextBlock Text="login to strava" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         <!-- The actual login control  -->
@@ -82,7 +82,7 @@
                 Background="{StaticResource background}" 
                 Margin="0, 0,-1,0" Width="46" Height="28" Padding="2,0,0,0"
                 HorizontalAlignment="Right" VerticalAlignment="Top" 
-                Click="closeClick">
+                Click="CloseClick">
             <TextBlock FontSize="16" FontFamily="Segoe Fluent Icons" Text="&#xe711;"/>
         </Button>
     </Grid>

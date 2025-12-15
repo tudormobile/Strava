@@ -17,5 +17,6 @@ public class ErrorResponseTests
         Assert.AreEqual("Application", actual.Errors[0].Resource);
         Assert.AreEqual("client_id", actual.Errors[0].Field);
         Assert.AreEqual("invalid", actual.Errors[0].Code);
+        Assert.IsTrue(success);
     }
 }

@@ -19,12 +19,12 @@ public class UpdatableActivity
     /// <summary>
     /// Gets or sets a description of the activity.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Gets or sets the name associated with the activity.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Gets or sets the type of sport associated with the activity.
@@ -36,10 +36,12 @@ public class UpdatableActivity
     /// </summary>
     /// <param name="name">The name of the activity. If null, an empty string is used.</param>
     /// <param name="description">The description of the activity. If null, an empty string is used.</param>
-    public UpdatableActivity(string? name = null, string? description = null)
+    /// <param name="sportType">The type of sport associated with the activity. If null, the default sport type is used.</param>
+    public UpdatableActivity(string? name = null, string? description = null, SportTypes? sportType = null)
     {
         Name = name ?? string.Empty;
         Description = description ?? string.Empty;
+        SportType = sportType ?? default;
     }
 
 }

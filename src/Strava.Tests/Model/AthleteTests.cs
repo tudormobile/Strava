@@ -53,7 +53,7 @@ public class AthleteTests
         Assert.AreEqual(15, actual.FriendCount);
     }
 
-    private static string _json = @"
+    private static readonly string _json = @"
 {
   ""id"" : 1234567890987654321,
   ""username"" : ""marianne_t"",

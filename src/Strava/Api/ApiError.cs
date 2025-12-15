@@ -29,7 +29,8 @@ namespace Tudormobile.Strava.Api
         /// <remarks>
         /// The exception property will contain an generic excetion with the same error message.
         /// </remarks>
-        public ApiError(string? message = null) : this(message ?? "Unknown Strava API Error.", new Exception(message)) { }
+        public ApiError(string? message = null)
+            : this(message ?? "Unknown Strava API Error.", new Exception(message ?? "Unknown Strava API Error.")) { }
 
         /// <summary>
         /// Create and initialize a new instance.

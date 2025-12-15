@@ -18,17 +18,17 @@ public class SportToSymbolConverter : IValueConverter
         var path = "M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z";
         if (value is String)
         {
-            return Geometry.Parse(convertStringToSymbol((string)value)) ?? Geometry.Parse(path);
+            return Geometry.Parse(ConvertStringToSymbol((string)value)) ?? Geometry.Parse(path);
         }
-        else if (value is SportTypes)
+        else if (value is SportTypes sportType)
         {
-            result = Geometry.Parse(convertStringToSymbol(((SportTypes)value).ToString())) ?? result;
+            result = Geometry.Parse(ConvertStringToSymbol((sportType).ToString())) ?? result;
             return result != Geometry.Empty ? result : Geometry.Parse(path);
         }
-        else if (value is SummaryActivity)
+        else if (value is SummaryActivity summaryActivity)
         {
-            result = Geometry.Parse(convertStringToSymbol(((SummaryActivity)value).SportType)) ?? result;
-            return result != Geometry.Empty ? result : Geometry.Parse(convertStringToSymbol(((SummaryActivity)value).Type)) ?? Geometry.Parse(path);
+            result = Geometry.Parse(ConvertStringToSymbol(summaryActivity.SportType)) ?? result;
+            return result != Geometry.Empty ? result : Geometry.Parse(ConvertStringToSymbol(summaryActivity.Type)) ?? Geometry.Parse(path);
         }
         return Geometry.Parse(path);
         throw new ArgumentException("Only supports converting SummaryActivity objects or strings to symbols.", nameof(value));
@@ -37,7 +37,7 @@ public class SportToSymbolConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => throw new NotImplementedException();
 
-    private string convertStringToSymbol(string? value)
+    private static string ConvertStringToSymbol(string? value)
     {
         return value switch
         {

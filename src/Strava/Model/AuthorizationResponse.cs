@@ -27,15 +27,14 @@ OR
 /// </summary>
 internal class AuthorizationResponse
 {
-    /// <summary>
-    /// Response token type.
-    /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
     public string? token_type { get; init; }
     public int? expires_at { get; init; }
     public int? expires_in { get; init; }
     public string? access_token { get; init; }
     public string? refresh_token { get; init; }
     public AthleteId? athlete { get; init; }
+#pragma warning restore IDE1006 // Naming Styles
 }
 
 

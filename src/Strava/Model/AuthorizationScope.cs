@@ -21,7 +21,7 @@ public class AuthorizationScope
     /// Read public data only.
     /// </summary>
     /// <remarks>These are the minimal meaningful permissions.</remarks>
-    public static readonly AuthorizationScope READ = new AuthorizationScope(PublicScopes.read, ProfileScopes.read_all, ActivityScopes.read);
+    public static readonly AuthorizationScope READ = new(PublicScopes.read, ProfileScopes.read_all, ActivityScopes.read);
 
     /// <summary>
     /// General scope.

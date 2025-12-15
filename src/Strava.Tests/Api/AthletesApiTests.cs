@@ -10,7 +10,7 @@ public class AthletesApiTests
     private static StravaSession? _session;
 
     [ClassInitialize, ExcludeFromCodeCoverage]
-    public static void InitializeActivitiesApi(TestContext context)
+    public static void InitializeActivitiesApi(TestContext _)
     {
         // read the environment from json data
         string client_id = Environment.GetEnvironmentVariable("STRAVA_CLIENT_ID") ?? string.Empty;
@@ -33,8 +33,7 @@ public class AthletesApiTests
     public async Task GetAthleteTest()
     {
         var target = _session!.AthletesApi();
-        var id = _session!.Authorization.Id;
-        if (_session.IsAuthenticated)
+        if (_session!.IsAuthenticated)
         {
             var actual = await target.GetAthlete();
             Assert.IsTrue(actual.Success);

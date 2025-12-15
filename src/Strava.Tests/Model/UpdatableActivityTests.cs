@@ -39,8 +39,8 @@ public class UpdatableActivityTests
         // Assert
         Assert.AreEqual(String.Empty, activity.Name);
         Assert.AreEqual(String.Empty, activity.Description);
-        Assert.AreEqual(false, activity.Commute);
-        Assert.AreEqual(false, activity.Trainer);
+        Assert.IsFalse(activity.Commute);
+        Assert.IsFalse(activity.Trainer);
         Assert.AreEqual(SportTypes.Unknown, activity.SportType);
     }
 
@@ -48,14 +48,15 @@ public class UpdatableActivityTests
     public void UpdatableActivity_Setters_UpdateProperties()
     {
         // Arrange
-        var activity = new UpdatableActivity();
-
-        // Act
-        activity.Name = "Evening Run";
-        activity.SportType = SportTypes.Sail;
-        activity.Commute = true;
-        activity.Trainer = true;
-        activity.Description = "Evening run description";
+        var activity = new UpdatableActivity
+        {
+            // Act
+            Name = "Evening Run",
+            SportType = SportTypes.Sail,
+            Commute = true,
+            Trainer = true,
+            Description = "Evening run description"
+        };
 
         // Assert
         Assert.AreEqual("Evening Run", activity.Name);
