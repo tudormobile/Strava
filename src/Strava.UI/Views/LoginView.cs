@@ -174,6 +174,8 @@ namespace Tudormobile.Strava.UI.Views
                             Authorization = new StravaAuthorization()
                             {
                                 Id = id,
+                                ClientId = Authorization.ClientId,
+                                ClientSecret = Authorization.ClientSecret,
                             }.WithTokens(access_token, refresh_token, DateTime.UnixEpoch.AddSeconds(expires_at));
                             _messageView!.Text = "Login successful!";
                             OnLoginCompleted(success: true);
