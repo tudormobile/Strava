@@ -23,17 +23,17 @@ public class StravaAuthorization
     /// <summary>
     /// Access token expiration date and time.
     /// </summary>
-    public DateTime Expires { get; set; } = DateTime.MinValue;
+    public DateTime Expires { get; init; } = DateTime.MinValue;
 
     /// <summary>
     /// Client Access Token.
     /// </summary>
-    public string AccessToken { get; set; } = string.Empty;
+    public string AccessToken { get; init; } = string.Empty;
 
     /// <summary>
     /// Client Refresh Token.
     /// </summary>
-    public string RefreshToken { get; set; } = string.Empty;
+    public string RefreshToken { get; init; } = string.Empty;
 
     /// <summary>
     /// Create and initialize a new instance.
@@ -50,6 +50,21 @@ public class StravaAuthorization
         AccessToken = accessToken ?? String.Empty;
         RefreshToken = refreshToken ?? String.Empty;
         Expires = expires ?? DateTime.MinValue;
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="StravaAuthorization"/> instance with updated access and refresh tokens and expiration.
+    /// </summary>
+    /// <param name="accessToken">The new access token.</param>
+    /// <param name="refreshToken">The new refresh token.</param>
+    /// <param name="expires">The new expiration date and time for the access token.</param>
+    /// <returns>A new <see cref="StravaAuthorization"/> instance with updated token information.</returns>
+    public StravaAuthorization WithTokens(string accessToken, string refreshToken, DateTime expires)
+    {
+        return new StravaAuthorization(ClientId, ClientSecret, accessToken, refreshToken, expires)
+        {
+            Id = this.Id
+        };
     }
 }
 

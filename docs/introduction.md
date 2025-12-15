@@ -10,7 +10,7 @@ The *Tudormobile.Strava.Client* namespace contains classes for making HTTP reque
 Finally, the *Tudormobile.Strava.UI* library provides a set of user interface components that can be used to display data from the Strava API in a user-friendly manner. This library is designed to work with the *Tudormobile.Strava* API library and can be used to create applications that provide a rich user experience for the Windows desktop platform. Additional platorms and frameworks are planned to be included in future releases.
 
 ## Authorization with the Strava API
-Create a new *StravaAuthorization* object to begin the authorization process. This object will contain your application cliend id and client secret. If this is a new authoriation object, the remaining fields will be initialized to default values. You should presist and re-use the authorization object from previous sessions to avoid the user having to authenticate via the OAuth2 authorization flow every time. If a previous (existing) authorization objet is used, the *AccessToken*, *RefreshToken*, and *Expires* properties will be valid. Use this object to create a new *StravaSession* object.
+Create a new *StravaAuthorization* object to begin the authorization process. This object will contain your application client id and client secret. If this is a new authorization object, the remaining fields will be initialized to default values. You should persist and re-use the authorization object from previous sessions to avoid the user having to authenticate via the OAuth2 authorization flow every time. If a previous (existing) authorization object is used, the *AccessToken*, *RefreshToken*, and *Expires* properties will be valid. Use this object to create a new *StravaSession* object.
 ```
 var auth = new StravaAuthorization()
 {
@@ -27,7 +27,7 @@ if (!_session.IsAuthenticated)
 ```
 The sessions object contains an updated authorization object with the new access token, refresh token, and expiration dates. Additionally, the *Id* field will be set to contain the current Strava API *athlete id*.
 > [!NOTE]
-> It is possible that the Id can change from the value provded in an existing authorization object. In this case, the user has chosen to login under a different account.
+> It is possible that the Id can change from the value provided in an existing authorization object. In this case, the user has chosen to login under a different account.
 
 There is also a fluent-style API flow that can be used, as follows:
 ```

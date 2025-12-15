@@ -42,7 +42,6 @@ namespace Strava.Tests.Api
             var message = "some message";
             var target = new ApiError(message);
             Assert.AreEqual(message, target.Message);
-            Assert.IsNotNull(target.Exception);
             Assert.IsInstanceOfType<Exception>(target.Exception);
         }
 

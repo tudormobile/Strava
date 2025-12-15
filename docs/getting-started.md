@@ -24,7 +24,7 @@ var auth = new StravaAuthorization(
 var session = await new StravaSession(auth).RefreshTokens();
 
 // Get user activities
-var api = session.CreateApi();
+var api = session.ActivitiesApi();
 var activities = await api.GetActivities();
 ```
 ### Key Features

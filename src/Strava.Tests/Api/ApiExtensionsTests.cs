@@ -7,51 +7,45 @@ namespace Strava.Tests.Api;
 [TestClass]
 public class ApiExtensionsTests
 {
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void ClubsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.ClubsApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.ClubsApi());
     }
 
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void GearsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.GearsApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.GearsApi());
     }
 
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void RoutesApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.RoutesApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.RoutesApi());
     }
 
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void SegmentsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.SegmentsApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.SegmentsApi());
     }
 
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void StreamApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.StreamApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.StreamApi());
     }
 
-    [TestMethod, ExpectedException(typeof(NotImplementedException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void UploadsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        var api = session.UploadsApi();
-        Assert.IsNotNull(api);
+        Assert.ThrowsExactly<NotImplementedException>(() => session.UploadsApi());
     }
 }

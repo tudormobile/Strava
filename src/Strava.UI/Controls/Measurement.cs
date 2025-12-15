@@ -31,9 +31,9 @@ public enum MeasurementPreference
 /// cref="PreferenceProperty"/>.</remarks>
 public class Measurement : TextBlock
 {
-    private static SpeedConverter _speedConverter = new SpeedConverter();
-    private static DistanceConverter _distanceConverter = new DistanceConverter();
-    private static TimeConverter _timeConverter = new TimeConverter();
+    private static readonly SpeedConverter _speedConverter = new();
+    private static readonly DistanceConverter _distanceConverter = new();
+    private static readonly TimeConverter _timeConverter = new();
     static Measurement()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(Measurement), new FrameworkPropertyMetadata(typeof(Measurement)));

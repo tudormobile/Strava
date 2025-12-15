@@ -30,11 +30,14 @@ public class AthleteId()
         return new AthleteId();
     }
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-
-// here is the bad authorization response.
-/*
-{"message":"Bad Request","errors":[{"resource":"Application","field":"client_id","code":"invalid"}]}
+/* ref: bad authorization response.
+{
+    "message":"Bad Request",
+    "errors":[
+        {"resource":"Application",
+        "field":"client_id","code":"invalid"}
+    ]
+}
 */
 

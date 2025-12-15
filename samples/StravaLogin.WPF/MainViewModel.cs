@@ -21,7 +21,7 @@ namespace StravaLogin.WPF
             TotalElevationGain = 456,
             AverageSpeed = 7.15264
         };
-        public string[] Sports
+        public static string[] Sports
         {
             get => [
         "AlpineSki",

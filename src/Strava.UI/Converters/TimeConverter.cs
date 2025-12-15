@@ -25,9 +25,9 @@ public class TimeConverter : IValueConverter
             SummaryActivity activity => activity?.ElapsedTime ?? 0.0,
             ActivityView view => (view.Activity == null ? (view.DataContext as SummaryActivity)?.ElapsedTime : view.Activity?.ElapsedTime) ?? 0.0,
             TimeSpan timeSpan => timeSpan.TotalSeconds,
-            long l => (double)value,
-            int i => (double)value,
-            double d => value,
+            long => (double)value,
+            int => (double)value,
+            double => value,
             string s when double.TryParse(s, out var d) => d,
             _ => 0.0
         };

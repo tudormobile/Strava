@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.UI.Views
@@ -62,11 +63,10 @@ namespace Tudormobile.Strava.UI.Views
             base.OnApplyTemplate();
         }
 
-        private void closeClick(object sender, RoutedEventArgs e)
+        private void CloseClick(object sender, RoutedEventArgs e)
             => this.Close();
 
-        private void mouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-            => this.DragMove();
-
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+            => DragMove();
     }
 }

@@ -16,13 +16,11 @@ public class StravaSessionTests
         Assert.IsFalse(target.IsAuthenticated, "Must be non-authenticated since no data was provided"); // no exceptions thrown
     }
 
-    [TestMethod, ExpectedException(typeof(ArgumentNullException)), ExcludeFromCodeCoverage]
+    [TestMethod, ExcludeFromCodeCoverage]
     public void ConstructorWithNullTest()
     {
-        var auth = new StravaAuthorization();
-        auth = null;
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-        _ = new StravaSession(null);   // throws
+        Assert.ThrowsExactly<ArgumentNullException>(() => _ = new StravaSession(null));   // throws
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 
@@ -58,6 +56,6 @@ public class StravaSessionTests
         var target = new StravaSession(new StravaAuthorization());
         var actual = target.StravaApi();
         Assert.IsInstanceOfType<IStravaApi>(actual);
-        Assert.AreSame(actual, target.StravaApi(), "Failed to cache the api result.");
+        Assert.AreSame(target.StravaApi(), actual, "Failed to cache the api result.");
     }
 }

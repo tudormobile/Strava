@@ -7,7 +7,7 @@ namespace Strava.Tests.Converters;
 [TestClass]
 public class SpeedConverterTests
 {
-    private SpeedConverter _converter = new SpeedConverter();
+    private readonly SpeedConverter _converter = new();
 
     [TestMethod]
     public void ConvertMetersTest()
@@ -42,6 +42,6 @@ public class SpeedConverterTests
     [TestMethod, ExcludeFromCodeCoverage]
     public void ConvertBackTest()
     {
-        Assert.Throws<NotImplementedException>(() => new SpeedConverter().ConvertBack("123", typeof(double), null, null));
+        Assert.ThrowsExactly<NotImplementedException>(() => new SpeedConverter().ConvertBack("123", typeof(double), null, null));
     }
 }

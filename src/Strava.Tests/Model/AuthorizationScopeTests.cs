@@ -31,9 +31,11 @@ public class AuthorizationScopeTests
     public void ToStringWithBadScopeTest()
     {
         var expected = "read";
-        var target = new AuthorizationScope();
-        target.PublicScope = AuthorizationScope.PublicScopes.read;
-        target.ProfileScope = (AuthorizationScope.ProfileScopes)AuthorizationScope.ScopePermission.read;
+        var target = new AuthorizationScope
+        {
+            PublicScope = AuthorizationScope.PublicScopes.read,
+            ProfileScope = (AuthorizationScope.ProfileScopes)AuthorizationScope.ScopePermission.read
+        };
         var actual = target.ToString();
         Assert.AreEqual(expected, actual);
     }

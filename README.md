@@ -23,10 +23,10 @@ var auth = new StravaAuthorization(
 var session = await new StravaSession(auth).RefreshTokens();
 
 // Get user activities (last 30 days)
-var api = session.CreateApi();
+var api = session.ActivitiesApi();
 var activities = await api.GetActivities(after: DateTime.Now.AddDays(-30));
 ```
 
 The Strava API, Client, Service, and Model libraries provide support for developing clients and services that utilize the Strava V3 API.
 
-[Documentation](docs/introduction.md) | [Source Code README](src/README.md) | [Tudormobile.Strava API Documentation](https://tudormobile.github.io/Strava/)
+[Documentation](https://tudormobile.github.io/Strava/) | [API documentation](https://tudormobile.github.io/Strava/api/tudormobile.html) | [NuGet Package Readme](docs/README.md)

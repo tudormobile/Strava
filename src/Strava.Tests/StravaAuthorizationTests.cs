@@ -9,11 +9,7 @@ namespace Strava.Tests
         public void ConstructorTest1()
         {
             var target = new StravaAuthorization();
-            Assert.IsNotNull(target.ClientId, "Client Id cannot be (null).");
-            Assert.IsNotNull(target.ClientSecret, "Client secret cannot be (null).");
             Assert.IsTrue(target.Expires < DateTime.Now, "Must already be expired.");
-            Assert.IsNotNull(target.AccessToken, "Access token cannot be (null).");
-            Assert.IsNotNull(target.RefreshToken, "Refresh secret cannot be (null).");
             Assert.AreEqual(0, target.Id, "Id must be zero.");
         }
 
