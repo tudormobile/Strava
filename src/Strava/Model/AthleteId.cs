@@ -31,7 +31,7 @@ public class AthleteId()
     }
 }
 
-/* ref: bad authorizartion response.
+/* ref: bad authorization response.
 {
     "message":"Bad Request",
     "errors":[

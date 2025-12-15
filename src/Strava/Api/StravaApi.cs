@@ -52,7 +52,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         var json = JsonSerializer.Serialize<UpdatableActivity>(activity, _jsonOptions);
         var uri = $"https://www.strava.com/api/v3/activities/{id}";
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await result.Data!.PutAsync(uri, content).ConfigureAwait(false); ;
+        var response = await result.Data!.PutAsync(uri, content).ConfigureAwait(false);
 
         if (response.IsSuccessStatusCode)
         {
@@ -126,7 +126,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         {
             try
             {
-                await using var jsonStream = await data.Content.ReadAsStreamAsync().ConfigureAwait(false); ;
+                await using var jsonStream = await data.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 return builder(jsonStream);
             }
             catch (Exception ex)

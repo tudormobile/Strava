@@ -24,7 +24,12 @@ namespace StravaLogin.WPF
 
         protected virtual void OnCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            OnStartupAsync();
+        }
+        private async void OnStartupAsync()
         {
             _authorization = new StravaAuthorization()
             {
