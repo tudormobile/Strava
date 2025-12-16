@@ -6,20 +6,38 @@ namespace Strava.Tests.Model;
 public class AthleteIdTests
 {
     [TestMethod]
-    public void FromJsonTest()
+    public void ConstructorTest()
     {
-        var json = "{\"id\" : 134815,\"resource_state\" : 1}";
-        var actual = AthleteId.FromJson(json);
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(134815, actual.Id);
-        Assert.AreEqual(1, actual.ResourceState);
+        var target = new AthleteId();
+        Assert.IsNotNull(target);
+        Assert.AreEqual(0, target.Id);
+        Assert.AreEqual(0, target.ResourceState);
     }
 
     [TestMethod]
-    public void FromInvalidJsonTest()
+    public void FromJsonTest()
     {
-        var json = "this is not valid json";
-        var actual = AthleteId.FromJson(json);
-        Assert.AreEqual(0, actual.Id);
+        var json = @"{""id"":123456789,""resource_state"":2}";
+        var target = AthleteId.FromJson(json);
+        Assert.IsNotNull(target);
+        Assert.AreEqual(123456789, target.Id);
+        Assert.AreEqual(2, target.ResourceState);
+    }
+
+    [TestMethod]
+    public void FromJsonWithInvalidDataTest()
+    {
+        var json = "invalid json";
+        var target = AthleteId.FromJson(json);
+        Assert.IsNotNull(target);
+        Assert.AreEqual(0, target.Id);
+    }
+
+    [TestMethod]
+    public void PropertyInitializationTest()
+    {
+        var target = new AthleteId { Id = 987654321, ResourceState = 3 };
+        Assert.AreEqual(987654321, target.Id);
+        Assert.AreEqual(3, target.ResourceState);
     }
 }

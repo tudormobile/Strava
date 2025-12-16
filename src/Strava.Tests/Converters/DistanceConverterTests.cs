@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Tudormobile.Strava.UI.Converters;
+﻿using Tudormobile.Strava.UI.Converters;
 namespace Strava.Tests.Converters;
 
 [TestClass]
@@ -32,7 +31,7 @@ public class DistanceConverterTests
 
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ConvertBackTest()
     {
         var converter = new DistanceConverter();

@@ -1,37 +1,32 @@
-﻿using System.Text.Json;
-using Tudormobile.Strava.Model;
+﻿using Tudormobile.Strava.Model;
 
 namespace Strava.Tests.Model;
 
 [TestClass]
 public class ErrorTests
 {
-    private static readonly JsonSerializerOptions _options = new() { PropertyNameCaseInsensitive = true };
-
     [TestMethod]
-    public void DefaultConstructorTest()
+    public void ConstructorTest()
     {
         var target = new Error();
-        Assert.AreEqual(String.Empty, target.Resource);
-        Assert.AreEqual(String.Empty, target.Field);
+        Assert.IsNotNull(target);
         Assert.AreEqual(String.Empty, target.Code);
+        Assert.AreEqual(String.Empty, target.Field);
+        Assert.AreEqual(String.Empty, target.Resource);
     }
 
     [TestMethod]
-    public void SerializationTest()
+    public void PropertyAssignmentTest()
     {
-        var resource = "some resource";
-        var @field = "some field";
-        var code = "some code";
+        var target = new Error
+        {
+            Code = "invalid",
+            Field = "client_id",
+            Resource = "Application"
+        };
 
-        var json = @$"{{""resource"":""{resource}"",""field"":""{@field}"",""code"":""{code}""}}";
-
-        var target = JsonSerializer.Deserialize<Error>(json, _options);
-
-        Assert.IsNotNull(target);
-        Assert.AreEqual(code, target.Code);
-        Assert.AreEqual(resource, target.Resource);
-        Assert.AreEqual(@field, target.Field);
-
+        Assert.AreEqual("invalid", target.Code);
+        Assert.AreEqual("client_id", target.Field);
+        Assert.AreEqual("Application", target.Resource);
     }
 }

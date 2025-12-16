@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Tudormobile.Strava;
+﻿using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
 
 namespace Strava.Tests.Api;
@@ -7,42 +6,42 @@ namespace Strava.Tests.Api;
 [TestClass]
 public class ApiExtensionsTests
 {
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ClubsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
         Assert.ThrowsExactly<NotImplementedException>(() => session.ClubsApi());
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void GearsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
         Assert.ThrowsExactly<NotImplementedException>(() => session.GearsApi());
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void RoutesApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
         Assert.ThrowsExactly<NotImplementedException>(() => session.RoutesApi());
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void SegmentsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
         Assert.ThrowsExactly<NotImplementedException>(() => session.SegmentsApi());
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void StreamApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
         Assert.ThrowsExactly<NotImplementedException>(() => session.StreamApi());
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void UploadsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());

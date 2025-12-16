@@ -36,4 +36,33 @@ public class FaultTests
 
     }
 
+    [TestMethod]
+    public void ConstructorTest()
+    {
+        var target = new Fault();
+        Assert.IsNotNull(target);
+        Assert.AreEqual(String.Empty, target.Message);
+        Assert.AreEqual(0, target.Errors.Length);
+    }
+
+    [TestMethod]
+    public void PropertyAssignmentTest()
+    {
+        var errors = new[]
+        {
+            new Error { Code = "invalid", Field = "client_id", Resource = "Application" }
+        };
+
+        var target = new Fault
+        {
+            Message = "Bad Request",
+            Errors = errors
+        };
+
+        Assert.AreEqual("Bad Request", target.Message);
+        Assert.AreEqual(1, target.Errors.Length);
+        Assert.AreEqual("invalid", target.Errors[0].Code);
+        Assert.AreEqual("client_id", target.Errors[0].Field);
+        Assert.AreEqual("Application", target.Errors[0].Resource);
+    }
 }

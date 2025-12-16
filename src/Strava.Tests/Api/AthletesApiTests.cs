@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Tudormobile.Strava;
+﻿using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
 
 namespace Strava.Tests.Api;
@@ -9,7 +8,7 @@ public class AthletesApiTests
 {
     private static StravaSession? _session;
 
-    [ClassInitialize, ExcludeFromCodeCoverage]
+    [ClassInitialize]
     public static void InitializeActivitiesApi(TestContext _)
     {
         // read the environment from json data
@@ -19,7 +18,7 @@ public class AthletesApiTests
         string refresh_token = Environment.GetEnvironmentVariable("STRAVA_REFRESH_TOKEN") ?? string.Empty;
 
         var auth = new StravaAuthorization(client_id, client_secret, access_token, refresh_token);
-        _session = new StravaSession(auth).RefreshTokens().Result;
+        _session = new StravaSession(auth).RefreshTokensAsync().Result;
     }
 
     [TestMethod]
@@ -35,7 +34,7 @@ public class AthletesApiTests
         var target = _session!.AthletesApi();
         if (_session!.IsAuthenticated)
         {
-            var actual = await target.GetAthlete();
+            var actual = await target.GetAthleteAsync();
             Assert.IsTrue(actual.Success);
             Assert.IsNotNull(actual.Data);
             Assert.AreEqual(_session.Authorization.Id, actual.Data.Id);

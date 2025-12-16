@@ -15,13 +15,13 @@ public static class ApiExtensions
     /// Creates or returns the existing ActivitiesApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Activities API.</returns>
-    public static IActivitiesApi ActivitiesApi(this StravaSession session) => session._api ??= new StravaApiImpl(session);
+    public static IActivitiesApi ActivitiesApi(this StravaSession session) => (IActivitiesApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing AthletesApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Athletes API.</returns>
-    public static IAthletesApi AthletesApi(this StravaSession session) => session._api ??= new StravaApiImpl(session);
+    public static IAthletesApi AthletesApi(this StravaSession session) => (IAthletesApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing ClubsApi interface.

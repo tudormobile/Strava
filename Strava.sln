@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{02EA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StravaLogin.WPF", "samples\StravaLogin.WPF\StravaLogin.WPF.csproj", "{FF10A053-19DA-4587-AA3B-D289500558F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleConsoleApp", "samples\SimpleConsoleApp\SimpleConsoleApp.csproj", "{CDC5EA08-4870-D1C2-749A-E655CC8C3615}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +37,17 @@ Global
 		{FF10A053-19DA-4587-AA3B-D289500558F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF10A053-19DA-4587-AA3B-D289500558F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF10A053-19DA-4587-AA3B-D289500558F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDC5EA08-4870-D1C2-749A-E655CC8C3615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDC5EA08-4870-D1C2-749A-E655CC8C3615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDC5EA08-4870-D1C2-749A-E655CC8C3615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDC5EA08-4870-D1C2-749A-E655CC8C3615}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FF10A053-19DA-4587-AA3B-D289500558F4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{CDC5EA08-4870-D1C2-749A-E655CC8C3615} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {12D19AB5-50A8-4413-ABDE-3610705A6351}

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Tudormobile.Strava.UI.Converters;
+﻿using Tudormobile.Strava.UI.Converters;
 
 namespace Strava.Tests.Converters;
 
@@ -21,7 +20,7 @@ public class TimeConverterTests
         Assert.AreEqual(expected, result);
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ConvertBackTest()
     {
         Assert.Throws<NotImplementedException>(() =>

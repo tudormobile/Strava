@@ -37,4 +37,11 @@ public class StravaSerializerTests
         Assert.IsInstanceOfType<JsonException>(ex);
     }
 
+    [TestMethod]
+    public void OptionsTests()
+    {
+        var options = StravaSerializer.Options;
+        Assert.IsNotNull(options.PropertyNamingPolicy);
+    }
+
 }

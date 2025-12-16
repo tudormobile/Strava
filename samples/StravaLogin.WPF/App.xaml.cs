@@ -125,12 +125,12 @@ namespace StravaLogin.WPF
                 _viewModel.StatusMessage = "Loading acivities ...";
 
                 var api = _session.ActivitiesApi();
-                var result = await api.GetAthlete(id);
+                var result = await api.GetAthleteAsync(id);
                 if (result.Success)
                 {
                     _viewModel.Athlete = result.Data;
                 }
-                var activities = await api.GetActivities(DateTime.Now, DateTime.Now.AddDays(-360));
+                var activities = await api.GetActivitiesAsync(DateTime.Now, DateTime.Now.AddDays(-360));
                 if (activities.Success)
                 {
                     activities.Data?.ForEach(a => _viewModel.Activities.Add(a));
@@ -170,7 +170,7 @@ namespace StravaLogin.WPF
                 };
                 var api = _session!.ActivitiesApi();
                 _window.Close();
-                api.UpdateActivity(activity.Id, updatableActivity).ContinueWith(async t =>
+                api.UpdateActivityAsync(activity.Id, updatableActivity).ContinueWith(async t =>
                 {
                     ApiResult<DetailedActivity> result = await t;
                     _window.Dispatcher.Invoke(() =>
