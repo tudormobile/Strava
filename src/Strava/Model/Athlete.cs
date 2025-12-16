@@ -7,7 +7,7 @@ namespace Tudormobile.Strava.Model;
 /// </summary>
 public class Athlete
 {
-    private readonly _athleteRecord _athlete;
+    private readonly AthleteRecord _athlete;
 
     /// <summary>
     /// The unique identifier of the athlete.
@@ -22,17 +22,17 @@ public class Athlete
     /// <summary>
     /// The username of the athlete.
     /// </summary>
-    public string Username => _athlete.username!;
+    public string Username => _athlete.username ?? "<user>";
 
     /// <summary>
     /// The athlete's first name.
     /// </summary>
-    public string FirstName => _athlete.firstname!;
+    public string FirstName => _athlete.firstname ?? "<firstname>";
 
     /// <summary>
     /// The athlete's last name.
     /// </summary>
-    public string LastName => _athlete.lastname!;
+    public string LastName => _athlete.lastname ?? "<lastname>";
 
     /// <summary>
     /// Friend count of the athlete, i.e., number of people the athlete is following.
@@ -44,19 +44,19 @@ public class Athlete
     /// </summary>
     public int FollowerCount => _athlete.follower_count ?? 0;
 
-    private Athlete(_athleteRecord athlete)
+    private Athlete(AthleteRecord athlete)
     {
         _athlete = athlete;
     }
 
     /// <summary>
-    /// Create and Athlete from Json data.
+    /// Create an Athlete from Json data.
     /// </summary>
     /// <param name="json">Json text representing the athlete.</param>
     /// <returns>A new Athlete object.</returns>
     public static Athlete? FromJson(string json)
     {
-        if (StravaSerializer.TryDeserialize(json, out _athleteRecord? record))
+        if (StravaSerializer.TryDeserialize(json, out AthleteRecord? record))
         {
             return new Athlete(record!);
         }
@@ -78,14 +78,14 @@ public class Athlete
     /// <returns>Empty Athlete object.</returns>
     public static Athlete Empty()
     {
-        return new Athlete(new _athleteRecord());
+        return new Athlete(new AthleteRecord());
     }
 }
 
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 #pragma warning disable IDE1006 // Naming Styles
-internal class _athleteRecord
+internal class AthleteRecord
 {
     public long id { get; set; }
     public int resource_state { get; set; }
@@ -113,11 +113,11 @@ internal class _athleteRecord
     public object[]? clubs { get; set; }
     public object? ftp { get; set; }
     public int? weight { get; set; }
-    public _bikeRecord[]? bikes { get; set; }
-    public _shoRecord[]? shoes { get; set; }
+    public BikeRecord[]? bikes { get; set; }
+    public ShoesRecord[]? shoes { get; set; }
 }
 
-internal class _bikeRecord
+internal class BikeRecord
 {
     public string id { get; set; }
     public bool primary { get; set; }
@@ -126,7 +126,7 @@ internal class _bikeRecord
     public int distance { get; set; }
 }
 
-internal class _shoRecord
+internal class ShoesRecord
 {
     public string id { get; set; }
     public bool primary { get; set; }

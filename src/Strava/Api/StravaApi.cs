@@ -7,6 +7,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 {
     private readonly StravaSession _session;
     private readonly HttpClient _client;
+    private readonly Lock _locker = new();
 
     public StravaApiImpl(StravaSession session, HttpClient httpClient)
     {
@@ -74,11 +75,11 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
         {
-            error = new ApiError(ex);
+            error = new ApiError("Rate limit exceeded", ex);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
-            error = new ApiError(ex);
+            error = new ApiError("Invalid login", ex);
         }
         catch (HttpRequestException ex)
         {
@@ -111,7 +112,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 
     private HttpClient UpdateAuthHeader(HttpClient client)
     {
-        lock (client)
+        lock (_locker)
         {
             if (client.DefaultRequestHeaders.Contains("Authorization"))
             {

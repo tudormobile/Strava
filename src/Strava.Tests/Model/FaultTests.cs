@@ -12,7 +12,7 @@ public class FaultTests
     {
         var target = new Fault();
         Assert.AreEqual(String.Empty, target.Message);
-        Assert.AreEqual(0, target.Errors.Length);
+        Assert.IsEmpty(target.Errors);
     }
 
     [TestMethod]
@@ -29,7 +29,7 @@ public class FaultTests
 
         Assert.IsNotNull(target);
         Assert.AreEqual(message, target.Message);
-        Assert.AreEqual(1, target.Errors.Length);
+        Assert.HasCount(1, target.Errors);
         Assert.AreEqual(code, target.Errors[0].Code);
         Assert.AreEqual(resource, target.Errors[0].Resource);
         Assert.AreEqual(@field, target.Errors[0].Field);
@@ -42,7 +42,7 @@ public class FaultTests
         var target = new Fault();
         Assert.IsNotNull(target);
         Assert.AreEqual(String.Empty, target.Message);
-        Assert.AreEqual(0, target.Errors.Length);
+        Assert.IsEmpty(target.Errors);
     }
 
     [TestMethod]
@@ -60,7 +60,7 @@ public class FaultTests
         };
 
         Assert.AreEqual("Bad Request", target.Message);
-        Assert.AreEqual(1, target.Errors.Length);
+        Assert.HasCount(1, target.Errors);
         Assert.AreEqual("invalid", target.Errors[0].Code);
         Assert.AreEqual("client_id", target.Errors[0].Field);
         Assert.AreEqual("Application", target.Errors[0].Resource);

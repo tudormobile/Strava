@@ -18,11 +18,20 @@ namespace Tudormobile.Strava;
 public class StravaSession
 {
     private static readonly TimeSpan DEFAULT_TIMEOUT = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Shared HttpClient instance for sessions without a provided client.
+    /// Static HttpClient is intentionally not disposed per Microsoft best practices for HttpClient reuse.
+    /// </summary>
+    /// <remarks>
+    /// See: https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient-guidelines
+    /// </remarks>
     private static readonly HttpClient _httpClient = new() { Timeout = DEFAULT_TIMEOUT };
     private readonly HttpClient? _providedClient;
     internal StravaApiImpl? _api;
     private readonly string STRAVA_TOKEN_ENDPOINT = "https://www.strava.com/oauth/token";
     private StravaAuthorization _authorization;
+
     /// <summary>
     /// True if current session is authenticated, i.e., access token is provided and is not expired.
     /// </summary>
@@ -68,18 +77,17 @@ public class StravaSession
     /// </summary>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <remarks>
-    /// If provided (and not expired), the AccessToken and RefreshToken are updated. This method does
-    /// not return errors; check the IsAuthenticated property to determine if the session is authenticated.
-    /// This method is provided as a convenience method to refresh the session with existing credentials.
+    /// ⚠️ This method silently handles authentication failures. Check <see cref="IsAuthenticated"/>
+    /// after calling to verify success. For explicit error handling, use <see cref="RefreshAsync"/> instead.
     /// </remarks>
     /// <returns>Reference to the current session.</returns>
     public async Task<StravaSession> RefreshTokensAsync(CancellationToken cancellationToken = default)
     {
         if (!IsAuthenticated)
         {
-            _ = await RefreshAsync(cancellationToken).ConfigureAwait(false);
+            _ = await RefreshAsync(cancellationToken).ConfigureAwait(false);  // ⚠️ Discards result
         }
-        return this;
+        return this;  // Always returns 'this', even on failure
     }
 
     /// <summary>

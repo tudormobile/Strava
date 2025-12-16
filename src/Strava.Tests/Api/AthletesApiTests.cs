@@ -18,7 +18,7 @@ public class AthletesApiTests
         string refresh_token = Environment.GetEnvironmentVariable("STRAVA_REFRESH_TOKEN") ?? string.Empty;
 
         var auth = new StravaAuthorization(client_id, client_secret, access_token, refresh_token);
-        _session = new StravaSession(auth).RefreshTokensAsync().Result;
+        _session = new StravaSession(auth).RefreshTokensAsync(_.CancellationToken).Result;
     }
 
     [TestMethod]
@@ -34,11 +34,12 @@ public class AthletesApiTests
         var target = _session!.AthletesApi();
         if (_session!.IsAuthenticated)
         {
-            var actual = await target.GetAthleteAsync();
+            var actual = await target.GetAthleteAsync(cancellationToken: TestContext.CancellationToken);
             Assert.IsTrue(actual.Success);
             Assert.IsNotNull(actual.Data);
             Assert.AreEqual(_session.Authorization.Id, actual.Data.Id);
         }
     }
 
+    public TestContext TestContext { get; set; }
 }

@@ -20,7 +20,7 @@ var auth = new StravaAuthorization(
     access_token,       // Current access token
     refresh_token);     // Current refresh token
 
-var session = await new StravaSession(auth).RefreshTokens();
+var session = await new StravaSession(auth).RefreshTokensAsync();
 
 // Get user activities (last 30 days)
 var api = session.ActivitiesApi();

@@ -84,9 +84,9 @@ public class StravaExceptionTests
         var s = ex.ToString();
 
         // Assert
-        Assert.IsTrue(s.Contains("HTTP Status: BadRequest"));
-        Assert.IsTrue(s.Contains("Content: "));
-        Assert.IsTrue(s.Contains(content));
+        Assert.Contains("HTTP Status: BadRequest", s);
+        Assert.Contains("Content: ", s);
+        Assert.Contains(content, s);
     }
 
     [TestMethod]
@@ -100,9 +100,9 @@ public class StravaExceptionTests
         var s = ex.ToString();
 
         // Assert
-        Assert.IsTrue(s.Contains("HTTP Status: BadRequest"));
-        Assert.IsTrue(s.Contains("Content: "));
-        Assert.IsTrue(s.Contains("…(truncated)"), "ToString should include a truncated preview marker or be short.");
-        Assert.IsTrue(s.Length < longContent.Length, "Failed to actually truncate");
+        Assert.Contains("HTTP Status: BadRequest", s);
+        Assert.Contains("Content: ", s);
+        Assert.Contains("…(truncated)", s, "ToString should include a truncated preview marker or be short.");
+        Assert.IsLessThan(longContent.Length, s.Length, "Failed to actually truncate");
     }
 }

@@ -23,9 +23,9 @@ public class TimeConverterTests
     [TestMethod]
     public void ConvertBackTest()
     {
+        var timeConverter = new TimeConverter();
         Assert.Throws<NotImplementedException>(() =>
         {
-            var timeConverter = new TimeConverter();
             timeConverter.ConvertBack(null, typeof(TimeSpan), null, null);
         });
     }

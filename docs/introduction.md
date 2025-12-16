@@ -31,11 +31,11 @@ The sessions object contains an updated authorization object with the new access
 
 There is also a fluent-style API flow that can be used, as follows:
 ```
-var session = await new StravaSesstion(auth).RefreshTokens();
+var session = await new StravaSesstion(auth).RefreshTokensAsync();
 ```
 If the session is not successfully authenticated, the result object will contain error information. If the session is authenticated, the session object will contain the unique identifier new access token, refresh token, and expiration dates. The *StravaSession* object can be used to create an instance of the *IStravaApi* interface if desired. This interface provides methods for accessing the various endpoints of the Strava API.
 > [!NOTE]
-> You can force the user to re-authenticate by clearing the token properties, or setting the Expires property to a time in the past. This will cause the *RefreshAsync* method (or *RefreshTokens()* method) to force the user to re-authenticate via the OAuth2 authorization flow.
+> You can force the user to re-authenticate by clearing the token properties, or setting the Expires property to a time in the past. This will cause the *RefreshAsync* method (or *RefreshTokensAsync()* method) to force the user to re-authenticate via the OAuth2 authorization flow.
 
 <small>[&#128462; Session and Authorization components](api/Tudormobile.Strava.StravaAuthorization.yml)</small>
 

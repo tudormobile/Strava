@@ -27,7 +27,7 @@ public class StravaSessionTests
     public async Task RefreshTestWithBadTokenTest()
     {
         var target = new StravaSession(new StravaAuthorization());
-        var actual = await target.RefreshAsync();
+        var actual = await target.RefreshAsync(TestContext.CancellationToken);
         Assert.IsFalse(actual.Success, "Should have failed with bad tokens.");
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
@@ -44,7 +44,7 @@ public class StravaSessionTests
     public async Task RefreshTokensWhenNotAuthenticatedTest()
     {
         var target = new StravaSession(new StravaAuthorization());
-        var actual = await target.RefreshTokensAsync();
+        var actual = await target.RefreshTokensAsync(TestContext.CancellationToken);
         Assert.AreSame(target, actual, "Should return the same instance.");
         Assert.IsFalse(target.IsAuthenticated, "Should not be authenticated.");
     }
@@ -57,4 +57,6 @@ public class StravaSessionTests
         Assert.IsInstanceOfType<IStravaApi>(actual);
         Assert.AreSame(target.StravaApi(), actual, "Failed to cache the api result.");
     }
+
+    public TestContext TestContext { get; set; }
 }

@@ -42,9 +42,10 @@ namespace Tudormobile.Strava.Api
         public ApiError(Exception exception) : this(exception.Message, exception) { }
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="ApiError"/> class using the specified <see cref="Fault"/>
+        /// object.
         /// </summary>
-        /// <param name="fault"></param>
+        /// <param name="fault">The <see cref="Fault"/> instance that contains details about the API error. Must not be <c>null</c>.</param>
         public ApiError(Fault fault) : this(fault.Message) { Fault = fault; }
 
         /// <summary>

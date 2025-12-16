@@ -142,7 +142,7 @@ public class SummaryActivityTests
         var actual = StravaSerializer.TryDeserialize(s, out SummaryActivity[]? activities);
         Assert.IsTrue(actual);
         Assert.IsNotNull(activities);
-        Assert.AreEqual(2, activities.Length);
+        Assert.HasCount(2, activities);
         var item = activities[1];
 
         // Validate the second SummaryActivity
