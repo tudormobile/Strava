@@ -10,11 +10,11 @@ public interface IStravaApi
     /// <summary>
     /// Retrieves a stream from the Strava API.
     /// </summary>
-    /// <param name="requestUri">The URI the of the request.</param>
+    /// <param name="requestUri">The URI of the request.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Stream"/> containing the API response.</returns>
     /// <remarks>
-    /// It is the responsible of the caller to dispose of the returned stream.
+    /// It is the responsibility of the caller to dispose of the returned stream.
     /// </remarks>
     Task<Stream> GetStreamAsync(string requestUri, CancellationToken cancellationToken = default);
 

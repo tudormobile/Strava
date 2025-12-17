@@ -7,7 +7,7 @@ namespace Tudormobile.Strava.Client;
 /// Provides extension methods for registering Strava client services with an <see cref="IServiceCollection"/>.
 /// </summary>
 /// <remarks>Use these extension methods to add and configure Strava API clients in ASP.NET Core dependency
-/// injection containers. This enables applications to access financial data from Strava using strongly-typed
+/// injection containers. This enables applications to access athletic and fitness data from Strava using strongly-typed
 /// services.</remarks>
 public static class ServiceCollectionExtensions
 {

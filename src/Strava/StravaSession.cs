@@ -98,10 +98,17 @@ public class StravaSession
     /// <remarks>
     /// Success or Failure is returned in the ApiResult object. If successful, the session authentication is 
     /// updated with the new authentication and refresh tokens, as well as the currently logged in Athlete (user) Id.
+    /// <para>
+    /// This method makes a network call to the Strava authorization endpoint to refresh the tokens using a new,
+    /// internal HttpClient instance. The HttpClient is disposed after the request completes. This method is thread-safe
+    /// however is not expected to be called often. The token needs to be refreshed only when expired (typically after significant
+    /// timeframes as defined by the Strava V3 API).
+    /// </para>
     /// </remarks>
     public async Task<ApiResult<StravaAuthorization>> RefreshAsync(CancellationToken cancellationToken = default)
     {
-        using var client = new HttpClient();
+        using var client = new HttpClient();    // New client per request to avoid token issues; disposed via 'using'
+        client.Timeout = DEFAULT_TIMEOUT;
         KeyValuePair<string, string>[] data =
             [
                 new ("client_id", Authorization.ClientId),

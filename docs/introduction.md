@@ -80,7 +80,7 @@ The *Tudormobile.Strava.Client* package and namespace contains classes for makin
  The *Tudormobile.Strava.Service* package and namespace contains classes for exposing a custom API that delegates, caches, or modifies the API provided by Strava allowing you to build custom applications or integrate Strava features into your own web services and applications.
 
  ### UI Elements
-Finally, the *Tudormobile.Strava.UI* library provides a set of user interface components that can be used to display data from the Strava API in a user-friendly manner. This library is designed to work with the *Tudormobile.Strava* API library and can be used to create applications that provide a rich user experience for the Windows desktop platform. Additional platorms and frameworks are planned to be included in future releases in difference languages.
+Finally, the *Tudormobile.Strava.UI* library provides a set of user interface components that can be used to display data from the Strava API in a user-friendly manner. This library is designed to work with the *Tudormobile.Strava* API library and can be used to create applications that provide a rich user experience for the Windows desktop platform. Additional platforms and frameworks are planned to be included in future releases in several different programming languages and platforms.
 
 ## Overview in more Detail
 ### Authorization with the Strava API
@@ -117,7 +117,7 @@ If the session is not successfully authenticated, the result object will contain
 The Strava API is partitioned into a number of components (categories), each of which is represented by an interface in the *Tudormobile.Strava.Api* namespace. These interfaces provide methods for accessing the various endpoints of the Strava API. The *StravaSession* object is the main entry point for accessing the Strava API, and it provides methods for accessing all of the component interfaces. For example, to access the activities api, use the *ActivitiesApi()* method of the *StravaSession* object. This property returns an instance of the *IActivitiesApi* interface, which provides methods for accessing the various endpoints of the activities API.
 ```cs
 var api = session.ActivitiesApi();
-var activities = await api.GetActivities();
+var activities = await api.GetActivitiesAsync();
 if (activities.Success)
 {
     activities.Data?.ForEach(a => 

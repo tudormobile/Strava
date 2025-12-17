@@ -8,6 +8,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
     private readonly StravaSession _session;
     private readonly HttpClient _client;
     private readonly Lock _locker = new();
+    private readonly SemaphoreSlim _authSemaphore = new(1, 1);
 
     public StravaApiImpl(StravaSession session, HttpClient httpClient)
     {
@@ -25,7 +26,12 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         try
         {
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+            var memoryStream = new MemoryStream();
+            // Provide a memory stream to the caller to manage disposal
+            await response.Content.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
+            response.Dispose();
+            memoryStream.Position = 0;
+            return memoryStream;        
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
         {
@@ -127,13 +133,23 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
     {
         if (_session.IsAuthenticated) return _client;
 
-        // Attempt to update the authentication and refresh the headers
-        var result = await _session.RefreshAsync(cancellationToken).ConfigureAwait(false);
-        if (!result.Success)
+        await _authSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
         {
-            throw new StravaException(result.Error!.Message, result.Error.Exception);
+            // Double-check after acquiring the lock
+            if (_session.IsAuthenticated) return _client;
+
+            var result = await _session.RefreshAsync(cancellationToken).ConfigureAwait(false);
+            if (!result.Success)
+            {
+                throw new StravaException(result.Error!.Message, result.Error.Exception);
+            }
+            return UpdateAuthHeader(_client);
         }
-        return UpdateAuthHeader(_client);
+        finally
+        {
+            _authSemaphore.Release();
+        }
     }
 
 }
