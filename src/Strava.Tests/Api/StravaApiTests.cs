@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
 using Tudormobile.Strava.Model;
@@ -11,7 +10,7 @@ public class StravaApiTests
 {
     private static StravaSession? _session;
 
-    [ClassInitialize, ExcludeFromCodeCoverage]
+    [ClassInitialize]
     public static void InitializeActivitiesApi(TestContext _)
     {
         // read the environment from json data
@@ -22,8 +21,8 @@ public class StravaApiTests
 
         var auth = new StravaAuthorization(client_id, client_secret, access_token, refresh_token);
         _session = new StravaSession(auth);
-        var result = _session.RefreshAsync();
-        result.Wait();
+        var result = _session.RefreshAsync(_.CancellationToken);
+        result.Wait(_.CancellationToken);
         if (result.IsCompletedSuccessfully && _session.IsAuthenticated)
         {
             // Save the data
@@ -32,7 +31,7 @@ public class StravaApiTests
         }
     }
     // is this needed??
-    [ClassCleanup(ClassCleanupBehavior.EndOfClass), ExcludeFromCodeCoverage]
+    [ClassCleanup]
     public static void CleanupActivitiesApi()
     {
         if (_session?.Authorization != null && _session.IsAuthenticated)
@@ -48,7 +47,7 @@ public class StravaApiTests
     {
         if (_session!.IsAuthenticated)
         {
-            var result = await _session.RefreshTokens();
+            var result = await _session.RefreshTokensAsync(TestContext.CancellationToken);
             Assert.AreSame(_session, result, "Should return the same instance.");
             Assert.IsTrue(result.IsAuthenticated);
         }
@@ -60,7 +59,7 @@ public class StravaApiTests
         if (_session!.IsAuthenticated)
         {
             var api = _session!.ActivitiesApi();
-            var actual = await api.GetActivities(DateTime.Now, DateTime.UnixEpoch);
+            var actual = await api.GetActivitiesAsync(DateTime.Now, DateTime.UnixEpoch, cancellationToken: TestContext.CancellationToken);
             Assert.IsTrue(actual.Success);
             Assert.IsNull(actual.Error);
             Assert.IsNotNull(actual.Data);
@@ -79,7 +78,7 @@ public class StravaApiTests
         var clientAuthorization = new StravaAuthorization();
         var session = new StravaSession(clientAuthorization);
         var api = session.ActivitiesApi();
-        var actual = await api.GetActivities(DateTime.Now, DateTime.MinValue);
+        var actual = await api.GetActivitiesAsync(DateTime.Now, DateTime.MinValue, cancellationToken: TestContext.CancellationToken);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
@@ -89,7 +88,7 @@ public class StravaApiTests
     public async Task GetActivitiesTestBadPage()
     {
         var api = _session!.ActivitiesApi();
-        var actual = await api.GetActivities(DateTime.Now, DateTime.MinValue, page: -5);
+        var actual = await api.GetActivitiesAsync(DateTime.Now, DateTime.MinValue, page: -5, cancellationToken: TestContext.CancellationToken);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
@@ -102,7 +101,7 @@ public class StravaApiTests
         var session = new StravaSession(clientAuthorization);
         var api = session.ActivitiesApi();
         var id = 123;
-        var actual = await api.UpdateActivity(id, new UpdatableActivity());
+        var actual = await api.UpdateActivityAsync(id, new UpdatableActivity(), TestContext.CancellationToken);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
@@ -115,10 +114,11 @@ public class StravaApiTests
         var session = new StravaSession(clientAuthorization);
         var api = session.ActivitiesApi();
         var id = 123;
-        var actual = await api.GetActivity(id, includeAllEfforts: false);
+        var actual = await api.GetActivityAsync(id, includeAllEfforts: false, TestContext.CancellationToken);
         Assert.IsFalse(actual.Success);
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
     }
 
+    public TestContext TestContext { get; set; }
 }

@@ -5,12 +5,13 @@
 ```
 dotnet package add Tudormobile.Strava
 -or-
+dotnet package add Tudormobile.Strava.Client
+dotnet package add Tudormobile.Strava.Service
 dotnet package add Tudormobile.Strava.UI
 ```
-### Prerequisites
-***None.***
 ### Dependencies
-***None.*** 
+The base model package (*Tudormobile.Strava*) has no dependencies. The Client and Service model
+includes dependency injection and logging features from *Microsoft.Extensions.Http*.
 
 ### Key Features
 - Authentication and Authorization with the Strava V3 API

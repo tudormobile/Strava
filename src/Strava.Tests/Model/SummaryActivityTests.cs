@@ -142,7 +142,7 @@ public class SummaryActivityTests
         var actual = StravaSerializer.TryDeserialize(s, out SummaryActivity[]? activities);
         Assert.IsTrue(actual);
         Assert.IsNotNull(activities);
-        Assert.AreEqual(2, activities.Length);
+        Assert.HasCount(2, activities);
         var item = activities[1];
 
         // Validate the second SummaryActivity
@@ -159,5 +159,48 @@ public class SummaryActivityTests
         Assert.AreEqual(new DateTime(2018, 04, 30, 12, 35, 51, DateTimeKind.Utc), item.StartDate);
         Assert.AreEqual(4.385, item.AverageSpeed);
         Assert.AreEqual(8.8, item.MaxSpeed);
+    }
+
+    [TestMethod]
+    public void ConstructorTest()
+    {
+        var target = new SummaryActivity();
+        Assert.IsNotNull(target);
+        Assert.AreEqual(0, target.Id);
+        Assert.AreEqual(String.Empty, target.Name);
+    }
+
+    [TestMethod]
+    public void PropertyAssignmentTest()
+    {
+        var startDate = DateTime.Now;
+        var target = new SummaryActivity
+        {
+            Id = 123456789,
+            Name = "Morning Run",
+            Distance = 5000.0,
+            MovingTime = 1800.0,
+            ElapsedTime = 1900.0,
+            TotalElevationGain = 100.0,
+            Type = "Run",
+            SportType = "Run",
+            WorkoutType = 1,
+            StartDate = startDate,
+            AverageSpeed = 2.78,
+            MaxSpeed = 4.5
+        };
+
+        Assert.AreEqual(123456789, target.Id);
+        Assert.AreEqual("Morning Run", target.Name);
+        Assert.AreEqual(5000.0, target.Distance);
+        Assert.AreEqual(1800.0, target.MovingTime);
+        Assert.AreEqual(1900.0, target.ElapsedTime);
+        Assert.AreEqual(100.0, target.TotalElevationGain);
+        Assert.AreEqual("Run", target.Type);
+        Assert.AreEqual("Run", target.SportType);
+        Assert.AreEqual(1, target.WorkoutType);
+        Assert.AreEqual(startDate, target.StartDate);
+        Assert.AreEqual(2.78, target.AverageSpeed);
+        Assert.AreEqual(4.5, target.MaxSpeed);
     }
 }

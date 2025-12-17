@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using Tudormobile.Strava.UI.Converters;
 
 namespace Strava.Tests.Converters;
@@ -54,7 +53,7 @@ public class AddConverterTests
         Assert.AreEqual(7.0, result);
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void Convert_InvalidValue_ThrowsException()
     {
         // Arrange
@@ -67,7 +66,7 @@ public class AddConverterTests
             _converter.Convert(value, typeof(int), parameter, culture));
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void Convert_InvalidParameter_ThrowsException()
     {
         // Arrange
@@ -80,7 +79,7 @@ public class AddConverterTests
             _converter.Convert(value, typeof(int), parameter, culture));
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ConvertBack_NotImplemented()
     {
         // Act & Assert

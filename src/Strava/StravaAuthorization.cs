@@ -3,7 +3,7 @@
 /// <summary>
 /// Client Authorization Record.
 /// </summary>
-public class StravaAuthorization
+public class StravaAuthorization : StravaAuthorizationOptions
 {
     /// <summary>
     /// Current user identifier (AthleteId), or zero if not authenticated.
@@ -11,29 +11,9 @@ public class StravaAuthorization
     public long Id { get; set; } = 0;
 
     /// <summary>
-    /// Client Identifier.
-    /// </summary>
-    public string ClientId { get; init; }
-
-    /// <summary>
-    /// Client Secret.
-    /// </summary>
-    public string ClientSecret { get; init; }
-
-    /// <summary>
     /// Access token expiration date and time.
     /// </summary>
     public DateTime Expires { get; init; } = DateTime.MinValue;
-
-    /// <summary>
-    /// Client Access Token.
-    /// </summary>
-    public string AccessToken { get; init; } = string.Empty;
-
-    /// <summary>
-    /// Client Refresh Token.
-    /// </summary>
-    public string RefreshToken { get; init; } = string.Empty;
 
     /// <summary>
     /// Create and initialize a new instance.
@@ -67,4 +47,34 @@ public class StravaAuthorization
         };
     }
 }
+
+/// <summary>
+/// Represents the configuration options required for authorizing access to the Strava API.
+/// </summary>
+/// <remarks>This class encapsulates the credentials and tokens needed to authenticate and authorize requests to
+/// Strava on behalf of a client application. The values are typically provided by the Strava developer portal and
+/// should be kept secure. Use these options when configuring services that interact with the Strava API.</remarks>
+public class StravaAuthorizationOptions
+{
+    /// <summary>
+    /// Client Access Token.
+    /// </summary>
+    public string AccessToken { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Client Identifier.
+    /// </summary>
+    public string ClientId { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Client Secret.
+    /// </summary>
+    public string ClientSecret { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Client Refresh Token.
+    /// </summary>
+    public string RefreshToken { get; init; } = string.Empty;
+}
+
 

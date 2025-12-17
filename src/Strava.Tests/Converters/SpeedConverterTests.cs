@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using Tudormobile.Strava.UI.Converters;
 
 namespace Strava.Tests.Converters;
@@ -39,7 +38,7 @@ public class SpeedConverterTests
         Assert.AreEqual("11.2mph", result);
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ConvertBackTest()
     {
         Assert.ThrowsExactly<NotImplementedException>(() => new SpeedConverter().ConvertBack("123", typeof(double), null, null));

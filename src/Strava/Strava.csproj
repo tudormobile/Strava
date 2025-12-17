@@ -20,8 +20,8 @@
     <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
     <Authors>WH Tudor</Authors>
     <Title>Strava API Library</Title>
-    <Description>Strava API libraries and clients</Description>
-    <Copyright>COPYRIGHT © TUDORMOBILE</Copyright>
+    <Description>Strava API V3 Libraries</Description>
+    <Copyright>COPYRIGHT © BILL TUDOR</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Tudormobile.Strava;
+﻿using Tudormobile.Strava;
 using Tudormobile.Strava.Api;
 
 namespace Strava.Tests;
@@ -16,7 +15,7 @@ public class StravaSessionTests
         Assert.IsFalse(target.IsAuthenticated, "Must be non-authenticated since no data was provided"); // no exceptions thrown
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public void ConstructorWithNullTest()
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -24,11 +23,11 @@ public class StravaSessionTests
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public async Task RefreshTestWithBadTokenTest()
     {
         var target = new StravaSession(new StravaAuthorization());
-        var actual = await target.RefreshAsync();
+        var actual = await target.RefreshAsync(TestContext.CancellationToken);
         Assert.IsFalse(actual.Success, "Should have failed with bad tokens.");
         Assert.IsNotNull(actual.Error);
         Assert.IsNull(actual.Data);
@@ -41,11 +40,11 @@ public class StravaSessionTests
         }
     }
 
-    [TestMethod, ExcludeFromCodeCoverage]
+    [TestMethod]
     public async Task RefreshTokensWhenNotAuthenticatedTest()
     {
         var target = new StravaSession(new StravaAuthorization());
-        var actual = await target.RefreshTokens();
+        var actual = await target.RefreshTokensAsync(TestContext.CancellationToken);
         Assert.AreSame(target, actual, "Should return the same instance.");
         Assert.IsFalse(target.IsAuthenticated, "Should not be authenticated.");
     }
@@ -58,4 +57,6 @@ public class StravaSessionTests
         Assert.IsInstanceOfType<IStravaApi>(actual);
         Assert.AreSame(target.StravaApi(), actual, "Failed to cache the api result.");
     }
+
+    public TestContext TestContext { get; set; }
 }

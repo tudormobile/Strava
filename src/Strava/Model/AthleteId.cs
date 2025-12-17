@@ -6,7 +6,7 @@
 public class AthleteId()
 {
     /// <summary>
-    /// Unique identifer of the Athlete.
+    /// Unique identifier of the Athlete.
     /// </summary>
     public long Id { get; init; }
 

@@ -5,7 +5,7 @@ Strava API libraries
 [![Publish Docs](https://github.com/tudormobile/Strava/actions/workflows/docs.yml/badge.svg)](https://github.com/tudormobile/Strava/actions/workflows/docs.yml)  
 
 > [!NOTE]  
-> The current state is experimental (v0.X).
+> The current state of this library is experimental (v0.x). Public API surface and project structure will change.
 
 ### Quick Start
 ```
@@ -20,13 +20,13 @@ var auth = new StravaAuthorization(
     access_token,       // Current access token
     refresh_token);     // Current refresh token
 
-var session = await new StravaSession(auth).RefreshTokens();
+var session = await new StravaSession(auth).RefreshTokensAsync();
 
 // Get user activities (last 30 days)
 var api = session.ActivitiesApi();
-var activities = await api.GetActivities(after: DateTime.Now.AddDays(-30));
+var activities = await api.GetActivitiesAsync(after: DateTime.Now.AddDays(-30));
 ```
 
-The Strava API, Client, Service, and Model libraries provide support for developing clients and services that utilize the Strava V3 API.
+The Strava API, Client, and Service libraries provide support for developing clients and services that utilize the Strava V3 API in dotnet.
 
 [Documentation](https://tudormobile.github.io/Strava/) | [API documentation](https://tudormobile.github.io/Strava/api/tudormobile.html) | [NuGet Package Readme](docs/README.md)

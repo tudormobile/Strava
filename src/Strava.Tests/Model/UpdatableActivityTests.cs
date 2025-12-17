@@ -1,68 +1,46 @@
 ﻿using Tudormobile.Strava.Model;
 
 namespace Strava.Tests.Model;
+
 [TestClass]
 public class UpdatableActivityTests
 {
     [TestMethod]
-    public void UpdatableActivity_Constructor_SetsProperties()
+    public void ConstructorTest()
     {
-        // Arrange
-        var name = "Morning Ride";
-        var sportType = SportTypes.Ride;
-        var commute = false;
-        var trainer = true;
-        var description = "Test description";
-
-        // Act
-        var activity = new UpdatableActivity(name, description)
-        {
-            Commute = commute,
-            Trainer = trainer,
-            SportType = sportType,
-        };
-
-        // Assert
-        Assert.AreEqual(name, activity.Name);
-        Assert.AreEqual(description, activity.Description);
-        Assert.AreEqual(commute, activity.Commute);
-        Assert.AreEqual(trainer, activity.Trainer);
-        Assert.AreEqual(sportType, activity.SportType);
+        var target = new UpdatableActivity();
+        Assert.IsNotNull(target);
+        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(String.Empty, target.Description);
+        Assert.IsFalse(target.Commute);
+        Assert.IsFalse(target.Trainer);
     }
 
     [TestMethod]
-    public void UpdatableActivity_DefaultConstructor_InitializesPropertiesToDefaults()
+    public void ConstructorWithParametersTest()
     {
-        // Act
-        var activity = new UpdatableActivity();
-
-        // Assert
-        Assert.AreEqual(String.Empty, activity.Name);
-        Assert.AreEqual(String.Empty, activity.Description);
-        Assert.IsFalse(activity.Commute);
-        Assert.IsFalse(activity.Trainer);
-        Assert.AreEqual(SportTypes.Unknown, activity.SportType);
+        var target = new UpdatableActivity("Test Activity", "Test Description", SportTypes.Run);
+        Assert.AreEqual("Test Activity", target.Name);
+        Assert.AreEqual("Test Description", target.Description);
+        Assert.AreEqual(SportTypes.Run, target.SportType);
     }
 
     [TestMethod]
-    public void UpdatableActivity_Setters_UpdateProperties()
+    public void PropertyAssignmentTest()
     {
-        // Arrange
-        var activity = new UpdatableActivity
+        var target = new UpdatableActivity
         {
-            // Act
-            Name = "Evening Run",
-            SportType = SportTypes.Sail,
             Commute = true,
             Trainer = true,
-            Description = "Evening run description"
+            Description = "Evening ride",
+            Name = "Training Ride",
+            SportType = SportTypes.Ride
         };
 
-        // Assert
-        Assert.AreEqual("Evening Run", activity.Name);
-        Assert.AreEqual("Evening run description", activity.Description);
-        Assert.IsTrue(activity.Commute);
-        Assert.IsTrue(activity.Trainer);
-        Assert.AreEqual(SportTypes.Sail, activity.SportType);
+        Assert.IsTrue(target.Commute);
+        Assert.IsTrue(target.Trainer);
+        Assert.AreEqual("Evening ride", target.Description);
+        Assert.AreEqual("Training Ride", target.Name);
+        Assert.AreEqual(SportTypes.Ride, target.SportType);
     }
 }
