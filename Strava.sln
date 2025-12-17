@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strava.Client", "src\Strava
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strava.Service", "src\Strava.Service\Strava.Service.csproj", "{6016432F-15C7-850F-3F18-CE0E945C5BFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StravaConsoleApp", "samples\StravaConsoleApp\StravaConsoleApp.csproj", "{8063CF1E-C712-4C60-5062-978E39B31056}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{6016432F-15C7-850F-3F18-CE0E945C5BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6016432F-15C7-850F-3F18-CE0E945C5BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6016432F-15C7-850F-3F18-CE0E945C5BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8063CF1E-C712-4C60-5062-978E39B31056}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8063CF1E-C712-4C60-5062-978E39B31056}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8063CF1E-C712-4C60-5062-978E39B31056}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8063CF1E-C712-4C60-5062-978E39B31056}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FF10A053-19DA-4587-AA3B-D289500558F4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{CDC5EA08-4870-D1C2-749A-E655CC8C3615} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8063CF1E-C712-4C60-5062-978E39B31056} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {12D19AB5-50A8-4413-ABDE-3610705A6351}
