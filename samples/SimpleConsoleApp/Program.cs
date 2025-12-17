@@ -36,11 +36,7 @@ internal class Program
         var data = activities.Data ?? [];
         foreach (var activity in data)
         {
-<<<<<<< HEAD
             Console.WriteLine(activity.ToString());
-=======
-            Console.WriteLine(activity);
->>>>>>> origin/main
         }
 
     }
