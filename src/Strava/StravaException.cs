@@ -73,7 +73,7 @@ public class StravaException : Exception
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append(this);
+        sb.Append(base.ToString());
 
         if (StatusCode.HasValue)
         {
