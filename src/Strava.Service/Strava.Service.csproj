@@ -7,15 +7,9 @@
     <AssemblyName>Tudormobile.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Tudormobile.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <MajorMinorVer>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)\..\..\version.txt').Trim())</MajorMinorVer>
-    <BuildVer>$([System.DateTime]::Now.ToString('yyMM'))</BuildVer>
-    <RevVer>$([System.DateTime]::Now.ToString('dd'))</RevVer>
-    <AssemblyVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</AssemblyVersion>
-    <FileVersion>$(MajorMinorVer).$(BuildVer).100$(RevVer)</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <PackageVersion>$(MajorMinorVer).$(BuildVer)</PackageVersion>
     <Authors>WH Tudor</Authors>
     <Title>Strava API Service Library</Title>
     <Description>Strava API V3 libraries</Description>
@@ -24,8 +18,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Strava;Tudormobile</PackageTags>
-    <RepositoryUrl>https://github.com/tudormobile/$(MSBuildProjectName)</RepositoryUrl>
-  </PropertyGroup>
+    <PackageProjectUrl>https://tudormobile.github.io/Strava/</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/tudormobile/Strava/releases</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/tudormobile/Strava</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+</PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />

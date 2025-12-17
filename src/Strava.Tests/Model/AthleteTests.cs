@@ -12,9 +12,9 @@ public class AthleteTests
         Assert.IsNotNull(actual);
         Assert.AreEqual(0, actual.Id);
 
-        Assert.IsFalse(string.IsNullOrEmpty(actual.LastName));
-        Assert.IsFalse(string.IsNullOrEmpty(actual.FirstName));
-        Assert.IsFalse(string.IsNullOrEmpty(actual.Username));
+        Assert.AreEqual("", actual.LastName);
+        Assert.AreEqual("", actual.FirstName);
+        Assert.AreEqual("", actual.Username);
     }
 
     [TestMethod]

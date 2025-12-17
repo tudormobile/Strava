@@ -15,6 +15,22 @@ internal class StravaClientBuilder : IStravaClientBuilder
         {
             throw new InvalidOperationException("An HttpClient instance must be provided. Use WithHttpClient() to indicate what client instance to use.");
         }
+        if (_authorization == null)
+        {
+            if (_options == null)
+            {
+                throw new InvalidOperationException("StravaOptions must be provided. Use WithOptions() to indicate what options to use.");
+            }
+        
+            if (_options.ClientId == null)
+            {
+                throw new InvalidOperationException("ClientId must be provided. Use WithOptions(), WithClientId() or UseAuthorization() to indicate what options to use.");
+            }
+            if (_options.ClientSecret == null)
+            {
+                throw new InvalidOperationException("ClientSecret must be provided. Use WithOptions(), WithClientSecret() or UseAuthorization() to indicate what options to use.");
+            }
+        }
         return _authorization == null
             ? new StravaClient(_httpClient, _logger, _options.ClientId, _options.ClientSecret, _options.AccessToken, _options.RefreshToken)
             : new StravaClient(_httpClient, _logger, _authorization);

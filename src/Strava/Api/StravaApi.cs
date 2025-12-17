@@ -31,23 +31,23 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
             await response.Content.CopyToAsync(memoryStream, cancellationToken).ConfigureAwait(false);
             response.Dispose();
             memoryStream.Position = 0;
-            return memoryStream;        
+            return memoryStream;
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
         {
             response.Dispose();
-            throw new StravaException("Rate limit exceeded", ex);
+            throw new StravaException("Rate limit exceeded", ex.StatusCode, innerException: ex);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             response.Dispose();
-            throw new StravaException("Invalid login", ex);
+            throw new StravaException("Invalid login", ex.StatusCode, innerException: ex);
         }
         catch (HttpRequestException ex)
         {
             var message = $"Failed to fetch url '{requestUri}': {ex.Message}";
             response.Dispose();
-            throw new StravaException(message, ex);
+            throw new StravaException(message, ex.StatusCode, innerException: ex);
         }
     }
 
@@ -136,7 +136,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         await _authSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            // Double-check after acquiring the lock
+            // Double-check authentication status after acquiring semaphore
             if (_session.IsAuthenticated) return _client;
 
             var result = await _session.RefreshAsync(cancellationToken).ConfigureAwait(false);
