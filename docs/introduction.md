@@ -104,8 +104,8 @@ The sessions object contains an updated authorization object with the new access
 > It is possible that the Id can change from the value provided in an existing authorization object. In this case, the user has chosen to login under a different account.
 
 There is also a fluent-style API flow that can be used, as follows:
-```cs
-var session = await new StravaSesstion(auth).RefreshTokensAsync();
+```
+var session = await new StravaSesstion(auth).RefreshTokens();
 ```
 If the session is not successfully authenticated, the result object will contain error information. If the session is authenticated, the session object will contain the unique identifier new access token, refresh token, and expiration dates. The *StravaSession* object can be used to create an instance of the *IStravaApi* interface if desired. This interface provides methods for accessing the various endpoints of the Strava API.
 > [!NOTE]
