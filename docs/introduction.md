@@ -44,7 +44,7 @@ var reply = await api.GetActivitiesAsync(after: DateTime.Now.AddDays(-30));
 
 if (reply.Success) 
 {
-    List<SummaryActvity> activities = reply.Data;   // List of SummaryActivity objects
+    List<SummaryActivity> activities = reply.Data;   // List of SummaryActivity objects
     // ...
 } 
 else 
@@ -76,7 +76,7 @@ The *Tudormobile.Strava.Client* package and namespace contains classes for makin
 ```cs
 // sample code will go here...
 ```
-### Serivice API
+### Service API
  The *Tudormobile.Strava.Service* package and namespace contains classes for exposing a custom API that delegates, caches, or modifies the API provided by Strava allowing you to build custom applications or integrate Strava features into your own web services and applications.
 
  ### UI Elements
@@ -105,7 +105,7 @@ The sessions object contains an updated authorization object with the new access
 
 There is also a fluent-style API flow that can be used, as follows:
 ```cs
-var session = await new StravaSesstion(auth).RefreshTokensAsync();
+var session = await new StravaSession(auth).RefreshTokensAsync();
 ```
 If the session is not successfully authenticated, the result object will contain error information. If the session is authenticated, the session object will contain the unique identifier new access token, refresh token, and expiration dates. The *StravaSession* object can be used to create an instance of the *IStravaApi* interface if desired. This interface provides methods for accessing the various endpoints of the Strava API.
 > [!NOTE]

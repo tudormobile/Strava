@@ -77,17 +77,17 @@ public class StravaSession
     /// </summary>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <remarks>
-    /// ⚠️ This method silently handles authentication failures. Check <see cref="IsAuthenticated"/>
-    /// after calling to verify success. For explicit error handling, use <see cref="RefreshAsync"/> instead.
+    /// This method silently handles authentication failures. Check <see cref="IsAuthenticated"/>
+    /// after calling to verify success.
     /// </remarks>
     /// <returns>Reference to the current session.</returns>
     public async Task<StravaSession> RefreshTokensAsync(CancellationToken cancellationToken = default)
     {
         if (!IsAuthenticated)
         {
-            _ = await RefreshAsync(cancellationToken).ConfigureAwait(false);  // ⚠️ Discards result
+            _ = await RefreshAsync(cancellationToken).ConfigureAwait(false);
         }
-        return this;  // Always returns 'this', even on failure
+        return this;
     }
 
     /// <summary>
@@ -99,15 +99,17 @@ public class StravaSession
     /// Success or Failure is returned in the ApiResult object. If successful, the session authentication is 
     /// updated with the new authentication and refresh tokens, as well as the currently logged in Athlete (user) Id.
     /// <para>
-    /// This method makes a network call to the Strava authorization endpoint to refresh the tokens using a new,
+    /// This method makes a network call to the Strava authorization endpoint to refresh the access token using a new,
     /// internal HttpClient instance. The HttpClient is disposed after the request completes. This method is thread-safe
-    /// however is not expected to be called often. The token needs to be refreshed only when expired (typically after significant
-    /// timeframes as defined by the Strava V3 API).
+    /// however is not expected to be called often. The access token needs to be refreshed only when expired (typically
+    /// after significant timeframes, but defined by the Strava V3 API). To avoid unnecessary network calls, use the
+    /// <see cref="RefreshTokensAsync"/> method which only calls this method when the current access token is expired,
+    /// and call this method once per session or as needed when explicit error handling is required.
     /// </para>
     /// </remarks>
     public async Task<ApiResult<StravaAuthorization>> RefreshAsync(CancellationToken cancellationToken = default)
     {
-        using var client = new HttpClient();    // New client per request to avoid token issues; disposed via 'using'
+        using var client = new HttpClient();
         client.Timeout = DEFAULT_TIMEOUT;
         KeyValuePair<string, string>[] data =
             [

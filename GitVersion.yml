@@ -1,0 +1,15 @@
+mode: ContinuousDeployment
+workflow: GitHubFlow/v1
+major-version-bump-message: \+semver:\s?(breaking|major)
+minor-version-bump-message: \+semver:\s?(feature|minor)
+patch-version-bump-message: \+semver:\s?(fix|patch)
+no-bump-message: \+semver:\s?(none|skip)
+branches:
+  main:
+    increment: Patch
+  feature:
+    increment: Minor
+  release:
+    regex: ^releases?[\/-](?<version>\d+\.\d+\.\d+)$
+    label: 'rc'
+    increment: None

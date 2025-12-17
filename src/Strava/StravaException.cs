@@ -73,7 +73,7 @@ public class StravaException : Exception
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append(base.ToString());
+        sb.Append(base);
 
         if (StatusCode.HasValue)
         {
@@ -84,7 +84,7 @@ public class StravaException : Exception
         if (!string.IsNullOrEmpty(Content))
         {
             const int maxPreview = 1024;
-            var preview = Content.Length <= maxPreview ? Content : Content[..maxPreview] + "…(truncated)";
+            var preview = Content.Length <= maxPreview ? Content : Content[..maxPreview] + "ï¿½(truncated)";
             sb.AppendLine();
             sb.Append("Content: ").Append(preview);
         }
