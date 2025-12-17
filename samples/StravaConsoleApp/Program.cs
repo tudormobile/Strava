@@ -46,7 +46,7 @@ internal class Program
         var data = activities.Data ?? [];
         foreach (var activity in data)
         {
-            Console.WriteLine(activity.ToString());
+            Console.WriteLine(activity);
         }
         Console.WriteLine("Done.");
     }
