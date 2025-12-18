@@ -93,7 +93,7 @@ public class StravaSerializerTests
         await StravaSerializer.SerializeAsync(stream, lap, CancellationToken.None);
         stream.Position = 0;
         using var reader = new StreamReader(stream);
-        var json = await reader.ReadToEndAsync();
+        var json = await reader.ReadToEndAsync(TestContext.CancellationToken);
 
         Assert.Contains("elapsed_time", json);
         Assert.Contains("\"distance\":5", json);
@@ -107,4 +107,5 @@ public class StravaSerializerTests
         Assert.AreEqual(metaActivityId, actual.Activity.Id);
     }
 
+    public TestContext TestContext { get; set; }
 }

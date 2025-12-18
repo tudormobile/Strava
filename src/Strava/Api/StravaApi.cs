@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
@@ -7,13 +8,12 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 {
     private readonly StravaSession _session;
     private readonly HttpClient _client;
-    private readonly Lock _locker = new();
     private readonly SemaphoreSlim _authSemaphore = new(1, 1);
 
     public StravaApiImpl(StravaSession session, HttpClient httpClient)
     {
         _session = session;
-        _client = UpdateAuthHeader(httpClient);
+        _client = httpClient;
     }
 
     public async Task<Stream> GetStreamAsync(string uriString, CancellationToken cancellationToken)
@@ -21,8 +21,12 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 
     public async Task<Stream> GetStreamAsync(Uri requestUri, CancellationToken cancellationToken)
     {
-        var client = await GetAuthenticatedClientAsync(cancellationToken).ConfigureAwait(false);
-        var response = await client.GetAsync(requestUri, cancellationToken).ConfigureAwait(false);
+        var token = await GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
         try
         {
             response.EnsureSuccessStatusCode();
@@ -74,8 +78,13 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         HttpResponseMessage? response = null;
         try
         {
-            var client = await GetAuthenticatedClientAsync(cancellationToken).ConfigureAwait(false);
-            response = await client.PutAsJsonAsync(requestUri, body, StravaSerializer.Options, cancellationToken).ConfigureAwait(false);
+            var token = await GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var request = new HttpRequestMessage(HttpMethod.Put, requestUri);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = JsonContent.Create(body, options: StravaSerializer.Options);
+
+            response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             data = await response.Content.ReadFromJsonAsync<TResult>(cancellationToken).ConfigureAwait(false);
         }
@@ -100,56 +109,69 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
     }
 
     async Task<ApiResult<Athlete>> IStravaApi.GetAthleteAsync(long? athleteId, CancellationToken cancellationToken)
-        => await GetApiResultAsync<Athlete>(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
-
-    private async Task<ApiResult<HttpClient>> GetAuthenticatedClient()
     {
-        if (!_session.IsAuthenticated)
+        // Athlete must use custom serialization
+        try
         {
-            var result = await _session.RefreshAsync();
-            if (!result.Success)
+            using var result = await GetStreamAsync(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
+            var json = await new StreamReader(result).ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+            if (json != null)
             {
-                return new ApiResult<HttpClient>(error: result.Error);
+                var athlete = Athlete.FromJson(json);
+                if (athlete != null)
+                {
+                    return new ApiResult<Athlete>(athlete);
+                }
             }
-            UpdateAuthHeader(_client);
+            return new ApiResult<Athlete>(error: new ApiError("Unable to parse athlete data"));
         }
-        return new ApiResult<HttpClient>(data: _client);
+        catch (StravaException ex)
+        {
+            return new ApiResult<Athlete>(error: new ApiError(ex.Message, ex));
+        }
     }
 
-    private HttpClient UpdateAuthHeader(HttpClient client)
+    //    var result = await GetApiResultAsync<AthleteRecord>(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
+    //    if (result.Success && result.Data != null)
+    //    {
+    //        var athlete = new Athlete(result.Data);
+    //        return new ApiResult<Athlete>(athlete);
+    //    }
+    //    else
+    //    {
+    //        return new ApiResult<Athlete>(error: result.Error);
+    //    }
+    //}
+    //        => await GetApiResultAsync<Athlete>(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
+
+    private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
     {
-        lock (_locker)
+        // Fast path: if authenticated, return token immediately without locking
+        if (_session.IsAuthenticated)
         {
-            if (client.DefaultRequestHeaders.Contains("Authorization"))
-            {
-                client.DefaultRequestHeaders.Remove("Authorization");
-            }
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_session.Authorization.AccessToken}");
+            return _session.Authorization.AccessToken;
         }
-        return client;
-    }
 
-    private async Task<HttpClient> GetAuthenticatedClientAsync(CancellationToken cancellationToken = default)
-    {
-        if (_session.IsAuthenticated) return _client;
-
+        // Slow path: need to refresh, use semaphore to ensure only one refresh happens
         await _authSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            // Double-check authentication status after acquiring semaphore
-            if (_session.IsAuthenticated) return _client;
+            // Double-check after acquiring semaphore
+            if (_session.IsAuthenticated)
+            {
+                return _session.Authorization.AccessToken;
+            }
 
             var result = await _session.RefreshAsync(cancellationToken).ConfigureAwait(false);
             if (!result.Success)
             {
                 throw new StravaException(result.Error!.Message, result.Error.Exception);
             }
-            return UpdateAuthHeader(_client);
+            return _session.Authorization.AccessToken;
         }
         finally
         {
             _authSemaphore.Release();
         }
     }
-
 }
