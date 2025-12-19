@@ -17,7 +17,7 @@ public class Athlete
     /// <summary>
     /// Resource state, indicates level of detail. Possible values: 1 -> "meta", 2 -> "summary", 3 -> "detail"
     /// </summary>
-    public ResourceStates ResourceState => (ResourceStates)_athlete.resource_state;
+    public ResourceStates ResourceState => _athlete.resource_state;
 
     /// <summary>
     /// The username of the athlete.
@@ -88,7 +88,7 @@ public class Athlete
 internal class AthleteRecord
 {
     public long id { get; set; }
-    public int resource_state { get; set; }
+    public ResourceStates resource_state { get; set; }
     public string? username { get; set; }
     public string? firstname { get; set; }
     public string? lastname { get; set; }
@@ -122,7 +122,7 @@ internal class BikeRecord
     public string id { get; set; }
     public bool primary { get; set; }
     public string name { get; set; }
-    public int resource_state { get; set; }
+    public ResourceStates resource_state { get; set; }
     public int distance { get; set; }
 }
 
@@ -131,7 +131,7 @@ internal class ShoesRecord
     public string id { get; set; }
     public bool primary { get; set; }
     public string name { get; set; }
-    public int resource_state { get; set; }
+    public ResourceStates resource_state { get; set; }
     public int distance { get; set; }
 }
 #pragma warning restore IDE1006 // Naming Styles

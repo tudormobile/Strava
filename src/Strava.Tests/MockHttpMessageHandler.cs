@@ -5,6 +5,7 @@ namespace Strava.Tests;
 [ExcludeFromCodeCoverage]
 public class MockHttpMessageHandler : HttpMessageHandler
 {
+    public Uri? ProvidedRequestUri { get; set; }
     public Exception? AlwaysThrows { get; set; } = null;
     public HttpResponseMessage? AlwaysResponds { get; set; } = null;
     public string? JsonResponse { get; set; }
@@ -12,6 +13,7 @@ public class MockHttpMessageHandler : HttpMessageHandler
     public bool ForceNullResponse { get; set; } = false;
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        ProvidedRequestUri = request.RequestUri;
         return await Task.Run(() =>
         {
             if (AlwaysThrows != null)

@@ -6,6 +6,7 @@ namespace Tudormobile.Strava.Api;
 
 internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 {
+    private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
     private readonly HttpClient _client;
     private readonly SemaphoreSlim _authSemaphore = new(1, 1);
@@ -55,6 +56,9 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         }
     }
 
+    public async Task<ApiResult<T>> GetApiResultAsync<T>(string uriStringOrPath, CancellationToken cancellationToken = default)
+        => await GetApiResultAsync<T>(GetUri(uriStringOrPath), cancellationToken).ConfigureAwait(false);
+
     public async Task<ApiResult<T>> GetApiResultAsync<T>(Uri requestUri, CancellationToken cancellationToken)
     {
         try
@@ -71,6 +75,9 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         }
     }
 
+    public async Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(string uriStringOrPath, TBody? body, CancellationToken cancellationToken = default)
+        => await PutApiResultAsync<TBody, TResult>(GetUri(uriStringOrPath), body, cancellationToken).ConfigureAwait(false);
+
     public async Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(Uri requestUri, TBody? body, CancellationToken cancellationToken = default)
     {
         ApiError? error = null;
@@ -86,7 +93,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 
             response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
-            data = await response.Content.ReadFromJsonAsync<TResult>(cancellationToken).ConfigureAwait(false);
+            data = await response.Content.ReadFromJsonAsync<TResult>(StravaSerializer.Options, cancellationToken).ConfigureAwait(false);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
         {
@@ -131,19 +138,6 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         }
     }
 
-    //    var result = await GetApiResultAsync<AthleteRecord>(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
-    //    if (result.Success && result.Data != null)
-    //    {
-    //        var athlete = new Athlete(result.Data);
-    //        return new ApiResult<Athlete>(athlete);
-    //    }
-    //    else
-    //    {
-    //        return new ApiResult<Athlete>(error: result.Error);
-    //    }
-    //}
-    //        => await GetApiResultAsync<Athlete>(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
-
     private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
     {
         // Fast path: if authenticated, return token immediately without locking
@@ -172,6 +166,18 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         finally
         {
             _authSemaphore.Release();
+        }
+    }
+
+    private Uri GetUri(string uriStringOrPath)
+    {
+        if (Uri.IsWellFormedUriString(uriStringOrPath, UriKind.Absolute))
+        {
+            return new Uri(uriStringOrPath);
+        }
+        else
+        {
+            return new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
         }
     }
 }

@@ -15,7 +15,18 @@ public static class StravaSerializer
     private static readonly JsonSerializerOptions _options = new()
     {
         PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        Converters =
+        {
+            new Converters.ResourceStatesConverter(),
+            new Converters.ActivityStatsConverter(),
+            //new Converters.ActivityTypeConverter(),
+            //new Converters.SportTypeConverter(),
+            //new Converters.ClubTypeConverter(),
+            //new Converters.GearTypeConverter(),
+            //new Converters.HeatMapTypeConverter(),
+            //new Converters.WeightClassConverter()
+        }
     };
 
     /// <summary>
