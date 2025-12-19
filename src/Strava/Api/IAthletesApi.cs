@@ -19,7 +19,7 @@ public interface IAthletesApi : IStravaApi
     /// </summary>
     /// <param name="athleteId">The identifier of the athlete. Must match the authenticated athlete.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
-    /// <returns>The athletes statistics.</returns>
+    /// <returns>The athlete's statistics.</returns>
     Task<ApiResult<ActivityStats>> GetStats(long athleteId, CancellationToken cancellationToken = default) => GetApiResultAsync<ActivityStats>($"/athletes/{athleteId}/stats", cancellationToken);
 
     /// <summary>
