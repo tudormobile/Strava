@@ -57,7 +57,7 @@ public interface IStravaApi
     /// Sends an asynchronous HTTP request to the specified URI and returns the result as an <see cref="ApiResult{T}"/>.
     /// </summary>
     /// <typeparam name="T">The type to which the response content is deserialized.</typeparam>
-    /// <param name="uriStringOrPath">The path ot URI string of the API endpoint to request. Cannot be <see langword="null"/>.</param>
+    /// <param name="uriStringOrPath">The path or URI string of the API endpoint to request. Cannot be <see langword="null"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="ApiResult{T}"/>
     /// representing the outcome of the API request, including the deserialized response data or error information.</returns>

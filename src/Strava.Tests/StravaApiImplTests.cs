@@ -121,7 +121,7 @@ public class StravaApiImplTests
     }
 
     [TestMethod]
-    public async Task StravaApiImpl_GetSApiResultAsync_WithValidResponse_ShouldDeserializeCorrectly()
+    public async Task StravaApiImpl_GetApiResultAsync_WithValidResponse_ShouldDeserializeCorrectly()
     {
         // Arrange
         var sampleJson = "{\"id\":12345,\"username\":\"testuser\",\"resource_state\":3}";

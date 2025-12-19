@@ -1,12 +1,12 @@
 ﻿namespace Tudormobile.Strava.Model;
 
 /// <summary>
-/// Gets or sets the time spent in the zone, in seconds.
+/// Represents a range within a power zone.
 /// </summary>
 public class PowerZoneRange : ZoneRange
 {
     /// <summary>
-    /// Gets the time spent in the zone in seconds.
+    /// Gets or sets the time spent in the zone, in seconds.
     /// </summary>
     public int Time { get; set; }
 }
