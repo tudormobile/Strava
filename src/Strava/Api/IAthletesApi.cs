@@ -8,7 +8,7 @@ namespace Tudormobile.Strava.Api;
 public interface IAthletesApi : IStravaApi
 {
     /// <summary>
-    /// Returns the the authenticated athlete's heart rate and power zones. Requires profile:read_all.
+    /// Returns the authenticated athlete's heart rate and power zones. Requires profile:read_all.
     /// </summary>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
     /// <returns>Collection of the athlete's heart rate and power zones.</returns>

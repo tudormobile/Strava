@@ -60,7 +60,7 @@ public class StravaSessionTests
     }
 
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefreshTest()
+    public async Task RefreshAsync_SuccessfulRefreshTest()
     {
         var authorization = new StravaAuthorization()
         {
@@ -87,7 +87,7 @@ public class StravaSessionTests
     }
 
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefresh_WithAthleteIdTest()
+    public async Task RefreshAsync_SuccessfulRefresh_WithAthleteIdTest()
     {
         var authorization = new StravaAuthorization()
         {
@@ -113,12 +113,12 @@ public class StravaSessionTests
         Assert.AreEqual(1, actual.Data.Id, "Should have set Athlete Id from response.");
         // <12/18/2040 6:43:28 PM>
         var expectedData = new DateTime(2040, 12, 18, 18, 43, 28);
-        Assert.AreEqual(expectedData, actual.Data.Expires, "Failed to property process expiration date in response.");
+        Assert.AreEqual(expectedData, actual.Data.Expires, "Failed to properly process expiration date in response.");
     }
 
     // null access token in response
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefresh_WithNoAccessTokenInResponseTest()
+    public async Task RefreshAsync_SuccessfulRefresh_WithNoAccessTokenInResponseTest()
     {
         var authorization = new StravaAuthorization()
         {
@@ -146,7 +146,7 @@ public class StravaSessionTests
 
     // null refresh token in response
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefresh_WithNoRefreshTokenInResponseTest()
+    public async Task RefreshAsync_SuccessfulRefresh_WithNoRefreshTokenInResponseTest()
     {
         var authorization = new StravaAuthorization()
         {
@@ -174,7 +174,7 @@ public class StravaSessionTests
 
     // malformed json response
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefresh_WithMalformedInJsonResponseTest()
+    public async Task RefreshAsync_SuccessfulRefresh_WithMalformedInJsonResponseTest()
     {
         var authorization = new StravaAuthorization()
         {
@@ -202,7 +202,7 @@ public class StravaSessionTests
 
     // athlete id missing in response
     [TestMethod]
-    public async Task RefreshAsync_SuccessfullRefresh_WithAthleteNullIdInResponseTest()
+    public async Task RefreshAsync_SuccessfulRefresh_WithAthleteNullIdInResponseTest()
     {
         var authorization = new StravaAuthorization()
         {

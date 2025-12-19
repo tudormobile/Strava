@@ -121,7 +121,8 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         try
         {
             using var result = await GetStreamAsync(new Uri("https://www.strava.com/api/v3/athlete"), cancellationToken).ConfigureAwait(false);
-            var json = await new StreamReader(result).ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+            using var reader = new StreamReader(result);
+            var json = await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
             if (json != null)
             {
                 var athlete = Athlete.FromJson(json);
