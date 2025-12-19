@@ -171,13 +171,8 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 
     private Uri GetUri(string uriStringOrPath)
     {
-        if (Uri.IsWellFormedUriString(uriStringOrPath, UriKind.Absolute))
-        {
-            return new Uri(uriStringOrPath);
-        }
-        else
-        {
-            return new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
-        }
+        return Uri.IsWellFormedUriString(uriStringOrPath, UriKind.Absolute)
+            ? new Uri(uriStringOrPath)
+            : new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
     }
 }
