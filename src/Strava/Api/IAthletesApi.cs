@@ -15,7 +15,7 @@ public interface IAthletesApi : IStravaApi
     Task<ApiResult<List<PowerZoneRanges>>> GetLoggedInAthleteZones(CancellationToken cancellationToken = default) => GetApiResultAsync<List<PowerZoneRanges>>("/athlete/zones", cancellationToken);
 
     /// <summary>
-    /// Returns the activity stats of an athlete. Only includes data from activities set to Everyone visibilty.
+    /// Returns the activity stats of an athlete. Only includes data from activities set to Everyone visibility.
     /// </summary>
     /// <param name="athleteId">The identifier of the athlete. Must match the authenticated athlete.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
