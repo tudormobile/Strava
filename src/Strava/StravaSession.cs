@@ -28,6 +28,7 @@ public class StravaSession
     /// </remarks>
     private static readonly HttpClient _httpClient = new() { Timeout = DEFAULT_TIMEOUT };
     private readonly HttpClient? _providedClient;
+    private readonly bool _useProvidedClientForRefresh;
     internal StravaApiImpl? _api;
     private readonly string STRAVA_TOKEN_ENDPOINT = "https://www.strava.com/oauth/token";
     private StravaAuthorization _authorization;
@@ -50,6 +51,7 @@ public class StravaSession
     /// </summary>
     /// <param name="clientAuthorization">Initial authorization.</param>
     /// <param name="httpClient">HttpClient to use for api requests; Optional.</param>
+    /// <param name="useProvidedClientForRefresh">Indicates whether to use the provided HttpClient for token refresh operations.</param>
     /// <remarks>
     /// Providing an HttpClient is preferred. If provided, management of the HttpClient is the 
     /// responsibility of the caller.
@@ -59,11 +61,12 @@ public class StravaSession
     /// with stale DNS and connection pooling.
     /// </para> 
     /// </remarks>
-    public StravaSession(StravaAuthorization clientAuthorization, HttpClient? httpClient = null)
+    public StravaSession(StravaAuthorization clientAuthorization, HttpClient? httpClient = null, bool useProvidedClientForRefresh = false)
     {
         ArgumentNullException.ThrowIfNull(clientAuthorization);
         _authorization = clientAuthorization;
         _providedClient = httpClient;
+        _useProvidedClientForRefresh = useProvidedClientForRefresh;
     }
 
     /// <summary>
@@ -109,8 +112,28 @@ public class StravaSession
     /// </remarks>
     public async Task<ApiResult<StravaAuthorization>> RefreshAsync(CancellationToken cancellationToken = default)
     {
+        if (_useProvidedClientForRefresh && _providedClient != null)
+        {
+            return await RefreshAsync(_providedClient, cancellationToken);
+        }
         using var client = new HttpClient();
         client.Timeout = DEFAULT_TIMEOUT;
+        return await RefreshAsync(client, cancellationToken);
+    }
+
+    /// <summary>
+    /// Refresh the authorization (access and refresh) tokens using a provided <see cref="HttpClient"/> instance.
+    /// </summary>
+    /// <param name="httpClient">The <see cref="HttpClient"/> to use for the request.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+    /// <returns>Strava API result.</returns>
+    /// <remarks>
+    /// This overload allows the caller to provide a custom <see cref="HttpClient"/> instance for the token refresh request.
+    /// Success or Failure is returned in the <see cref="ApiResult{StravaAuthorization}"/> object. If successful, the session authentication is 
+    /// updated with the new authentication and refresh tokens, as well as the currently logged in Athlete (user) Id.
+    /// </remarks>
+    public async Task<ApiResult<StravaAuthorization>> RefreshAsync(HttpClient httpClient, CancellationToken cancellationToken = default)
+    {
         KeyValuePair<string, string>[] data =
             [
                 new ("client_id", Authorization.ClientId),
@@ -122,7 +145,7 @@ public class StravaSession
         var content = new FormUrlEncodedContent(data);
         try
         {
-            var response = await client.PostAsync(STRAVA_TOKEN_ENDPOINT, content, cancellationToken).ConfigureAwait(false);
+            var response = await httpClient.PostAsync(STRAVA_TOKEN_ENDPOINT, content, cancellationToken).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
             {
                 // refresh the authorization data
@@ -144,7 +167,7 @@ public class StravaSession
                 return new ApiResult<StravaAuthorization>(error: new ApiError(fault: fault!));
             }
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
             return new ApiResult<StravaAuthorization>(error: new ApiError("Unable to authorize", ex));
         }
