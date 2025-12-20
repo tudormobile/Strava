@@ -19,19 +19,21 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="distance">Distance, in meters.</param>
     /// <param name="trainer">True if this is a trainer activity.</param>
     /// <param name="commute">True if this is a commute activity.</param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<ApiResult<DetailedActivity>> CreateActivityAsync(
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>An ApiResult containing the DetailedActivity object representing the created activity.</returns>
+    async Task<ApiResult<DetailedActivity>> CreateActivityAsync(
         string name,
-        string type,
-        string sportType,
+        SportTypes sportType,
         DateTime startDateLocal,
-        double elapsedTime,
-        string description,
-        double distance,
-        bool trainer,
-        bool commute
-        ) => throw new NotImplementedException();
+        long elapsedTime,
+        string? type = null,
+        string? description = null,
+        double? distance = null,
+        bool? trainer = null,
+        bool? commute = null,
+        CancellationToken cancellationToken = default) => await PostApiResultAsync<DetailedActivity>("/activities",
+            ActivitiesApiExtensions.CreateActivityPostContent(name, sportType, startDateLocal, elapsedTime, type, description, distance, trainer, commute),
+            cancellationToken);
 
     /// <summary>
     /// List Athlete Activities
@@ -70,10 +72,7 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>The activity's detailed representation. An instance of DetailedActivity.</returns>
     async Task<ApiResult<DetailedActivity>> GetActivityAsync(long id, bool? includeAllEfforts = false, CancellationToken cancellationToken = default)
-    {
-        var requestUri = new Uri($"https://www.strava.com/api/v3/activities/{id}");
-        return await GetApiResultAsync<DetailedActivity>(requestUri, cancellationToken).ConfigureAwait(false);
-    }
+        => await GetApiResultAsync<DetailedActivity>($"/activities/{id}", cancellationToken).ConfigureAwait(false);
 
     /// <summary>
     /// Returns the comments on the given activity. 
@@ -82,10 +81,22 @@ public interface IActivitiesApi : IStravaApi
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="afterCursor">Cursor of the last item in the previous page of results, used to request the subsequent page of results. When omitted, the first page of results is fetched.</param>
+    /// <param name="pageSize">Number of items per page. Defaults to the Strava V3 API default size (currently 30).</param>
     /// <returns>A list of Comments.</returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null)
-        => throw new NotImplementedException();
+    async Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null)
+    {
+        var queryParams = System.Web.HttpUtility.ParseQueryString(string.Empty);
+        if (pageSize != null)
+        {
+            queryParams.Add("page_size", pageSize.ToString());
+        }
+        if (afterCursor != null)
+        {
+            queryParams.Add("after_cursor", System.Web.HttpUtility.UrlEncode(afterCursor));
+        }
+        var query = queryParams.ToString()!;
+        return await GetApiResultAsync<List<Comment>>($"/activities/{id}/comments{(string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query)}").ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Returns the athletes who kudoed an activity identified by an identifier. 
@@ -135,9 +146,7 @@ public interface IActivitiesApi : IStravaApi
     /// Also requires activity:read_all in order to update Only Me activities
     /// </remarks>
     async Task<ApiResult<DetailedActivity>> UpdateActivityAsync(long id, UpdatableActivity activity, CancellationToken cancellationToken = default)
-    {
-        var requestUri = new Uri($"https://www.strava.com/api/v3/activities/{id}");
-        return await PutApiResultAsync<UpdatableActivity, DetailedActivity>(requestUri, activity, cancellationToken).ConfigureAwait(false);
-    }
+        => await PutApiResultAsync<UpdatableActivity, DetailedActivity>($"/activities/{id}", activity, cancellationToken).ConfigureAwait(false);
+
 }
 

@@ -26,7 +26,7 @@ public class Comment
     /// <summary>
     /// The associated athlete.
     /// </summary>
-    public Athlete? Athlete { get; set; }
+    public SummaryAthlete? Athlete { get; set; }
 
     /// <summary>
     /// The time at which this comment was created.

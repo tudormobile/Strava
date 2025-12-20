@@ -21,7 +21,7 @@ public class CommentTests
     public void PropertyAssignmentTest()
     {
         var createdAt = DateTime.Now;
-        var athlete = Athlete.Empty();
+        var athlete = new SummaryAthlete { Firstname = "John", Lastname = "Doe" };
 
         var target = new Comment
         {
@@ -35,7 +35,8 @@ public class CommentTests
         Assert.AreEqual(123456789, target.Id);
         Assert.AreEqual(987654321, target.ActivityId);
         Assert.AreEqual("Great workout!", target.Text);
-        Assert.AreSame(athlete, target.Athlete);
+        Assert.AreSame(athlete.Firstname, target.Athlete.Firstname);
+        Assert.AreSame(athlete.Lastname, target.Athlete.Lastname);
         Assert.AreEqual(createdAt, target.CreatedAt);
     }
 
@@ -55,13 +56,13 @@ public class CommentTests
             Id = 111,
             ActivityId = 222,
             Text = "Nice job!",
-            Athlete = athlete,
+            Athlete = new SummaryAthlete { Firstname = "Test", Lastname = "User" },
             CreatedAt = new DateTime(2025, 1, 1)
         };
 
         Assert.IsNotNull(target.Athlete);
-        Assert.AreEqual(12345, target.Athlete.Id);
-        Assert.AreEqual("test_user", target.Athlete.Username);
+        Assert.AreEqual("Test", target.Athlete.Firstname);
+        Assert.AreEqual("User", target.Athlete.Lastname);
     }
 
     [TestMethod]

@@ -76,4 +76,27 @@ public interface IStravaApi
     /// representing the deserialized response from the API.</returns>
     Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(string uriStringOrPath, TBody? body, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Sends an HTTP POST request to the specified URI with the provided request body and returns the deserialized API
+    /// result.
+    /// </summary>
+    /// <typeparam name="TResult">The type to which the response content is deserialized.</typeparam>
+    /// <param name="requestUri">The URI to which the POST request is sent. Cannot be <c>null</c>.</param>
+    /// <param name="body">The request body to send with the POST request.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="ApiResult{TResult}"/>
+    /// representing the deserialized response from the API.</returns>
+    Task<ApiResult<TResult>> PostApiResultAsync<TResult>(Uri requestUri, HttpContent body, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sends an HTTP POST request to the specified URI string or path with the provided request body and returns the deserialized API
+    /// result.
+    /// </summary>
+    /// <typeparam name="TResult">The type to which the response content is deserialized.</typeparam>
+    /// <param name="uriStringOrPath">The path or URI string to which the POST request is sent. Cannot be <c>null</c>.</param>
+    /// <param name="body">The request body to send with the POST request.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests. The default value is <see cref="CancellationToken.None"/>.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an <see cref="ApiResult{TResult}"/>
+    /// representing the deserialized response from the API.</returns>
+    Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default);
 }
