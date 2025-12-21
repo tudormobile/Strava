@@ -120,5 +120,27 @@ public class StravaApiTests
         Assert.IsNull(actual.Data);
     }
 
+    [TestMethod]
+    public async Task GetApiResultAsync_WithFullUriStringTest()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler { AlwaysResponds = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError) };
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
+        var api = session.StravaApi();
+        var uriString = "https://www.strava.com/api/v3/athlete";
+
+        // Act
+        _ = Assert.ThrowsExactlyAsync<StravaException>(async () => await api.GetStreamAsync(uriString, TestContext.CancellationToken));
+
+        // Assert
+        Assert.AreEqual(uriString, handler.ProvidedRequestUri?.ToString());
+    }
+
     public TestContext TestContext { get; set; }
 }

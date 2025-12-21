@@ -14,7 +14,7 @@ public class ActivityZoneTests
         Assert.AreEqual("Unknown", target.Type);
         Assert.IsFalse(target.SensorBased);
         Assert.AreEqual(0, target.Points);
-        Assert.IsFalse(target.CustomZone);
+        Assert.IsFalse(target.CustomZones);
         Assert.AreEqual(0, target.Max);
     }
 
@@ -27,7 +27,7 @@ public class ActivityZoneTests
             Type = "heartrate",
             SensorBased = true,
             Points = 50,
-            CustomZone = true,
+            CustomZones = true,
             Max = 180
         };
 
@@ -35,7 +35,7 @@ public class ActivityZoneTests
         Assert.AreEqual("heartrate", target.Type);
         Assert.IsTrue(target.SensorBased);
         Assert.AreEqual(50, target.Points);
-        Assert.IsTrue(target.CustomZone);
+        Assert.IsTrue(target.CustomZones);
         Assert.AreEqual(180, target.Max);
     }
 
@@ -61,13 +61,13 @@ public class ActivityZoneTests
         {
             Type = "power",
             SensorBased = true,
-            CustomZone = true,
+            CustomZones = true,
             Max = 300
         };
 
         Assert.AreEqual("power", target.Type);
         Assert.IsTrue(target.SensorBased);
-        Assert.IsTrue(target.CustomZone);
+        Assert.IsTrue(target.CustomZones);
         Assert.AreEqual(300, target.Max);
     }
 }

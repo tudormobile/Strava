@@ -36,7 +36,7 @@ public class ResourceStatesConverter : JsonConverter<ResourceStates>
         if (reader.TokenType == JsonTokenType.Number)
         {
             var value = reader.GetInt32();
-            return Enum.TryParse<ResourceStates>(value.ToString(), out var result) ? result : ResourceStates.Unknown;
+            return Enum.TryParse<ResourceStates>(value.ToString(), out var result) && Enum.IsDefined<ResourceStates>(result) ? result : ResourceStates.Unknown;
         }
 
         // Handle string representation as fallback

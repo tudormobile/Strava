@@ -126,4 +126,12 @@ public class StravaClient : IStravaClient
     /// <inheritdoc/>
     public Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(string uriStringOrPath, TBody? body, CancellationToken cancellationToken = default)
         => _session.StravaApi().PutApiResultAsync<TBody, TResult>(uriStringOrPath, body, cancellationToken);
+
+    /// <inheritdoc/>
+    public Task<ApiResult<TResult>> PostApiResultAsync<TResult>(Uri requestUri, HttpContent body, CancellationToken cancellationToken = default)
+        => _session.StravaApi().PostApiResultAsync<TResult>(requestUri, body, cancellationToken);
+
+    /// <inheritdoc/>
+    public Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default)
+        => _session.StravaApi().PostApiResultAsync<TResult>(uriStringOrPath, body, cancellationToken);
 }

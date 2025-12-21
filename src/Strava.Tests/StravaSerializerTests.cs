@@ -107,5 +107,44 @@ public class StravaSerializerTests
         Assert.AreEqual(metaActivityId, actual.Activity.Id);
     }
 
+    [TestMethod]
+    public void Read_WithNoStartObject_Fails()
+    {
+        var json = "[test";
+        Assert.IsFalse(StravaSerializer.TryDeserialize<ActivityStats>(json, out var result));
+        Assert.IsNull(result);
+    }
+
+    [TestMethod]
+    public void DeserializeCommandTest()
+    {
+        var json = @"[
+  {
+    ""id"": 12345678987654320,
+    ""activity_id"": 12345678987654320,
+    ""post_id"": null,
+    ""resource_state"": 2,
+    ""text"": ""Good job and keep the cat pictures coming!"",
+    ""mentions_metadata"": null,
+    ""created_at"": ""2018-02-08T19:25:39Z"",
+    ""athlete"": {
+      ""firstname"": ""Peter"",
+      ""lastname"": ""S""
+    },
+    ""cursor"": ""abc123%20""
+  }
+]";
+        var success = StravaSerializer.TryDeserialize<List<Comment>>(json, out var comments);
+        Assert.IsTrue(success);
+        Assert.IsNotNull(comments);
+        Assert.HasCount(1, comments);
+        Assert.AreEqual(12345678987654320, comments[0].Id);
+        Assert.AreEqual("Good job and keep the cat pictures coming!", comments[0].Text);
+        Assert.AreEqual(DateTime.Parse("2018-02-08T19:25:39Z"), comments[0].CreatedAt.ToLocalTime());
+        Assert.IsNotNull(comments[0].Athlete);
+        Assert.AreEqual("Peter", comments[0].Athlete?.Firstname);
+        Assert.AreEqual("S", comments[0].Athlete?.Lastname);
+    }
+
     public TestContext TestContext { get; set; }
 }

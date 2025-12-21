@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/SimpleConsoleApp/SimpleConsoleApp.csproj" />
+    <Project Path="samples/StravaConsoleApp/StravaConsoleApp.csproj" />
+    <Project Path="samples/StravaLogin.WPF/StravaLogin.WPF.csproj" />
+  </Folder>
+  <Project Path="src/Strava.Client/Strava.Client.csproj" />
+  <Project Path="src/Strava.Service/Strava.Service.csproj" />
+  <Project Path="src/Strava.Tests/Strava.Tests.csproj" />
+  <Project Path="src/Strava.UI/Strava.UI.csproj" />
+  <Project Path="src/Strava/Strava.csproj" />
+</Solution>

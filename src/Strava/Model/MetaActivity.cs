@@ -8,5 +8,5 @@ public class MetaActivity
     /// <summary>
     /// Gets or sets the unique identifier for the entity.
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 }

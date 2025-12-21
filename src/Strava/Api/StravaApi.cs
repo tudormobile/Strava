@@ -18,7 +18,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
     }
 
     public async Task<Stream> GetStreamAsync(string uriString, CancellationToken cancellationToken)
-        => await GetStreamAsync(new Uri(uriString), cancellationToken).ConfigureAwait(false);
+        => await GetStreamAsync(GetUri(uriString), cancellationToken).ConfigureAwait(false);
 
     public async Task<Stream> GetStreamAsync(Uri requestUri, CancellationToken cancellationToken)
     {
@@ -80,39 +80,16 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
 
     public async Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(Uri requestUri, TBody? body, CancellationToken cancellationToken = default)
     {
-        ApiError? error = null;
-        TResult? data = default;
-        HttpResponseMessage? response = null;
-        try
-        {
-            var token = await GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+        var content = JsonContent.Create(body, options: StravaSerializer.Options);
+        return await SendHttpContentAsync<TResult>(HttpMethod.Put, requestUri, content, cancellationToken).ConfigureAwait(false);
+    }
 
-            using var request = new HttpRequestMessage(HttpMethod.Put, requestUri);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            request.Content = JsonContent.Create(body, options: StravaSerializer.Options);
+    public async Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default)
+        => await PostApiResultAsync<TResult>(GetUri(uriStringOrPath), body, cancellationToken).ConfigureAwait(false);
 
-            response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            data = await response.Content.ReadFromJsonAsync<TResult>(StravaSerializer.Options, cancellationToken).ConfigureAwait(false);
-        }
-        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-        {
-            error = new ApiError("Rate limit exceeded", ex);
-        }
-        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-        {
-            error = new ApiError("Invalid login", ex);
-        }
-        catch (HttpRequestException ex)
-        {
-            error = new ApiError(ex);
-        }
-        catch (Exception ex)
-        {
-            error = new ApiError(new StravaException("Unexpected error posting Json data.", ex));
-        }
-        response?.Dispose();
-        return new ApiResult<TResult>(data, error);
+    public async Task<ApiResult<TResult>> PostApiResultAsync<TResult>(Uri requestUri, HttpContent body, CancellationToken cancellationToken = default)
+    {
+        return await SendHttpContentAsync<TResult>(HttpMethod.Post, requestUri, body, cancellationToken).ConfigureAwait(false);
     }
 
     async Task<ApiResult<Athlete>> IStravaApi.GetAthleteAsync(long? athleteId, CancellationToken cancellationToken)
@@ -137,6 +114,46 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
         {
             return new ApiResult<Athlete>(error: new ApiError(ex.Message, ex));
         }
+    }
+
+    private async Task<ApiResult<TResult>> SendHttpContentAsync<TResult>(HttpMethod method, Uri requestUri, HttpContent content, CancellationToken cancellationToken)
+    {
+        ApiError? error = null;
+        TResult? data = default;
+        HttpResponseMessage? response = null;
+        try
+        {
+            var token = await GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+
+            using var request = new HttpRequestMessage(method, requestUri);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Content = content;
+
+            response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            data = await response.Content.ReadFromJsonAsync<TResult>(StravaSerializer.Options, cancellationToken).ConfigureAwait(false);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+        {
+            error = new ApiError("Rate limit exceeded", ex);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            error = new ApiError("Invalid login", ex);
+        }
+        catch (HttpRequestException ex)
+        {
+            error = new ApiError(ex);
+        }
+        catch (Exception ex)
+        {
+            error = new ApiError(new StravaException("Unexpected error posting Json data.", ex));
+        }
+        finally
+        {
+            response?.Dispose();
+        }
+        return new ApiResult<TResult>(data, error);
     }
 
     private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)

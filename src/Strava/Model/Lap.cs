@@ -8,7 +8,7 @@ public class Lap
     /// <summary>
     /// Gets or sets the unique identifier for the lap.
     /// </summary>
-    public int Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// Gets or sets the name of the lap.
