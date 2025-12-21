@@ -93,3 +93,4 @@ public static class ActivitiesApiExtensions
         return uriString + (string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query);
     }
 }
+

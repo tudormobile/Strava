@@ -21,7 +21,7 @@ public class StravaApiImplTests
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
         // Act
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Assert
         Assert.IsNotNull(stravaApi);
     }
@@ -39,7 +39,7 @@ public class StravaApiImplTests
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
         // Act
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Assert
         Assert.IsNotNull(stravaApi);
     }
@@ -60,7 +60,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var exception = await Assert.ThrowsExactlyAsync<StravaException>(async () => await stravaApi.GetStreamAsync("http://www.example.com", TestContext.CancellationToken));
         // Assert
@@ -85,7 +85,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var exception = await Assert.ThrowsExactlyAsync<StravaException>(async () => await stravaApi.GetStreamAsync("http://www.example.com", TestContext.CancellationToken));
         // Assert
@@ -110,7 +110,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var exception = await Assert.ThrowsExactlyAsync<StravaException>(async () => await stravaApi.GetStreamAsync("http://www.example.com", TestContext.CancellationToken));
         // Assert
@@ -136,7 +136,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var result = await stravaApi.GetApiResultAsync<AthleteId>(new Uri("http://www.example.com"), TestContext.CancellationToken);
         // Assert
@@ -162,7 +162,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var result = await stravaApi.GetApiResultAsync<AthleteId>(new Uri("http://www.example.com"), TestContext.CancellationToken);
         // Assert
@@ -188,7 +188,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var result = await stravaApi.GetApiResultAsync<AthleteId>(new Uri("http://www.example.com"), TestContext.CancellationToken);
         // Assert
@@ -213,7 +213,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var result = await stravaApi.GetApiResultAsync<AthleteId>(new Uri("http://www.example.com"), TestContext.CancellationToken);
         // Assert
@@ -240,7 +240,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);
         // Assert
@@ -266,7 +266,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         var sampleAthleteId = new AthleteId { Id = 12345, ResourceState = 3 };
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);
@@ -292,7 +292,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         var sampleAthleteId = new AthleteId { Id = 12345, ResourceState = 3 };
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);
@@ -319,7 +319,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         var sampleAthleteId = new AthleteId { Id = 12345, ResourceState = 3 };
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);
@@ -345,7 +345,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         var sampleAthleteId = new AthleteId { Id = 12345, ResourceState = 3 };
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);
@@ -371,7 +371,7 @@ public class StravaApiImplTests
         var refreshToken = "test_refresh_token";
         var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
         var session = new StravaSession(stravaAuthorization, httpClient);
-        var stravaApi = new StravaApiImpl(session, httpClient);
+        using var stravaApi = new StravaApiImpl(session, httpClient);
         AthleteId sampleAthleteId = null!;
         // Act
         var result = await stravaApi.PutApiResultAsync<AthleteId, AthleteId>(new Uri("http://www.example.com"), sampleAthleteId, TestContext.CancellationToken);

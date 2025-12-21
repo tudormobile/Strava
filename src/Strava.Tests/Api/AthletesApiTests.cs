@@ -80,7 +80,7 @@ public class AthletesApiTests
         var session = new StravaSession(stravaAuthorization, httpClient);
         // Act
         var athletesApi = session.AthletesApi();
-        var result = await athletesApi.GetLoggedInAthleteZones(TestContext.CancellationToken);
+        var result = await athletesApi.GetLoggedInAthleteZonesAsync(TestContext.CancellationToken);
         // Assert
         Assert.IsTrue(result.Success);
         Assert.IsNotNull(result.Data);
@@ -132,7 +132,7 @@ public class AthletesApiTests
         var session = new StravaSession(stravaAuthorization, httpClient);
         // Act
         var athletesApi = session.AthletesApi();
-        var result = await athletesApi.GetStats(athleteId, TestContext.CancellationToken);
+        var result = await athletesApi.GetStatsAsync(athleteId, TestContext.CancellationToken);
         // Assert
         Assert.IsTrue(result.Success);
         Assert.IsNotNull(result.Data);
@@ -221,7 +221,7 @@ public class AthletesApiTests
         var session = new StravaSession(stravaAuthorization, httpClient);
         // Act
         var athletesApi = session.AthletesApi();
-        var result = await athletesApi.UpdateLoggedInAthlete(weight, TestContext.CancellationToken);
+        var result = await athletesApi.UpdateLoggedInAthleteAsync(weight, TestContext.CancellationToken);
         // Assert
         Assert.IsTrue(result.Success);
         Assert.IsNotNull(result.Data);
@@ -267,6 +267,54 @@ public class AthletesApiTests
         Assert.AreEqual("adidas", result.Data.Shoes[0].Name);
         Assert.AreEqual(ResourceStates.Summary, result.Data.Shoes[0].ResourceState);
         Assert.AreEqual(4904, result.Data.Shoes[0].Distance);
+    }
+
+    [TestMethod]
+    public async Task ListAthleteClubsAsync_ReturnsListOfClubs()
+    {
+        var handler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"[
+  {
+    ""id"": 231407,
+    ""resource_state"": 2,
+    ""name"": ""The Strava Club"",
+    ""profile_medium"": ""https://xxxxx.cloudfront.net/pictures/clubs/231407/5319085/1/medium.jpg"",
+    ""profile"": ""https://xxxxx.cloudfront.net/pictures/clubs/231407/5319085/1/large.jpg"",
+    ""cover_photo"": ""https://xxxxx.cloudfront.net/pictures/clubs/231407/5098428/4/large.jpg"",
+    ""cover_photo_small"": ""https://xxxxx.cloudfront.net/pictures/clubs/231407/5098428/4/small.jpg"",
+    ""sport_type"": ""other"",
+    ""city"": ""San Francisco"",
+    ""state"": ""California"",
+    ""country"": ""United States"",
+    ""private"": false,
+    ""member_count"": 93151,
+    ""featured"": false,
+    ""verified"": true,
+    ""url"": ""strava""
+  }
+]"
+        };
+
+        // Arrange
+        var expected = $"https://www.strava.com/api/v3/athlete/clubs";
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
+        var api = session.AthletesApi();
+
+        // Act
+        var result = await api.ListAthleteClubsAsync(cancellationToken: TestContext.CancellationToken);
+
+        // Assert
+        Assert.IsTrue(result.Success, result.Error?.Message ?? "Api call failed.");
+        Assert.IsNotNull(result.Data);
+        Assert.AreEqual(expected, handler.ProvidedRequestUri?.ToString());
+
     }
 
     public TestContext TestContext { get; set; }

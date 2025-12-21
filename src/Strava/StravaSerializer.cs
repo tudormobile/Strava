@@ -22,7 +22,7 @@ public static class StravaSerializer
             new Converters.ActivityStatsConverter(),
             new Converters.TimeSpanConverter(),
             //new Converters.ActivityTypeConverter(),
-            //new Converters.SportTypeConverter(),
+            new Converters.SportTypesConverter(),
             //new Converters.ClubTypeConverter(),
             //new Converters.GearTypeConverter(),
             //new Converters.HeatMapTypeConverter(),

@@ -4,17 +4,27 @@ using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
-internal class StravaApiImpl : IActivitiesApi, IAthletesApi
+internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposable
 {
     private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
     private readonly HttpClient _client;
     private readonly SemaphoreSlim _authSemaphore = new(1, 1);
+    private bool _disposed;
 
     public StravaApiImpl(StravaSession session, HttpClient httpClient)
     {
         _session = session;
         _client = httpClient;
+    }
+
+    public void Dispose()
+    {
+        if (!_disposed)
+        {
+            _authSemaphore.Dispose();
+            _disposed = true;
+        }
     }
 
     public async Task<Stream> GetStreamAsync(string uriString, CancellationToken cancellationToken)
@@ -193,4 +203,5 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi
             ? new Uri(uriStringOrPath)
             : new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
     }
+
 }
