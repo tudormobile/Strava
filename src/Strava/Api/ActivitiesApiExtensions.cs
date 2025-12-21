@@ -32,7 +32,7 @@ public static class ActivitiesApiExtensions
         bool? commute = null
         )
     {
-        var content = new MultipartFormDataContent
+        using var content = new MultipartFormDataContent
         {
             { new StringContent(name), nameof(name) },
             { new StringContent(sportType.ToString()), "sport_type" },
@@ -86,7 +86,7 @@ public static class ActivitiesApiExtensions
         {
             if (!string.IsNullOrWhiteSpace(value?.ToString()))
             {
-                queryParams.Add(key, System.Web.HttpUtility.UrlEncode(value.ToString()));
+                queryParams.Add(key, value.ToString());
             }
         }
         var query = queryParams.ToString()!;

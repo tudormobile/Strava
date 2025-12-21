@@ -21,7 +21,7 @@ public class TimeSpanConverter : JsonConverter<TimeSpan>
         {
             throw new JsonException("Expected Number token");
         }
-        var seconds = reader.GetInt32();
+        var seconds = reader.GetInt64();
         return TimeSpan.FromSeconds(seconds);
     }
     /// <summary>
@@ -32,6 +32,6 @@ public class TimeSpanConverter : JsonConverter<TimeSpan>
     /// <param name="options">Options to control the conversion behavior.</param>
     public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue((int)value.TotalSeconds);
+        writer.WriteNumberValue((long)value.TotalSeconds);
     }
 }

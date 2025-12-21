@@ -82,8 +82,9 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="afterCursor">Cursor of the last item in the previous page of results, used to request the subsequent page of results. When omitted, the first page of results is fetched.</param>
     /// <param name="pageSize">Number of items per page. Defaults to the Strava V3 API default size (currently 30).</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A list of Comments.</returns>
-    async Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null)
+    async Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null, CancellationToken cancellationToken = default)
         => await GetApiResultAsync<List<Comment>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/comments", [("page_size", pageSize), ("after_cursor", afterCursor)])).ConfigureAwait(false);
 
     /// <summary>
@@ -94,9 +95,10 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="page">Page number. Defaults to Strava V3 API default (currently 1).</param>
     /// <param name="perPage">Number of items per page. Strava V3 API default (currently 30).
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     ///</param>
     /// <returns>A list of SummaryAthlete objects.</returns>
-    async Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null)
+    async Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null, CancellationToken cancellationToken = default)
        => await GetApiResultAsync<List<SummaryAthlete>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/kudos", [("page", page), ("per_page", perPage)])).ConfigureAwait(false);
 
     /// <summary>
@@ -105,8 +107,9 @@ public interface IActivitiesApi : IStravaApi
     /// Requires activity:read_all for Only Me activities.
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of Lap objects.</returns>
-    async Task<ApiResult<List<Lap>>> ListActivityLaps(long id)
+    async Task<ApiResult<List<Lap>>> ListActivityLaps(long id, CancellationToken cancellationToken = default)
         => await GetApiResultAsync<List<Lap>>($"/activities/{id}/laps").ConfigureAwait(false);
 
     /// <summary>
@@ -115,8 +118,9 @@ public interface IActivitiesApi : IStravaApi
     /// Requires activity:read_all for Only Me activities.
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>An collection of ActivityZone objects.</returns>
-    async Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id)
+    async Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id, CancellationToken cancellationToken = default)
         => await GetApiResultAsync<List<ActivityZone>>($"/activities/{id}/zones").ConfigureAwait(false);
 
     /// <summary>

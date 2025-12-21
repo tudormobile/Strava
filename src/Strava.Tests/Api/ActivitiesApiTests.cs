@@ -458,7 +458,7 @@ public class ActivitiesApiTests
 ]"
         };
 
-        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/comments?page_size=10&after_cursor=abc123%2b";
+        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/comments?page_size=10&after_cursor=abc123+";
         var httpClient = new HttpClient(handler);
         var clientId = "test_client_id";
         var clientSecret = "test_client_secret";
@@ -696,10 +696,10 @@ public class ActivitiesApiTests
 
 
     [TestMethod]
-    public void AddOptionalConent_WithNullToStringValue_AddsEmptyString()
+    public void AddOptionalContent_WithNullToStringValue_AddsEmptyString()
     {
         // Arrange
-        var content = new MultipartFormDataContent();
+        using var content = new MultipartFormDataContent();
         var payload = new TestContentClass();
 
         // Act
