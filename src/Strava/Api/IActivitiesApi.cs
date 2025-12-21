@@ -25,15 +25,12 @@ public interface IActivitiesApi : IStravaApi
         string name,
         SportTypes sportType,
         DateTime startDateLocal,
-        long elapsedTime,
-        string? type = null,
-        string? description = null,
-        double? distance = null,
-        bool? trainer = null,
-        bool? commute = null,
-        CancellationToken cancellationToken = default) => PostApiResultAsync<DetailedActivity>("/activities",
-            ActivitiesApiExtensions.CreateActivityPostContent(name, sportType, startDateLocal, elapsedTime, type, description, distance, trainer, commute),
-            cancellationToken);
+        double elapsedTime,
+        string description,
+        double distance,
+        bool trainer,
+        bool commute
+        ) => throw new NotImplementedException();
 
     /// <summary>
     /// List Athlete Activities
@@ -71,8 +68,11 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="includeAllEfforts">True to include all segments efforts.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>The activity's detailed representation. An instance of DetailedActivity.</returns>
-    Task<ApiResult<DetailedActivity>> GetActivityAsync(long id, bool? includeAllEfforts = false, CancellationToken cancellationToken = default)
-        => GetApiResultAsync<DetailedActivity>($"/activities/{id}", cancellationToken);
+    async Task<ApiResult<DetailedActivity>> GetActivityAsync(long id, bool? includeAllEfforts = false, CancellationToken cancellationToken = default)
+    {
+        var requestUri = new Uri($"https://www.strava.com/api/v3/activities/{id}");
+        return await GetApiResultAsync<DetailedActivity>(requestUri, cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Returns the comments on the given activity. 
@@ -84,8 +84,9 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="pageSize">Number of items per page. Defaults to the Strava V3 API default size (currently 30).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A list of Comments.</returns>
-    Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null, CancellationToken cancellationToken = default)
-        => GetApiResultAsync<List<Comment>>(ApiExtensions.AddQueryToUriString($"/activities/{id}/comments", [("page_size", pageSize), ("after_cursor", afterCursor)]), cancellationToken);
+    /// <exception cref="NotImplementedException"></exception>
+    Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null)
+        => throw new NotImplementedException();
 
     /// <summary>
     /// Returns the athletes who kudoed an activity identified by an identifier. 
@@ -98,8 +99,9 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     ///</param>
     /// <returns>A list of SummaryAthlete objects.</returns>
-    Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null, CancellationToken cancellationToken = default)
-       => GetApiResultAsync<List<SummaryAthlete>>(ApiExtensions.AddQueryToUriString($"/activities/{id}/kudos", [("page", page), ("per_page", perPage)]), cancellationToken);
+    /// <exception cref="NotImplementedException"></exception>
+    Task<ApiResult<List<Athlete>>> ListActivityKudoersAsync(long id, int? page = 1, int? perPage = 30)
+        => throw new NotImplementedException();
 
     /// <summary>
     /// Returns the laps of an activity identified by an identifier. 
@@ -109,8 +111,9 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of Lap objects.</returns>
-    Task<ApiResult<List<Lap>>> ListActivityLaps(long id, CancellationToken cancellationToken = default)
-        => GetApiResultAsync<List<Lap>>($"/activities/{id}/laps", cancellationToken);
+    /// <exception cref="NotImplementedException"></exception>
+    Task<ApiResult<List<Lap>>> ListActivityLaps(long id)
+        => throw new NotImplementedException();
 
     /// <summary>
     /// Returns the zones of a given activity. 
@@ -120,8 +123,9 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>An collection of ActivityZone objects.</returns>
-    Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id, CancellationToken cancellationToken = default)
-        => GetApiResultAsync<List<ActivityZone>>($"/activities/{id}/zones", cancellationToken);
+    /// <exception cref="NotImplementedException"></exception>
+    Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id)
+        => throw new NotImplementedException();
 
     /// <summary>
     /// Update Activity
@@ -134,8 +138,10 @@ public interface IActivitiesApi : IStravaApi
     /// Updates the given activity that is owned by the authenticated athlete. Requires activity:write. 
     /// Also requires activity:read_all in order to update Only Me activities
     /// </remarks>
-    Task<ApiResult<DetailedActivity>> UpdateActivityAsync(long id, UpdatableActivity activity, CancellationToken cancellationToken = default)
-        => PutApiResultAsync<UpdatableActivity, DetailedActivity>($"/activities/{id}", activity, cancellationToken);
-
+    async Task<ApiResult<DetailedActivity>> UpdateActivityAsync(long id, UpdatableActivity activity, CancellationToken cancellationToken = default)
+    {
+        var requestUri = new Uri($"https://www.strava.com/api/v3/activities/{id}");
+        return await PutApiResultAsync<UpdatableActivity, DetailedActivity>(requestUri, activity, cancellationToken).ConfigureAwait(false);
+    }
 }
 
