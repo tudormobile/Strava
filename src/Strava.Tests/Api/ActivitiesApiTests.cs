@@ -486,43 +486,214 @@ public class ActivitiesApiTests
     }
 
     [TestMethod]
-    public void ListActivityKudoersAsync_ThrowsNotImplementedException()
+    public async Task ListActivityKudoersAsync_ReturnsKudoers()
     {
-        // Arrange
-        var auth = new StravaAuthorization();
-        var session = new StravaSession(auth);
+        var handler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"[
+  {
+    ""firstname"": ""Peter"",
+    ""lastname"": ""S""
+  }
+]"
+        };
+
+        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/kudos";
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
         var api = session.ActivitiesApi();
 
-        // Act & Assert
-        Assert.ThrowsExactlyAsync<NotImplementedException>(async () =>
-            await api.ListActivityKudoersAsync(123456));
+        // Act
+        var result = await api.ListActivityKudoersAsync(12345678987654320);
+
+        // Assert
+        Assert.IsTrue(result.Success);
+        Assert.IsNotNull(result.Data);
+        Assert.HasCount(1, result.Data);
+
+        Assert.AreEqual(expected, handler.ProvidedRequestUri?.ToString());
+        Assert.HasCount(1, result.Data);
+        Assert.AreEqual("Peter", result.Data[0].Firstname);
+        Assert.AreEqual("S", result.Data[0].Lastname);
     }
 
     [TestMethod]
-    public void ListActivityLaps_ThrowsNotImplementedException()
+    public async Task ListActivityKudoersAsync_WithParameters_ReturnsKudoers()
     {
-        // Arrange
-        var auth = new StravaAuthorization();
-        var session = new StravaSession(auth);
+        var handler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"[
+  {
+    ""firstname"": ""Peter"",
+    ""lastname"": ""S""
+  }
+]"
+        };
+
+        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/kudos?page=5&per_page=200";
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
         var api = session.ActivitiesApi();
 
-        // Act & Assert
-        Assert.ThrowsExactlyAsync<NotImplementedException>(async () =>
-            await api.ListActivityLaps(123456));
+        // Act
+        var result = await api.ListActivityKudoersAsync(12345678987654320, 5, 200);
+
+        // Assert
+        Assert.IsTrue(result.Success);
+        Assert.IsNotNull(result.Data);
+        Assert.HasCount(1, result.Data);
+
+        Assert.AreEqual(expected, handler.ProvidedRequestUri?.ToString());
+        Assert.HasCount(1, result.Data);
+        Assert.AreEqual("Peter", result.Data[0].Firstname);
+        Assert.AreEqual("S", result.Data[0].Lastname);
+    }
+
+
+    [TestMethod]
+    public async Task ListActivityLaps_ReturnsLaps()
+    {
+        var handler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"[
+  {
+    ""id"": 12345678987654320,
+    ""resource_state"": 2,
+    ""name"": ""Lap 1"",
+    ""activity"": {
+      ""id"": 12345678987654320,
+      ""resource_state"": 1
+    },
+    ""athlete"": {
+      ""id"": 12345678987654321,
+      ""resource_state"": 1
+    },
+    ""elapsed_time"": 1691,
+    ""moving_time"": 1587,
+    ""start_date"": ""2018-02-08T14:13:37Z"",
+    ""start_date_local"": ""2018-02-08T06:13:37Z"",
+    ""distance"": 8046.72,
+    ""start_index"": 0,
+    ""end_index"": 1590,
+    ""total_elevation_gain"": 270,
+    ""average_speed"": 4.76,
+    ""max_speed"": 9.4,
+    ""average_cadence"": 79,
+    ""device_watts"": true,
+    ""average_watts"": 228.2,
+    ""lap_index"": 1,
+    ""split"": 1
+  }
+]"
+        };
+
+        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/laps";
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
+        var api = session.ActivitiesApi();
+
+        // Act
+        var result = await api.ListActivityLaps(12345678987654320);
+
+        // Assert
+        Assert.IsTrue(result.Success);
+        Assert.IsNotNull(result.Data);
+        Assert.HasCount(1, result.Data);
+
+        Assert.AreEqual(expected, handler.ProvidedRequestUri?.ToString());
+
+        Assert.HasCount(1, result.Data);
+        Assert.AreEqual(12345678987654320, result.Data[0].Id);
+        Assert.AreEqual("Lap 1", result.Data[0].Name);
+        Assert.AreEqual(12345678987654320, result.Data[0].Activity.Id);
+        Assert.AreEqual(12345678987654321, result.Data[0].Athlete.Id);
+        Assert.AreEqual(TimeSpan.FromSeconds(1691), result.Data[0].ElapsedTime);
+        Assert.AreEqual(TimeSpan.FromSeconds(1587), result.Data[0].MovingTime);
+        Assert.AreEqual(DateTime.Parse("2018-02-08T14:13:37Z"), result.Data[0].StartDate.ToLocalTime());
+        Assert.AreEqual(DateTime.Parse("2018-02-08T06:13:37Z"), result.Data[0].StartDateLocal.ToLocalTime());
+        Assert.AreEqual(8046.72, result.Data[0].Distance);
+        Assert.AreEqual(0, result.Data[0].StartIndex);
+        Assert.AreEqual(1590, result.Data[0].EndIndex);
+        Assert.AreEqual(270, result.Data[0].TotalElevationGain);
+        Assert.AreEqual(4.76, result.Data[0].AverageSpeed);
+        Assert.AreEqual(9.4, result.Data[0].MaxSpeed);
+        Assert.AreEqual(79, result.Data[0].AverageCadence);
+        Assert.AreEqual(1, result.Data[0].LapIndex);
+        Assert.AreEqual(1, result.Data[0].Split);
     }
 
     [TestMethod]
-    public void GetActivityZones_ThrowsNotImplementedException()
+    public async Task GetActivityZones_ReturnsActivityZones()
     {
-        // Arrange
-        var auth = new StravaAuthorization();
-        var session = new StravaSession(auth);
+        var handler = new MockHttpMessageHandler()
+        {
+            JsonResponse = @"[
+  {
+    ""score"": 1234,
+    ""distribution_buckets"": [
+      {
+        ""min"": 1,
+        ""max"": 2,
+        ""time"": 123
+      }
+    ],
+    ""type"": ""heartrate"",
+    ""sensor_based"": true,
+    ""points"": 12,
+    ""custom_zones"": true,
+    ""max"": 14
+  }
+]"
+        };
+
+        var expected = "https://www.strava.com/api/v3/activities/12345678987654320/zones";
+        var httpClient = new HttpClient(handler);
+        var clientId = "test_client_id";
+        var clientSecret = "test_client_secret";
+        var accessToken = "test_access_token";
+        var refreshToken = "test_refresh_token";
+        var stravaAuthorization = new StravaAuthorization(clientId, clientSecret, accessToken, refreshToken, expires: DateTime.Now.AddMonths(12));
+        var session = new StravaSession(stravaAuthorization, httpClient);
         var api = session.ActivitiesApi();
 
-        // Act & Assert
-        Assert.ThrowsExactlyAsync<NotImplementedException>(async () =>
-            await api.GetActivityZones(123456));
+        // Act
+        var result = await api.GetActivityZones(12345678987654320);
+
+        // Assert
+        Assert.IsTrue(result.Success);
+        Assert.IsNotNull(result.Data);
+        Assert.HasCount(1, result.Data);
+
+        Assert.AreEqual(expected, handler.ProvidedRequestUri?.ToString());
+        Assert.HasCount(1, result.Data);
+        Assert.AreEqual(1234, result.Data[0].Score);
+        Assert.IsTrue(result.Data[0].SensorBased);
+        Assert.IsTrue(result.Data[0].CustomZones);
+        Assert.AreEqual(12, result.Data[0].Points);
+        Assert.AreEqual(14, result.Data[0].Max);
+        Assert.AreEqual("heartrate", result.Data[0].Type);
+
+        Assert.HasCount(1, result.Data[0].DistributionBuckets);
+        Assert.AreEqual(1, result.Data[0].DistributionBuckets[0].Min);
+        Assert.AreEqual(2, result.Data[0].DistributionBuckets[0].Max);
+        Assert.AreEqual(123, result.Data[0].DistributionBuckets[0].Time);
     }
+
 
     [TestMethod]
     public void AddOptionalConent_WithNullToStringValue_AddsEmptyString()

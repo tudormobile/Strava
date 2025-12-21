@@ -84,19 +84,7 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="pageSize">Number of items per page. Defaults to the Strava V3 API default size (currently 30).</param>
     /// <returns>A list of Comments.</returns>
     async Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null)
-    {
-        var queryParams = System.Web.HttpUtility.ParseQueryString(string.Empty);
-        if (pageSize != null)
-        {
-            queryParams.Add("page_size", pageSize.ToString());
-        }
-        if (afterCursor != null)
-        {
-            queryParams.Add("after_cursor", System.Web.HttpUtility.UrlEncode(afterCursor));
-        }
-        var query = queryParams.ToString()!;
-        return await GetApiResultAsync<List<Comment>>($"/activities/{id}/comments{(string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query)}").ConfigureAwait(false);
-    }
+        => await GetApiResultAsync<List<Comment>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/comments", [("page_size", pageSize), ("after_cursor", afterCursor)])).ConfigureAwait(false);
 
     /// <summary>
     /// Returns the athletes who kudoed an activity identified by an identifier. 
@@ -104,13 +92,12 @@ public interface IActivitiesApi : IStravaApi
     /// Requires activity:read_all for Only Me activities.
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
-    /// <param name="page">Page number. Defaults to 1.</param>
-    /// <param name="perPage">Number of items per page. Defaults to 30.
+    /// <param name="page">Page number. Defaults to Strava V3 API default (currently 1).</param>
+    /// <param name="perPage">Number of items per page. Strava V3 API default (currently 30).
     ///</param>
     /// <returns>A list of SummaryAthlete objects.</returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<ApiResult<List<Athlete>>> ListActivityKudoersAsync(long id, int? page = 1, int? perPage = 30)
-        => throw new NotImplementedException();
+    async Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null)
+       => await GetApiResultAsync<List<SummaryAthlete>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/kudos", [("page", page), ("per_page", perPage)])).ConfigureAwait(false);
 
     /// <summary>
     /// Returns the laps of an activity identified by an identifier. 
@@ -119,9 +106,8 @@ public interface IActivitiesApi : IStravaApi
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
     /// <returns>A collection of Lap objects.</returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<ApiResult<List<Lap>>> ListActivityLaps(long id)
-        => throw new NotImplementedException();
+    async Task<ApiResult<List<Lap>>> ListActivityLaps(long id)
+        => await GetApiResultAsync<List<Lap>>($"/activities/{id}/laps").ConfigureAwait(false);
 
     /// <summary>
     /// Returns the zones of a given activity. 
@@ -130,9 +116,8 @@ public interface IActivitiesApi : IStravaApi
     /// </summary>
     /// <param name="id">The identifier of the activity.</param>
     /// <returns>An collection of ActivityZone objects.</returns>
-    /// <exception cref="NotImplementedException"></exception>
-    Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id)
-        => throw new NotImplementedException();
+    async Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id)
+        => await GetApiResultAsync<List<ActivityZone>>($"/activities/{id}/zones").ConfigureAwait(false);
 
     /// <summary>
     /// Update Activity

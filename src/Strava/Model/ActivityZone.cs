@@ -31,10 +31,15 @@ public class ActivityZone
     /// <summary>
     /// Gets or sets a value indicating whether a custom zone is used.
     /// </summary>
-    public bool CustomZone { get; set; }
+    public bool CustomZones { get; set; }
 
     /// <summary>
     /// Maximum.
     /// </summary>
     public int Max { get; set; }
+
+    /// <summary>
+    /// Gets or sets the collection of power zone ranges used for distribution analysis.
+    /// </summary>
+    public List<PowerZoneRange> DistributionBuckets { get; set; } = [];
 }
