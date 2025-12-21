@@ -418,7 +418,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.ListActivityCommentsAsync(12345678987654320);
+        var result = await api.ListActivityCommentsAsync(12345678987654320, cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
@@ -469,7 +469,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.ListActivityCommentsAsync(12345678987654320, pageSize: 10, afterCursor: "abc123 ");
+        var result = await api.ListActivityCommentsAsync(12345678987654320, pageSize: 10, afterCursor: "abc123 ", cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
@@ -509,7 +509,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.ListActivityKudoersAsync(12345678987654320);
+        var result = await api.ListActivityKudoersAsync(12345678987654320, cancellationToken: TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
@@ -546,7 +546,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.ListActivityKudoersAsync(12345678987654320, 5, 200);
+        var result = await api.ListActivityKudoersAsync(12345678987654320, 5, 200, TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
@@ -608,7 +608,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.ListActivityLaps(12345678987654320);
+        var result = await api.ListActivityLaps(12345678987654320, TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
@@ -672,7 +672,7 @@ public class ActivitiesApiTests
         var api = session.ActivitiesApi();
 
         // Act
-        var result = await api.GetActivityZones(12345678987654320);
+        var result = await api.GetActivityZones(12345678987654320, TestContext.CancellationToken);
 
         // Assert
         Assert.IsTrue(result.Success);
