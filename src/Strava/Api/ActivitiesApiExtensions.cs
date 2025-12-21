@@ -73,23 +73,4 @@ public static class ActivitiesApiExtensions
         return content;
     }
 
-    /// <summary>
-    /// Appends query parameters to a URI string.
-    /// </summary>
-    /// <param name="uriString">The base URI string to which query parameters will be added.</param>
-    /// <param name="queryParameters">A collection of key-value pairs representing the query parameters to add. Values that are <c>null</c> are ignored.</param>
-    /// <returns>The URI string with the appended query parameters.</returns>
-    public static string AddQueryToUriString(string uriString, IEnumerable<(string, object?)> queryParameters)
-    {
-        var queryParams = System.Web.HttpUtility.ParseQueryString(string.Empty);
-        foreach (var (key, value) in queryParameters)
-        {
-            if (!string.IsNullOrWhiteSpace(value?.ToString()))
-            {
-                queryParams.Add(key, value.ToString());
-            }
-        }
-        var query = queryParams.ToString()!;
-        return uriString + (string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query);
-    }
 }

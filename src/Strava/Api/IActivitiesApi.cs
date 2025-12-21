@@ -21,7 +21,7 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="commute">True if this is a commute activity.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>An ApiResult containing the DetailedActivity object representing the created activity.</returns>
-    async Task<ApiResult<DetailedActivity>> CreateActivityAsync(
+    Task<ApiResult<DetailedActivity>> CreateActivityAsync(
         string name,
         SportTypes sportType,
         DateTime startDateLocal,
@@ -31,7 +31,7 @@ public interface IActivitiesApi : IStravaApi
         double? distance = null,
         bool? trainer = null,
         bool? commute = null,
-        CancellationToken cancellationToken = default) => await PostApiResultAsync<DetailedActivity>("/activities",
+        CancellationToken cancellationToken = default) => PostApiResultAsync<DetailedActivity>("/activities",
             ActivitiesApiExtensions.CreateActivityPostContent(name, sportType, startDateLocal, elapsedTime, type, description, distance, trainer, commute),
             cancellationToken);
 
@@ -53,7 +53,7 @@ public interface IActivitiesApi : IStravaApi
     /// limit the number of activities returned.
     /// </para>
     /// </remarks>
-    async Task<ApiResult<List<SummaryActivity>>> GetActivitiesAsync(DateTime? before = null, DateTime? after = null, int? page = 1, int? perPage = 30, CancellationToken cancellationToken = default)
+    Task<ApiResult<List<SummaryActivity>>> GetActivitiesAsync(DateTime? before = null, DateTime? after = null, int? page = 1, int? perPage = 30, CancellationToken cancellationToken = default)
     {
         var beforeDate = before ?? DateTime.Now;                       // default is 'now'
         var afterDate = after ?? DateTimeOffset.UnixEpoch.DateTime;    // default is 'epoch'
@@ -61,7 +61,7 @@ public interface IActivitiesApi : IStravaApi
         var afterOffset = new DateTimeOffset(afterDate).ToUnixTimeSeconds();
         var requestUri = new Uri($"https://www.strava.com/api/v3/athlete/activities?before={beforeOffset}&after={afterOffset}&page={page}&per_page={perPage}");
 
-        return await GetApiResultAsync<List<SummaryActivity>>(requestUri, cancellationToken).ConfigureAwait(false);
+        return GetApiResultAsync<List<SummaryActivity>>(requestUri, cancellationToken);
     }
 
     /// <summary>
@@ -71,8 +71,8 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="includeAllEfforts">True to include all segments efforts.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>The activity's detailed representation. An instance of DetailedActivity.</returns>
-    async Task<ApiResult<DetailedActivity>> GetActivityAsync(long id, bool? includeAllEfforts = false, CancellationToken cancellationToken = default)
-        => await GetApiResultAsync<DetailedActivity>($"/activities/{id}", cancellationToken).ConfigureAwait(false);
+    Task<ApiResult<DetailedActivity>> GetActivityAsync(long id, bool? includeAllEfforts = false, CancellationToken cancellationToken = default)
+        => GetApiResultAsync<DetailedActivity>($"/activities/{id}", cancellationToken);
 
     /// <summary>
     /// Returns the comments on the given activity. 
@@ -84,8 +84,8 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="pageSize">Number of items per page. Defaults to the Strava V3 API default size (currently 30).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A list of Comments.</returns>
-    async Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null, CancellationToken cancellationToken = default)
-        => await GetApiResultAsync<List<Comment>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/comments", [("page_size", pageSize), ("after_cursor", afterCursor)])).ConfigureAwait(false);
+    Task<ApiResult<List<Comment>>> ListActivityCommentsAsync(long id, string? afterCursor = null, int? pageSize = null, CancellationToken cancellationToken = default)
+        => GetApiResultAsync<List<Comment>>(ApiExtensions.AddQueryToUriString($"/activities/{id}/comments", [("page_size", pageSize), ("after_cursor", afterCursor)]), cancellationToken);
 
     /// <summary>
     /// Returns the athletes who kudoed an activity identified by an identifier. 
@@ -98,8 +98,8 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     ///</param>
     /// <returns>A list of SummaryAthlete objects.</returns>
-    async Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null, CancellationToken cancellationToken = default)
-       => await GetApiResultAsync<List<SummaryAthlete>>(ActivitiesApiExtensions.AddQueryToUriString($"/activities/{id}/kudos", [("page", page), ("per_page", perPage)])).ConfigureAwait(false);
+    Task<ApiResult<List<SummaryAthlete>>> ListActivityKudoersAsync(long id, int? page = null, int? perPage = null, CancellationToken cancellationToken = default)
+       => GetApiResultAsync<List<SummaryAthlete>>(ApiExtensions.AddQueryToUriString($"/activities/{id}/kudos", [("page", page), ("per_page", perPage)]), cancellationToken);
 
     /// <summary>
     /// Returns the laps of an activity identified by an identifier. 
@@ -109,8 +109,8 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A collection of Lap objects.</returns>
-    async Task<ApiResult<List<Lap>>> ListActivityLaps(long id, CancellationToken cancellationToken = default)
-        => await GetApiResultAsync<List<Lap>>($"/activities/{id}/laps").ConfigureAwait(false);
+    Task<ApiResult<List<Lap>>> ListActivityLaps(long id, CancellationToken cancellationToken = default)
+        => GetApiResultAsync<List<Lap>>($"/activities/{id}/laps", cancellationToken);
 
     /// <summary>
     /// Returns the zones of a given activity. 
@@ -120,8 +120,8 @@ public interface IActivitiesApi : IStravaApi
     /// <param name="id">The identifier of the activity.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>An collection of ActivityZone objects.</returns>
-    async Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id, CancellationToken cancellationToken = default)
-        => await GetApiResultAsync<List<ActivityZone>>($"/activities/{id}/zones").ConfigureAwait(false);
+    Task<ApiResult<List<ActivityZone>>> GetActivityZones(long id, CancellationToken cancellationToken = default)
+        => GetApiResultAsync<List<ActivityZone>>($"/activities/{id}/zones", cancellationToken);
 
     /// <summary>
     /// Update Activity
@@ -134,8 +134,8 @@ public interface IActivitiesApi : IStravaApi
     /// Updates the given activity that is owned by the authenticated athlete. Requires activity:write. 
     /// Also requires activity:read_all in order to update Only Me activities
     /// </remarks>
-    async Task<ApiResult<DetailedActivity>> UpdateActivityAsync(long id, UpdatableActivity activity, CancellationToken cancellationToken = default)
-        => await PutApiResultAsync<UpdatableActivity, DetailedActivity>($"/activities/{id}", activity, cancellationToken).ConfigureAwait(false);
+    Task<ApiResult<DetailedActivity>> UpdateActivityAsync(long id, UpdatableActivity activity, CancellationToken cancellationToken = default)
+        => PutApiResultAsync<UpdatableActivity, DetailedActivity>($"/activities/{id}", activity, cancellationToken);
 
 }
 

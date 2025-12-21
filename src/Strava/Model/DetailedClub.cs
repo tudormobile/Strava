@@ -1,24 +1,24 @@
 ﻿namespace Tudormobile.Strava.Model;
 
 /// <summary>
-/// Represents a summary of a Strava club.
+/// Represents detailed information about a Strava club.
 /// </summary>
-public class SummaryClub
+public class DetailedClub
 {
     /// <summary>
-    /// The club's unique identifier.
+    /// Gets or sets the unique identifier for the club.
     /// </summary>
     public long Id { get; set; }
 
     /// <summary>
-    /// The name of the club.
-    /// </summary>
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Resource state, indicates level of detail.
+    /// Gets or sets the resource state indicating the level of detail in this representation.
     /// </summary>
     public ResourceStates ResourceState { get; set; }
+
+    /// <summary>
+    /// Gets or sets the name of the club.
+    /// </summary>
+    public string Name { get; set; } = String.Empty;
 
     /// <summary>
     /// Gets or sets the URL to the club's medium-sized profile picture.
@@ -36,7 +36,7 @@ public class SummaryClub
     public string? CoverPhoto { get; set; }
 
     /// <summary>
-    /// Gets or sets the URL to the club's small-sized cover photo.
+    /// Gets or sets the URL to the club's small cover photo.
     /// </summary>
     public string? CoverPhotoSmall { get; set; }
 
@@ -44,6 +44,11 @@ public class SummaryClub
     /// Gets or sets the primary sport type for the club.
     /// </summary>
     public SportTypes SportType { get; set; }
+
+    /// <summary>
+    /// Gets or sets the array of activity types associated with the club.
+    /// </summary>
+    public List<string>? ActivityTypes { get; set; }
 
     /// <summary>
     /// Gets or sets the city where the club is located.
@@ -66,7 +71,7 @@ public class SummaryClub
     public bool Private { get; set; }
 
     /// <summary>
-    /// Gets or sets the number of members in the club.
+    /// Gets or sets the total number of members in the club.
     /// </summary>
     public int MemberCount { get; set; }
 
@@ -84,4 +89,44 @@ public class SummaryClub
     /// Gets or sets the URL to the club's page on Strava.
     /// </summary>
     public string? Url { get; set; }
+
+    /// <summary>
+    /// Gets or sets the membership status of the current user (e.g., "member", "pending").
+    /// </summary>
+    public string Membership { get; set; } = "Unknown";
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the current user is an admin of the club.
+    /// </summary>
+    public bool Admin { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the current user is the owner of the club.
+    /// </summary>
+    public bool Owner { get; set; }
+
+    /// <summary>
+    /// Gets or sets the description of the club.
+    /// </summary>
+    public string Description { get; set; } = String.Empty;
+
+    /// <summary>
+    /// Gets or sets the type of club (e.g., "casual_club", "racing_team", "shop", "company", "other").
+    /// </summary>
+    public string ClubType { get; set; } = "Other";
+
+    /// <summary>
+    /// Gets or sets the total number of posts in the club.
+    /// </summary>
+    public int PostCount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the unique identifier of the club owner.
+    /// </summary>
+    public int OwnerId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of athletes the club is following.
+    /// </summary>
+    public int FollowingCount { get; set; }
 }

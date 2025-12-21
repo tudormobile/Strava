@@ -10,7 +10,7 @@ public class ApiExtensionsTests
     public void ClubsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        Assert.ThrowsExactly<NotImplementedException>(() => session.ClubsApi());
+        Assert.IsInstanceOfType<IClubsApi>(session.ClubsApi());
     }
 
     [TestMethod]
