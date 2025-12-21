@@ -46,7 +46,7 @@ public class DetailedClub
     public SportTypes SportType { get; set; }
 
     /// <summary>
-    /// Gets or sets the array of activity types associated with the club.
+    /// Gets or sets the list of activity types associated with the club.
     /// </summary>
     public List<string>? ActivityTypes { get; set; }
 

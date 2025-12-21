@@ -204,6 +204,6 @@ public class ApiExtensionsTests
         var result = ApiExtensions.AddQueryToUriString(uriString, queryParameters);
 
         // Assert
-        Assert.IsTrue(result.Contains("Run+%26+Bike"));
+        Assert.Contains("Run+%26+Bike", result);
     }
 }

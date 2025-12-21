@@ -11,7 +11,7 @@ public class SummaryClubTests
         var target = new SummaryClub();
         Assert.IsNotNull(target);
         Assert.AreEqual(0, target.Id);
-        Assert.IsNull(target.Name);
+        Assert.AreEqual(String.Empty, target.Name);
         Assert.AreEqual(ResourceStates.Unknown, target.ResourceState);
     }
 
