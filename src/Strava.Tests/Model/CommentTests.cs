@@ -12,7 +12,7 @@ public class CommentTests
         Assert.IsNotNull(target);
         Assert.AreEqual(0, target.Id);
         Assert.AreEqual(0, target.ActivityId);
-        Assert.AreEqual(String.Empty, target.Text);
+        Assert.AreEqual(string.Empty, target.Text);
         Assert.IsNull(target.Athlete);
         Assert.AreEqual(default, target.CreatedAt);
     }
@@ -72,9 +72,9 @@ public class CommentTests
         {
             Id = 1,
             ActivityId = 2,
-            Text = String.Empty
+            Text = string.Empty
         };
 
-        Assert.AreEqual(String.Empty, target.Text);
+        Assert.AreEqual(string.Empty, target.Text);
     }
 }

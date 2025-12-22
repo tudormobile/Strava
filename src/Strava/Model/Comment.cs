@@ -21,7 +21,7 @@ public class Comment
     /// <summary>
     /// The content of the comment.
     /// </summary>
-    public string Text { get; set; } = String.Empty;
+    public string Text { get; set; } = string.Empty;
 
     /// <summary>
     /// The associated athlete.

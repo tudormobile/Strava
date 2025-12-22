@@ -68,7 +68,7 @@ public static class ActivitiesApiExtensions
                 content.Add(new StringContent(boolValue ? "1" : "0"), name);
                 return content;
             }
-            content.Add(new StringContent(value.ToString() ?? String.Empty), name);
+            content.Add(new StringContent(value.ToString() ?? string.Empty), name);
         }
         return content;
     }

@@ -11,7 +11,7 @@ public class SummaryClubTests
         var target = new SummaryClub();
         Assert.IsNotNull(target);
         Assert.AreEqual(0, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
         Assert.AreEqual(ResourceStates.Unknown, target.ResourceState);
     }
 
@@ -73,12 +73,12 @@ public class SummaryClubTests
         var target = new SummaryClub
         {
             Id = 888,
-            Name = String.Empty,
+            Name = string.Empty,
             ResourceState = ResourceStates.Summary
         };
 
         Assert.AreEqual(888, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
     }
 
     [TestMethod]

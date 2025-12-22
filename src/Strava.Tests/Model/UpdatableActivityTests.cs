@@ -10,8 +10,8 @@ public class UpdatableActivityTests
     {
         var target = new UpdatableActivity();
         Assert.IsNotNull(target);
-        Assert.AreEqual(String.Empty, target.Name);
-        Assert.AreEqual(String.Empty, target.Description);
+        Assert.AreEqual(string.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Description);
         Assert.IsFalse(target.Commute);
         Assert.IsFalse(target.Trainer);
     }

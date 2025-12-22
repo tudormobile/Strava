@@ -18,7 +18,7 @@ public class DetailedActivity : SummaryActivity
     /// <summary>
     /// Gets or sets a description of the activity.
     /// </summary>
-    public string Description { get; set; } = String.Empty;
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DetailedActivity"/> class using the data from a <see

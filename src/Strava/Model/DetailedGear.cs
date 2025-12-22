@@ -19,13 +19,13 @@ public class DetailedGear
     public string Name
     {
         get => _name ?? (BrandName is not null && ModelName is not null ? string.Join("-", BrandName, ModelName) : $"{BrandName}{ModelName}");
-        set { _name = value.Trim(); }
+        set { _name = value?.Trim(); }
     }
 
     /// <summary>
     /// Gets or sets the description of the gear.
     /// </summary>
-    public string Description { get; set; } = String.Empty;
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the resource state indicating the level of detail available for this gear.

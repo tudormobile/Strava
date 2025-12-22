@@ -78,7 +78,4 @@ public static class ApiExtensions
         var query = queryParams.ToString()!;
         return uriString + (string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query);
     }
-
-    internal static bool TestMethod(this IStravaApi stravaApi)
-        => throw new NotImplementedException("StravaApi factory method not implemented yet.");
 }

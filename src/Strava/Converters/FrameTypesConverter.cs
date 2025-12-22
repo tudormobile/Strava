@@ -10,7 +10,7 @@ namespace Tudormobile.Strava.Converters;
 /// <remarks>
 /// This converter handles serialization and deserialization of <see cref="Model.FrameTypes"/> enum values
 /// to and from JSON. It supports both numeric (integer) and string representations of the enum values.
-/// The Strava API typically returns sport_type as a string (e.g., "Road", "Mountain").
+/// The Strava API typically returns frame_type as a string (e.g., "Road", "Mountain").
 /// </remarks>
 
 public class FrameTypesConverter : JsonConverter<FrameTypes>

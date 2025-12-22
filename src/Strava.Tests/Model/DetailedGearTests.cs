@@ -21,12 +21,11 @@ public class DetailedGearTests
         Assert.IsNull(gear.ModelName);
         Assert.AreEqual(FrameTypes.None, gear.FrameType);
         // Assert
-        // When both BrandName and ModelName are null, string.Join returns "-"
         Assert.AreEqual("", gear.Name);
     }
 
     [TestMethod]
-    public void Name_WithNameExplictlySet_ShouldReturnName()
+    public void Name_WithNameExplicitlySet_ShouldReturnName()
     {
         //Arrange
         var gear = new DetailedGear
@@ -42,6 +41,19 @@ public class DetailedGearTests
         Assert.AreEqual("ModelX", gear.ModelName);
         Assert.AreEqual("BrandY", gear.BrandName);
     }
+
+    [TestMethod]
+    public void Name_SetToNull_ShouldReturnEmptyString()
+    {
+        //Arrange
+        var gear = new DetailedGear();
+        // Act
+        gear.Name = null!;
+        // Assert
+        Assert.AreEqual(string.Empty, gear.Name);
+    }
+
+
 
     [TestMethod]
     public void Name_WithOnlyModelName_ShouldReturnModelName()

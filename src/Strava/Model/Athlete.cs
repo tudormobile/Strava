@@ -22,17 +22,17 @@ public class Athlete
     /// <summary>
     /// The username of the athlete.
     /// </summary>
-    public string Username => _athlete.username ?? String.Empty;
+    public string Username => _athlete.username ?? string.Empty;
 
     /// <summary>
     /// The athlete's first name.
     /// </summary>
-    public string FirstName => _athlete.firstname ?? String.Empty;
+    public string FirstName => _athlete.firstname ?? string.Empty;
 
     /// <summary>
     /// The athlete's last name.
     /// </summary>
-    public string LastName => _athlete.lastname ?? String.Empty;
+    public string LastName => _athlete.lastname ?? string.Empty;
 
     /// <summary>
     /// Friend count of the athlete, i.e., number of people the athlete is following.
