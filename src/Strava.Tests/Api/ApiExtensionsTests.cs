@@ -17,7 +17,7 @@ public class ApiExtensionsTests
     public void GearsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        Assert.ThrowsExactly<NotImplementedException>(() => session.GearsApi());
+        Assert.IsInstanceOfType<IGearsApi>(session.GearsApi());
     }
 
     [TestMethod]

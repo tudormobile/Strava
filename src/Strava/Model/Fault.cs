@@ -8,7 +8,7 @@ public class Fault
     /// <summary>
     /// The set of specific errors associated with this fault, if any.
     /// </summary>
-    public string Message { get; set; } = String.Empty;
+    public string Message { get; set; } = string.Empty;
 
     /// <summary>
     /// The message of the fault.

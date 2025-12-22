@@ -11,7 +11,7 @@ public class LapTests
         var target = new Lap();
         Assert.IsNotNull(target);
         Assert.AreEqual(0, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
     }
 
     [TestMethod]

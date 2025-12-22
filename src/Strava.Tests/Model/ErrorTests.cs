@@ -10,9 +10,9 @@ public class ErrorTests
     {
         var target = new Error();
         Assert.IsNotNull(target);
-        Assert.AreEqual(String.Empty, target.Code);
-        Assert.AreEqual(String.Empty, target.Field);
-        Assert.AreEqual(String.Empty, target.Resource);
+        Assert.AreEqual(string.Empty, target.Code);
+        Assert.AreEqual(string.Empty, target.Field);
+        Assert.AreEqual(string.Empty, target.Resource);
     }
 
     [TestMethod]

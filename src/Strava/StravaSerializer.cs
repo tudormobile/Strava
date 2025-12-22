@@ -21,12 +21,8 @@ public static class StravaSerializer
             new Converters.ResourceStatesConverter(),
             new Converters.ActivityStatsConverter(),
             new Converters.TimeSpanConverter(),
-            //new Converters.ActivityTypeConverter(),
+            new Converters.FrameTypesConverter(),
             new Converters.SportTypesConverter(),
-            //new Converters.ClubTypeConverter(),
-            //new Converters.GearTypeConverter(),
-            //new Converters.HeatMapTypeConverter(),
-            //new Converters.WeightClassConverter()
         }
     };
 

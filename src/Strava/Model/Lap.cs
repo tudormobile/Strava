@@ -13,7 +13,7 @@ public class Lap
     /// <summary>
     /// Gets or sets the name of the lap.
     /// </summary>
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets metadata about the activity this lap belongs to.

@@ -18,7 +18,7 @@ public class SummaryActivity
     /// <summary>
     /// The name of the activity
     /// </summary>
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// The activity's distance, in meters

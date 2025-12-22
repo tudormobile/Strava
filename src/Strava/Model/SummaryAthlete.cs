@@ -8,10 +8,10 @@ public class SummaryAthlete
     /// <summary>
     /// Gets or sets the first name of the athlete.
     /// </summary>
-    public string Firstname { get; set; } = String.Empty;
+    public string Firstname { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the last name of the athlete.
     /// </summary>
-    public string Lastname { get; set; } = String.Empty;
+    public string Lastname { get; set; } = string.Empty;
 }

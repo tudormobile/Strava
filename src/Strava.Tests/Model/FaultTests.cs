@@ -11,7 +11,7 @@ public class FaultTests
     public void DefaultConstructorTest()
     {
         var target = new Fault();
-        Assert.AreEqual(String.Empty, target.Message);
+        Assert.AreEqual(string.Empty, target.Message);
         Assert.IsEmpty(target.Errors);
     }
 
@@ -41,7 +41,7 @@ public class FaultTests
     {
         var target = new Fault();
         Assert.IsNotNull(target);
-        Assert.AreEqual(String.Empty, target.Message);
+        Assert.AreEqual(string.Empty, target.Message);
         Assert.IsEmpty(target.Errors);
     }
 

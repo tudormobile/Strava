@@ -11,7 +11,7 @@ public class SummaryClubTests
         var target = new SummaryClub();
         Assert.IsNotNull(target);
         Assert.AreEqual(0, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
         Assert.AreEqual(ResourceStates.Unknown, target.ResourceState);
     }
 
@@ -53,12 +53,14 @@ public class SummaryClubTests
     [TestMethod]
     public void NullNameTest()
     {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         var target = new SummaryClub
         {
             Id = 999,
             Name = null,
             ResourceState = ResourceStates.Meta
         };
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
         Assert.AreEqual(999, target.Id);
         Assert.IsNull(target.Name);
@@ -71,12 +73,12 @@ public class SummaryClubTests
         var target = new SummaryClub
         {
             Id = 888,
-            Name = String.Empty,
+            Name = string.Empty,
             ResourceState = ResourceStates.Summary
         };
 
         Assert.AreEqual(888, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
     }
 
     [TestMethod]
