@@ -33,7 +33,7 @@ public static class ApiExtensions
     /// Creates or returns the existing GearsApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Gears API.</returns>
-    public static IGearsApi GearsApi(this StravaSession session) => throw new NotImplementedException("Gears API not implemented yet.");
+    public static IGearsApi GearsApi(this StravaSession session) => (IGearsApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing RoutesApi interface.
@@ -79,4 +79,6 @@ public static class ApiExtensions
         return uriString + (string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query);
     }
 
+    internal static bool TestMethod(this IStravaApi stravaApi)
+        => throw new NotImplementedException("StravaApi factory method not implemented yet.");
 }

@@ -4,7 +4,7 @@ using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
-internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposable
+internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, IDisposable
 {
     private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
@@ -27,8 +27,8 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposa
         }
     }
 
-    public async Task<Stream> GetStreamAsync(string uriString, CancellationToken cancellationToken)
-        => await GetStreamAsync(GetUri(uriString), cancellationToken).ConfigureAwait(false);
+    public Task<Stream> GetStreamAsync(string uriString, CancellationToken cancellationToken)
+        => GetStreamAsync(GetUri(uriString), cancellationToken);
 
     public async Task<Stream> GetStreamAsync(Uri requestUri, CancellationToken cancellationToken)
     {
@@ -66,8 +66,8 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposa
         }
     }
 
-    public async Task<ApiResult<T>> GetApiResultAsync<T>(string uriStringOrPath, CancellationToken cancellationToken = default)
-        => await GetApiResultAsync<T>(GetUri(uriStringOrPath), cancellationToken).ConfigureAwait(false);
+    public Task<ApiResult<T>> GetApiResultAsync<T>(string uriStringOrPath, CancellationToken cancellationToken = default)
+        => GetApiResultAsync<T>(GetUri(uriStringOrPath), cancellationToken);
 
     public async Task<ApiResult<T>> GetApiResultAsync<T>(Uri requestUri, CancellationToken cancellationToken)
     {
@@ -85,22 +85,20 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposa
         }
     }
 
-    public async Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(string uriStringOrPath, TBody? body, CancellationToken cancellationToken = default)
-        => await PutApiResultAsync<TBody, TResult>(GetUri(uriStringOrPath), body, cancellationToken).ConfigureAwait(false);
+    public Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(string uriStringOrPath, TBody? body, CancellationToken cancellationToken = default)
+        => PutApiResultAsync<TBody, TResult>(GetUri(uriStringOrPath), body, cancellationToken);
 
-    public async Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(Uri requestUri, TBody? body, CancellationToken cancellationToken = default)
+    public Task<ApiResult<TResult>> PutApiResultAsync<TBody, TResult>(Uri requestUri, TBody? body, CancellationToken cancellationToken = default)
     {
         var content = JsonContent.Create(body, options: StravaSerializer.Options);
-        return await SendHttpContentAsync<TResult>(HttpMethod.Put, requestUri, content, cancellationToken).ConfigureAwait(false);
+        return SendHttpContentAsync<TResult>(HttpMethod.Put, requestUri, content, cancellationToken);
     }
 
-    public async Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default)
-        => await PostApiResultAsync<TResult>(GetUri(uriStringOrPath), body, cancellationToken).ConfigureAwait(false);
+    public Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default)
+        => PostApiResultAsync<TResult>(GetUri(uriStringOrPath), body, cancellationToken);
 
-    public async Task<ApiResult<TResult>> PostApiResultAsync<TResult>(Uri requestUri, HttpContent body, CancellationToken cancellationToken = default)
-    {
-        return await SendHttpContentAsync<TResult>(HttpMethod.Post, requestUri, body, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<ApiResult<TResult>> PostApiResultAsync<TResult>(Uri requestUri, HttpContent body, CancellationToken cancellationToken = default)
+        => SendHttpContentAsync<TResult>(HttpMethod.Post, requestUri, body, cancellationToken);
 
     async Task<ApiResult<Athlete>> IStravaApi.GetAthleteAsync(long? athleteId, CancellationToken cancellationToken)
     {
@@ -203,5 +201,4 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IDisposa
             ? new Uri(uriStringOrPath)
             : new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
     }
-
 }
