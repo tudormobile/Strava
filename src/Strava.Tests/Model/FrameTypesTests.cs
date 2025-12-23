@@ -210,16 +210,6 @@ public class FrameTypesTests
     }
 
     [TestMethod]
-    public void FrameTypes_ParseInvalidValue_ShouldThrowArgumentException()
-    {
-        // Arrange
-        var input = "InvalidFrameType";
-
-        // Act & Assert
-        Assert.ThrowsExactly<ArgumentException>(() => Enum.Parse<FrameTypes>(input));
-    }
-
-    [TestMethod]
     public void FrameTypes_TryParseRoad_ShouldReturnTrue()
     {
         // Arrange

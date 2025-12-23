@@ -43,14 +43,6 @@ public class CommentTests
     [TestMethod]
     public void CommentWithAthleteTest()
     {
-        var athlete = Athlete.FromJson(@"{
-            ""id"": 12345,
-            ""username"": ""test_user"",
-            ""firstname"": ""Test"",
-            ""lastname"": ""User"",
-            ""resource_state"": 2
-        }");
-
         var target = new Comment
         {
             Id = 111,

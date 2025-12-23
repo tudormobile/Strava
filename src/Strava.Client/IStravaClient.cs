@@ -11,7 +11,7 @@ public interface IStravaClient
     IClubsApi,
     IGearsApi,
     IRoutesApi,
-    ISegmentsApi,
+    //ISegmentsApi,
     IStreamsApi,
     IUploadsApi
 {

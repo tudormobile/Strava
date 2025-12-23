@@ -4,7 +4,7 @@ using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
-internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, IDisposable
+internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, ISegmentsApi, IDisposable
 {
     private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
@@ -123,6 +123,27 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
             return new ApiResult<Athlete>(error: new ApiError(ex.Message, ex));
         }
     }
+    Task<ApiResult<DetailedSegment>> ISegmentsApi.GetSegmentAsync(long id, CancellationToken cancellationToken)
+        => GetApiResultAsync<DetailedSegment>($"/segments/{id}", cancellationToken);
+
+    Task<ApiResult<List<Segment>>> ISegmentsApi.ListStarredSegmentsAsync(int? page, int? perPage, CancellationToken cancellationToken)
+        => GetApiResultAsync<List<Segment>>("/segments/starred", cancellationToken);
+
+    Task<ApiResult<SegmentList>> ISegmentsApi.ExploreSegmentsAsync(Bounds bounds, string? activityType, int? minimumCatagory, int? maximumCategory, CancellationToken cancellationToken)
+        => GetApiResultAsync<SegmentList>(ApiExtensions.AddQueryToUriString($"/segments/explore",
+            [("bounds", bounds), ("activity_type", activityType), ("min_cat", minimumCatagory), ("max_cat", maximumCategory)]),
+            cancellationToken);
+
+    Task<ApiResult<Segment>> ISegmentsApi.StarSegmentAsync(long id, bool removeStar, CancellationToken cancellationToken)
+        => PutApiResultAsync<StarState, Segment>($"/segments/{id}/starred", new StarState(removeStar), cancellationToken);
+
+    Task<ApiResult<SegmentEffort>> ISegmentEffortsApi.GetSegmentEffortAsync(long id, CancellationToken cancellationToken)
+        => GetApiResultAsync<SegmentEffort>($"/segment_efforts/{id}", cancellationToken);
+
+    Task<ApiResult<List<SegmentEffort>>> ISegmentEffortsApi.ListSegmentEffortsAsync(long segmentId, DateTime? startDateLocal, DateTime? endDateLocal, int? perPage, CancellationToken cancellationToken)
+        => GetApiResultAsync<List<SegmentEffort>>(ApiExtensions.AddQueryToUriString($"/segment_efforts",
+            [("segment_id", segmentId), ("start_date_local", startDateLocal), ("end_date_local", endDateLocal), ("per_page", perPage)]),
+            cancellationToken);
 
     private async Task<ApiResult<TResult>> SendHttpContentAsync<TResult>(HttpMethod method, Uri requestUri, HttpContent content, CancellationToken cancellationToken)
     {
@@ -201,4 +222,6 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
             ? new Uri(uriStringOrPath)
             : new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
     }
+
+
 }

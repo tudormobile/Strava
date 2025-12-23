@@ -46,9 +46,11 @@ public class DetailedGearTests
     public void Name_SetToNull_ShouldReturnEmptyString()
     {
         //Arrange
-        var gear = new DetailedGear();
-        // Act
-        gear.Name = null!;
+        var gear = new DetailedGear
+        {
+            // Act
+            Name = null!
+        };
         // Assert
         Assert.AreEqual(string.Empty, gear.Name);
     }
