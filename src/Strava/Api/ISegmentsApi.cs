@@ -47,7 +47,7 @@ public interface ISegmentsApi : ISegmentEffortsApi
     /// langword="false"/>.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see
-    /// cref="ApiResult{DetailedSegment}"/> with the updated segment details.</returns>
+    /// cref="ApiResult{Segment}"/> with the updated segment details.</returns>
     Task<ApiResult<Segment>> StarSegmentAsync(long id, bool removeStar = false, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -56,7 +56,7 @@ public interface ISegmentsApi : ISegmentEffortsApi
     /// <param name="id">The identifier of the segment to unstar.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an <see
-    /// cref="ApiResult{DetailedSegment}"/> with details of the updated segment.</returns>
+    /// cref="ApiResult{Segment}"/> with details of the updated segment.</returns>
     Task<ApiResult<Segment>> UnstarSegmentAsync(long id, CancellationToken cancellationToken = default)
         => StarSegmentAsync(id, removeStar: true, cancellationToken);
 }
