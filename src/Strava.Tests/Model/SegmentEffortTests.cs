@@ -185,7 +185,7 @@ public class SegmentEffortTests
         };
 
         // Act
-        var stream = new MemoryStream();
+        using var stream = new MemoryStream();
         StravaSerializer.SerializeAsync(stream, segmentEffort, CancellationToken.None).Wait(TestContext.CancellationToken);
         stream.Position = 0;
         using var reader = new StreamReader(stream);
@@ -220,7 +220,7 @@ public class SegmentEffortTests
         };
 
         // Act
-        var stream = new MemoryStream();
+        using var stream = new MemoryStream();
         StravaSerializer.SerializeAsync(stream, original, CancellationToken.None).Wait(TestContext.CancellationToken);
         stream.Position = 0;
         StravaSerializer.TryDeserialize(stream, out SegmentEffort? result);
