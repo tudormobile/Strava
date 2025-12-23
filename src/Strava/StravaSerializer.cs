@@ -23,6 +23,7 @@ public static class StravaSerializer
             new Converters.TimeSpanConverter(),
             new Converters.FrameTypesConverter(),
             new Converters.SportTypesConverter(),
+            new Converters.LatLngConverter(),
         }
     };
 
