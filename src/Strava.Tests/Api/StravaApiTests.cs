@@ -121,7 +121,7 @@ public class StravaApiTests
     }
 
     [TestMethod]
-    public async Task GetApiResultAsync_WithFullUriStringTest()
+    public void GetApiResultAsync_WithFullUriStringTest()
     {
         // Arrange
         var handler = new MockHttpMessageHandler { AlwaysResponds = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError) };

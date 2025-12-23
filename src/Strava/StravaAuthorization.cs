@@ -25,10 +25,10 @@ public class StravaAuthorization : StravaAuthorizationOptions
     /// <param name="expires">Access token expiration date and time.</param>
     public StravaAuthorization(string? clientId = null, string? clientSecret = null, String? accessToken = null, string? refreshToken = null, DateTime? expires = null)
     {
-        ClientId = clientId ?? String.Empty;
-        ClientSecret = clientSecret ?? String.Empty;
-        AccessToken = accessToken ?? String.Empty;
-        RefreshToken = refreshToken ?? String.Empty;
+        ClientId = clientId ?? string.Empty;
+        ClientSecret = clientSecret ?? string.Empty;
+        AccessToken = accessToken ?? string.Empty;
+        RefreshToken = refreshToken ?? string.Empty;
         Expires = expires ?? DateTime.MinValue;
     }
 

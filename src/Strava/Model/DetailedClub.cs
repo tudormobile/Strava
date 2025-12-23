@@ -18,7 +18,7 @@ public class DetailedClub
     /// <summary>
     /// Gets or sets the name of the club.
     /// </summary>
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the URL to the club's medium-sized profile picture.
@@ -108,7 +108,7 @@ public class DetailedClub
     /// <summary>
     /// Gets or sets the description of the club.
     /// </summary>
-    public string Description { get; set; } = String.Empty;
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the type of club (e.g., "casual_club", "racing_team", "shop", "company", "other").

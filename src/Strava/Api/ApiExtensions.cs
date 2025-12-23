@@ -33,7 +33,7 @@ public static class ApiExtensions
     /// Creates or returns the existing GearsApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Gears API.</returns>
-    public static IGearsApi GearsApi(this StravaSession session) => throw new NotImplementedException("Gears API not implemented yet.");
+    public static IGearsApi GearsApi(this StravaSession session) => (IGearsApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing RoutesApi interface.
@@ -45,7 +45,7 @@ public static class ApiExtensions
     /// Creates or returns the existing SegmentsApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Segments API.</returns>
-    public static ISegmentsApi SegmentsApi(this StravaSession session) => throw new NotImplementedException("Segments API not implemented yet.");
+    public static ISegmentsApi SegmentsApi(this StravaSession session) => (ISegmentsApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing StreamApi interface.
@@ -70,13 +70,32 @@ public static class ApiExtensions
         var queryParams = System.Web.HttpUtility.ParseQueryString(string.Empty);
         foreach (var (key, value) in queryParameters)
         {
-            if (!string.IsNullOrWhiteSpace(value?.ToString()))
+            if (value is DateTime dt)
             {
-                queryParams.Add(key, value.ToString());
+                // Strava API expects date-time values in ISO 8601 format
+                queryParams.Add(key, dt.ToString("o"));
+            }
+            else if (value is Array arr)
+            {
+                // arrays are represented as multiple query parameters with the same key
+                foreach (var item in arr)
+                {
+                    if (item != null)
+                    {
+                        queryParams.Add(key, item.ToString());
+                    }
+                }
+            }
+            else
+            {
+                // just a string representation
+                if (!string.IsNullOrWhiteSpace(value?.ToString()))
+                {
+                    queryParams.Add(key, value.ToString());
+                }
             }
         }
         var query = queryParams.ToString()!;
         return uriString + (string.IsNullOrWhiteSpace(query) ? string.Empty : "?" + query);
     }
-
 }

@@ -13,7 +13,7 @@ public class SummaryClub
     /// <summary>
     /// The name of the club.
     /// </summary>
-    public string Name { get; set; } = String.Empty;
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Resource state, indicates level of detail.

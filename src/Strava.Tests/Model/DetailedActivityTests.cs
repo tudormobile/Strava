@@ -12,9 +12,9 @@ public class DetailedActivityTests
         Assert.IsNotNull(target);
         Assert.IsFalse(target.Commute);
         Assert.IsFalse(target.Trainer);
-        Assert.AreEqual(String.Empty, target.Description);
+        Assert.AreEqual(string.Empty, target.Description);
         Assert.AreEqual(0, target.Id);
-        Assert.AreEqual(String.Empty, target.Name);
+        Assert.AreEqual(string.Empty, target.Name);
     }
 
     [TestMethod]
