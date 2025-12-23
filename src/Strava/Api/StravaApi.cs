@@ -223,5 +223,4 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
             : new Uri(STRAVA_API_BASE_URL + uriStringOrPath);
     }
 
-
 }
