@@ -23,7 +23,7 @@ public interface ISegmentsApi : ISegmentEffortsApi
     /// <param name="page">Page number (optional).</param>
     /// <param name="perPage">Number of items per page (optional).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>An instance of <see cref="ApiResult{T}"/> where T is <see cref="List{SummarySegment}"/>.
+    /// <returns>An instance of <see cref="ApiResult{T}"/> where T is <see cref="List{Segment}"/>.
     /// </returns>
     Task<ApiResult<List<Segment>>> ListStarredSegmentsAsync(int? page = null, int? perPage = null, CancellationToken cancellationToken = default);
 
@@ -35,7 +35,7 @@ public interface ISegmentsApi : ISegmentEffortsApi
     /// <param name="minimumCategory">The minimum climb category to filter segments (optional).</param>
     /// <param name="maximumCategory">The maximum climb category to filter segments (optional).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>An instance of <see cref="ApiResult{T}"/> where T is <see cref="List{SummarySegment}"/>.
+    /// <returns>An instance of <see cref="ApiResult{T}"/> where T is <see cref="SegmentList"/>.
     /// </returns>
     Task<ApiResult<SegmentList>> ExploreSegmentsAsync(Bounds bounds, string? activityType = null, int? minimumCategory = null, int? maximumCategory = null, CancellationToken cancellationToken = default);
 
