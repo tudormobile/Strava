@@ -129,9 +129,9 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
     Task<ApiResult<List<Segment>>> ISegmentsApi.ListStarredSegmentsAsync(int? page, int? perPage, CancellationToken cancellationToken)
         => GetApiResultAsync<List<Segment>>("/segments/starred", cancellationToken);
 
-    Task<ApiResult<SegmentList>> ISegmentsApi.ExploreSegmentsAsync(Bounds bounds, string? activityType, int? minimumCatagory, int? maximumCategory, CancellationToken cancellationToken)
+    Task<ApiResult<SegmentList>> ISegmentsApi.ExploreSegmentsAsync(Bounds bounds, string? activityType, int? minimumCategory, int? maximumCategory, CancellationToken cancellationToken)
         => GetApiResultAsync<SegmentList>(ApiExtensions.AddQueryToUriString($"/segments/explore",
-            [("bounds", bounds), ("activity_type", activityType), ("min_cat", minimumCatagory), ("max_cat", maximumCategory)]),
+            [("bounds", bounds), ("activity_type", activityType), ("min_cat", minimumCategory), ("max_cat", maximumCategory)]),
             cancellationToken);
 
     Task<ApiResult<Segment>> ISegmentsApi.StarSegmentAsync(long id, bool removeStar, CancellationToken cancellationToken)
