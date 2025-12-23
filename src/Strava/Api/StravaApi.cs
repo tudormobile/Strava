@@ -135,7 +135,7 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
             cancellationToken);
 
     Task<ApiResult<Segment>> ISegmentsApi.StarSegmentAsync(long id, bool removeStar, CancellationToken cancellationToken)
-        => PutApiResultAsync<StarState, Segment>($"/segments/{id}/starred", new StarState(removeStar), cancellationToken);
+        => PutApiResultAsync<StarState, Segment>($"/segments/{id}/starred", new StarState(!removeStar), cancellationToken);
 
     Task<ApiResult<SegmentEffort>> ISegmentEffortsApi.GetSegmentEffortAsync(long id, CancellationToken cancellationToken)
         => GetApiResultAsync<SegmentEffort>($"/segment_efforts/{id}", cancellationToken);
