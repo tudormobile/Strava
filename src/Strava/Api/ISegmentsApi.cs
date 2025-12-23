@@ -32,12 +32,12 @@ public interface ISegmentsApi : ISegmentEffortsApi
     /// </summary>
     /// <param name="bounds">The geographical bounds within which to search for segments.</param>
     /// <param name="activityType">The type of activity (e.g., "running", "riding") to filter segments.</param>
-    /// <param name="minimumCatagory">The minimum climb category to filter segments (optional).</param>
+    /// <param name="minimumCategory">The minimum climb category to filter segments (optional).</param>
     /// <param name="maximumCategory">The maximum climb category to filter segments (optional).</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>An instance of <see cref="ApiResult{T}"/> where T is <see cref="List{SummarySegment}"/>.
     /// </returns>
-    Task<ApiResult<SegmentList>> ExploreSegmentsAsync(Bounds bounds, string? activityType = null, int? minimumCatagory = null, int? maximumCategory = null, CancellationToken cancellationToken = default);
+    Task<ApiResult<SegmentList>> ExploreSegmentsAsync(Bounds bounds, string? activityType = null, int? minimumCategory = null, int? maximumCategory = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Stars or unstars the specified segment asynchronously for the authenticated user.
