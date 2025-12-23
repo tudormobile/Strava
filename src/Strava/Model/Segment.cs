@@ -61,7 +61,7 @@ public class Segment
     /// <summary>
     /// Gets or sets the geographic coordinates of the segment end point.
     /// </summary>
-    public LatLng EndLatLng { get; set; }
+    public LatLng EndLatlng { get; set; }
 
     /// <summary>
     /// Gets or sets the climb category of the segment.

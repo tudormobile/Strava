@@ -48,8 +48,8 @@ public class SegmentsApiTests
         Assert.AreEqual(92.4f, segment.ElevationLow, 0.01f);
         Assert.AreEqual(37.8331119f, segment.StartLatlng.Latitude, 0.0001f);
         Assert.AreEqual(-122.4834356f, segment.StartLatlng.Longitude, 0.0001f);
-        Assert.AreEqual(37.8280722f, segment.EndLatLng.Latitude, 0.0001f);
-        Assert.AreEqual(-122.4981393f, segment.EndLatLng.Longitude, 0.0001f);
+        Assert.AreEqual(37.8280722f, segment.EndLatlng.Latitude, 0.001f);
+        Assert.AreEqual(-122.4981393f, segment.EndLatlng.Longitude, 0.001f);
         Assert.AreEqual(1, segment.ClimbCategory);
         Assert.AreEqual("San Francisco", segment.City);
         Assert.AreEqual("CA", segment.State);

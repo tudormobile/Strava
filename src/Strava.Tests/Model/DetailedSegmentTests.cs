@@ -23,7 +23,7 @@ public class DetailedSegmentTests
         Assert.AreEqual(0f, target.ElevationHigh);
         Assert.AreEqual(0f, target.ElevationLow);
         Assert.AreEqual(default, target.StartLatlng);
-        Assert.AreEqual(default, target.EndLatLng);
+        Assert.AreEqual(default, target.EndLatlng);
         Assert.AreEqual(0, target.ClimbCategory);
         Assert.IsNull(target.City);
         Assert.IsNull(target.State);
@@ -75,7 +75,7 @@ public class DetailedSegmentTests
             ElevationHigh = 245.3f,
             ElevationLow = 92.4f,
             StartLatlng = startLatLng,
-            EndLatLng = endLatLng,
+            EndLatlng = endLatLng,
             ClimbCategory = 1,
             City = "San Francisco",
             State = "CA",
@@ -105,8 +105,8 @@ public class DetailedSegmentTests
         Assert.AreEqual(92.4f, target.ElevationLow, 0.01f);
         Assert.AreEqual(37.8331119f, target.StartLatlng.Latitude, 0.0001f);
         Assert.AreEqual(-122.4834356f, target.StartLatlng.Longitude, 0.0001f);
-        Assert.AreEqual(37.8280722f, target.EndLatLng.Latitude, 0.0001f);
-        Assert.AreEqual(-122.4981393f, target.EndLatLng.Longitude, 0.0001f);
+        Assert.AreEqual(37.8280722f, target.EndLatlng.Latitude, 0.0001f);
+        Assert.AreEqual(-122.4981393f, target.EndLatlng.Longitude, 0.0001f);
         Assert.AreEqual(1, target.ClimbCategory);
         Assert.AreEqual("San Francisco", target.City);
         Assert.AreEqual("CA", target.State);
@@ -139,8 +139,8 @@ public class DetailedSegmentTests
         // Assert
         Assert.AreEqual(0f, target.StartLatlng.Latitude);
         Assert.AreEqual(0f, target.StartLatlng.Longitude);
-        Assert.AreEqual(0f, target.EndLatLng.Latitude);
-        Assert.AreEqual(0f, target.EndLatLng.Longitude);
+        Assert.AreEqual(0f, target.EndLatlng.Latitude);
+        Assert.AreEqual(0f, target.EndLatlng.Longitude);
     }
 
     [TestMethod]
