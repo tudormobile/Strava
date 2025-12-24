@@ -34,7 +34,7 @@ public class GpxDocumentTests
 
         // Act & Assert
         var ex = Assert.ThrowsExactly<ArgumentException>(() => new GpxDocument(doc));
-        Assert.Contains("not a valid GPX document", ex.Message);
+        Assert.Contains("The provided XDocument does not have the expected root element.", ex.Message);
     }
 
     [TestMethod]
