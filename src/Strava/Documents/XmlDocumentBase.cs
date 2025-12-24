@@ -72,7 +72,7 @@ public abstract class XmlDocumentBase
     public async Task SaveAsync(Stream stream, SaveOptions options = SaveOptions.None, CancellationToken cancellationToken = default) => await _document.SaveAsync(stream, options, cancellationToken);
 
     /// <summary>
-    /// Base class for Gpx/Tcx elements that wrap XML elements.
+    /// Base class for GPX/TCX elements that wrap XML elements.
     /// </summary>
     public class XmlDocumentElement
     {
