@@ -40,7 +40,7 @@ public abstract class XmlDocumentBase
         _root = _document.Root ?? throw new ArgumentException("The provided XDocument does not have a root element.");
         if (_document.Root.Name.LocalName != rootName)
         {
-            throw new ArgumentException("The provided XDocument is not a valid GPX document.");
+            throw new ArgumentException("The provided XDocument does not have the expected root element.");
         }
         // Use the actual namespace of the root element instead of GetDefaultNamespace()
         _defaultNamespace = _root.Name.Namespace;
@@ -72,12 +72,12 @@ public abstract class XmlDocumentBase
     public async Task SaveAsync(Stream stream, SaveOptions options = SaveOptions.None, CancellationToken cancellationToken = default) => await _document.SaveAsync(stream, options, cancellationToken);
 
     /// <summary>
-    /// Base class for Gpx/Tcx elements that wrap XML elements.
+    /// Base class for GPX/TCX elements that wrap XML elements.
     /// </summary>
     public class XmlDocumentElement
     {
         /// <summary>
-        /// The underlying XML element for this GPX entity.
+        /// The underlying XML element wrapped by this document element instance.
         /// </summary>
         protected XElement _element;
 
