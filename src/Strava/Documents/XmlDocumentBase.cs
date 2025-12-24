@@ -77,7 +77,7 @@ public abstract class XmlDocumentBase
     public class XmlDocumentElement
     {
         /// <summary>
-        /// The underlying XML element for this GPX entity.
+        /// The underlying XML element wrapped by this document element instance.
         /// </summary>
         protected XElement _element;
 
