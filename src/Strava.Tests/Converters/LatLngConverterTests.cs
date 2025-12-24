@@ -94,7 +94,6 @@ public class LatLngConverterTests
 
         // Act & Assert
         Assert.AreEqual(default(LatLng), JsonSerializer.Deserialize<LatLng>(json, _options));
-        //Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<LatLng>(json, _options));
     }
 
     [TestMethod]
