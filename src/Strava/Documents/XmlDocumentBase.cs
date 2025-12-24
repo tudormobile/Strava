@@ -40,7 +40,7 @@ public abstract class XmlDocumentBase
         _root = _document.Root ?? throw new ArgumentException("The provided XDocument does not have a root element.");
         if (_document.Root.Name.LocalName != rootName)
         {
-            throw new ArgumentException("The provided XDocument is not a valid GPX document.");
+            throw new ArgumentException("The provided XDocument does not have the expected root element.");
         }
         // Use the actual namespace of the root element instead of GetDefaultNamespace()
         _defaultNamespace = _root.Name.Namespace;
