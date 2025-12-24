@@ -6,8 +6,7 @@ namespace Tudormobile.Strava.Documents;
 /// Represents a Training Center XML (TCX) document, providing access to workout and fitness data in the TCX format.
 /// </summary>
 /// <remarks>Use this class to read, manipulate, or generate TCX files, which are commonly used for exchanging
-/// fitness activity data between devices and applications. Inherits functionality from the GpxDocument class, enabling
-/// support for GPX-related features where applicable.</remarks>
+/// fitness activity data between devices and applications. Inherits functionality from the XmlDocumentBase class.</remarks>
 public class TcxDocument : XmlDocumentBase
 {
     /// <summary>
@@ -22,7 +21,7 @@ public class TcxDocument : XmlDocumentBase
     /// <summary>
     /// Gets the collection of activities contained in the TCX document.
     /// </summary>
-    public IEnumerable<TcxActivity> Activities => _root.Elements("Activities").Select(x => new TcxActivity(x));
+    public IEnumerable<TcxActivity> Activities => _root.Element(_root.GetDefaultNamespace() + "Activities")?.Elements(_root.GetDefaultNamespace() + "Activity").Select(x => new TcxActivity(x)) ?? Enumerable.Empty<TcxActivity>();
 
     /// <summary>
     /// Represents an activity in a TCX document, containing sport type, identifier, and lap data.
@@ -38,7 +37,7 @@ public class TcxDocument : XmlDocumentBase
         /// <summary>
         /// Gets the unique identifier of the activity as a string in ISO 8601 format.
         /// </summary>
-        public string Id => _element.Element("Id")?.Value ?? DateTime.MinValue.ToString("O");
+        public string Id => _element.Element(_element.GetDefaultNamespace() + "Id")?.Value ?? DateTime.MinValue.ToString("O");
 
         /// <summary>
         /// Gets the activity identifier as a <see cref="DateTime"/>.
@@ -53,7 +52,7 @@ public class TcxDocument : XmlDocumentBase
         /// <summary>
         /// Gets the collection of laps in the activity.
         /// </summary>
-        public IEnumerable<TcxActivityLap> Laps => _element.Elements("Lap").Select(x => new TcxActivityLap(x));
+        public IEnumerable<TcxActivityLap> Laps => _element.Elements(_element.GetDefaultNamespace() + "Lap").Select(x => new TcxActivityLap(x));
     }
 
     /// <summary>
@@ -75,22 +74,22 @@ public class TcxDocument : XmlDocumentBase
         /// <summary>
         /// Gets the total elapsed time of the lap in seconds.
         /// </summary>
-        public double TotalTimeSeconds => (double)_element.Element("TotalTimeSeconds")!;
+        public double TotalTimeSeconds => (double)_element.Element(_element.GetDefaultNamespace() + "TotalTimeSeconds")!;
 
         /// <summary>
         /// Gets the total distance covered in the lap in meters.
         /// </summary>
-        public double DistanceMeters => (double)_element.Element("DistanceMeters")!;
+        public double DistanceMeters => (double)_element.Element(_element.GetDefaultNamespace() + "DistanceMeters")!;
 
         /// <summary>
         /// Gets the maximum speed achieved during the lap in meters per second.
         /// </summary>
-        public double MaximumSpeed => (double)_element.Element("MaximumSpeed")!;
+        public double MaximumSpeed => (double)_element.Element(_element.GetDefaultNamespace() + "MaximumSpeed")!;
 
         /// <summary>
         /// Gets the collection of trackpoints (recorded positions) in the lap.
         /// </summary>
-        public IEnumerable<TcxTrackpoint> Tracks => _element.Elements("Track").Select(x => new TcxTrackpoint(x));
+        public IEnumerable<TcxTrackpoint> Tracks => _element.Elements(_element.GetDefaultNamespace() + "Track").Elements(_element.GetDefaultNamespace() + "Trackpoint").Select(x => new TcxTrackpoint(x));
     }
 
     /// <summary>
@@ -107,26 +106,33 @@ public class TcxDocument : XmlDocumentBase
         /// <summary>
         /// Gets the timestamp when the trackpoint was recorded.
         /// </summary>
-        public DateTime Time => (DateTime)_element.Attribute("Time")!;
+        public DateTime Time => (DateTime)_element.Element(_element.GetDefaultNamespace() + "Time")!;
 
         /// <summary>
         /// Gets the geographic position of the trackpoint as a tuple of latitude and longitude in decimal degrees.
         /// </summary>
-        public (double lat, double lon) Position => ((double)_element.Element("LatitudeDegrees")!, (double)_element.Element("LongitudeDegrees")!);
+        public (double lat, double lon) Position
+        {
+            get
+            {
+                var pos = _element.Element(_element.GetDefaultNamespace() + "Position")!;
+                return ((double)pos.Element(_element.GetDefaultNamespace() + "LatitudeDegrees")!, (double)pos.Element(_element.GetDefaultNamespace() + "LongitudeDegrees")!);
+            }
+        }
 
         /// <summary>
         /// Gets the altitude of the trackpoint in meters above sea level.
         /// </summary>
-        public double AltitudeMeters => (double)_element.Element("AltitudeMeters")!;
+        public double AltitudeMeters => (double)_element.Element(_element.GetDefaultNamespace() + "AltitudeMeters")!;
 
         /// <summary>
         /// Gets the cumulative distance traveled up to this trackpoint in meters.
         /// </summary>
-        public double DistanceMeters => (double)_element.Element("DistanceMeters")!;
+        public double DistanceMeters => (double)_element.Element(_element.GetDefaultNamespace() + "DistanceMeters")!;
 
         /// <summary>
         /// Gets the heart rate in beats per minute (BPM) at this trackpoint.
         /// </summary>
-        public double HeartRateBpm => (double)(_element.Element("HeartRateBpm")!.Element("value")!);
+        public double HeartRateBpm => (double)(_element.Element(_element.GetDefaultNamespace() + "HeartRateBpm")!.Element(_element.GetDefaultNamespace() + "Value")!);
     }
 }

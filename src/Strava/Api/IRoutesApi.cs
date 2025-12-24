@@ -25,7 +25,7 @@ public interface IRoutesApi
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the asynchronous operation.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains an ApiResult with a list of Route
     /// objects created by the athlete. The list will be empty if the athlete has no routes.</returns>
-    Task<ApiResult<List<Route>>> ListAthleteRoutesAsync(long athleteId, int? perPage = null, int? page = null, CancellationToken cancellationToken = default);
+    Task<ApiResult<List<Route>>> ListAthleteRoutesAsync(long athleteId, int? page = null, int? perPage = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Asynchronously exports the specified route as a TCX (Training Center XML) document.

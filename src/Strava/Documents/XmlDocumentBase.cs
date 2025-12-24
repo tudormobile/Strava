@@ -81,7 +81,7 @@ public abstract class XmlDocumentBase
         /// </summary>
         protected XElement _element;
 
-        internal XmlDocumentElement(XElement element) { _element = element; }
+        internal XmlDocumentElement(XElement element) { _element = element ?? throw new ArgumentNullException(nameof(element)); }
 
         /// <summary>
         /// Gets the underlying <see cref="XElement"/> wrapped by this instance.
