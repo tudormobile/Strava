@@ -87,7 +87,7 @@ public class LatLngConverterTests
     }
 
     [TestMethod]
-    public void Read_StringTypee_ShouldReturnDefault()
+    public void Read_StringType_ShouldReturnDefault()
     {
         // Arrange
         var json = "\"not an array\"";
