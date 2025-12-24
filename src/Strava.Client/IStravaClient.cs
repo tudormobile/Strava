@@ -10,7 +10,7 @@ public interface IStravaClient
     IAthletesApi,
     IClubsApi,
     IGearsApi,
-    IRoutesApi,
+    //IRoutesApi,
     //ISegmentsApi,
     IStreamsApi,
     IUploadsApi

@@ -39,7 +39,7 @@ public static class ApiExtensions
     /// Creates or returns the existing RoutesApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Routes API.</returns>
-    public static IRoutesApi RoutesApi(this StravaSession session) => throw new NotImplementedException("Routes API not implemented yet.");
+    public static IRoutesApi RoutesApi(this StravaSession session) => (IRoutesApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing SegmentsApi interface.

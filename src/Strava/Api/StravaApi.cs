@@ -1,10 +1,12 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Xml.Linq;
+using Tudormobile.Strava.Documents;
 using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
-internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, ISegmentsApi, IDisposable
+internal partial class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, ISegmentsApi, IRoutesApi, IDisposable
 {
     private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
@@ -74,7 +76,17 @@ internal class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsAp
         try
         {
             using var stream = await GetStreamAsync(requestUri, cancellationToken).ConfigureAwait(false);
-            T? result = await StravaSerializer.DeserializeAsync<T>(stream, cancellationToken).ConfigureAwait(false);
+            if (typeof(T) == typeof(TcxDocument))
+            {
+                var tcxDoc = new TcxDocument(XDocument.Load(stream));
+                return new ApiResult<T>(data: (T)(object)tcxDoc);
+            }
+            else if (typeof(T) == typeof(GpxDocument))
+            {
+                var gpxDoc = new GpxDocument(XDocument.Load(stream));
+                return new ApiResult<T>(data: (T)(object)gpxDoc);
+            }
+            var result = await StravaSerializer.DeserializeAsync<T>(stream, cancellationToken).ConfigureAwait(false);
             return result == null
                 ? new ApiResult<T>(error: new ApiError("Unable to parse result"))
                 : new ApiResult<T>(data: result);
