@@ -28,6 +28,11 @@ public class LatLngConverter : JsonConverter<LatLng>
             return default;
         }
 
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            return default;
+        }
+
         if (reader.TokenType != JsonTokenType.StartArray)
         {
             throw new JsonException($"Expected StartArray token, got {reader.TokenType}");
