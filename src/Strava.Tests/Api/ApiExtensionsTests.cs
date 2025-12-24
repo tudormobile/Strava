@@ -24,7 +24,7 @@ public class ApiExtensionsTests
     public void RoutesApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        Assert.ThrowsExactly<NotImplementedException>(() => session.RoutesApi());
+        Assert.IsInstanceOfType<IRoutesApi>(session.RoutesApi());
     }
 
     [TestMethod]

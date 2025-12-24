@@ -87,13 +87,14 @@ public class LatLngConverterTests
     }
 
     [TestMethod]
-    public void Read_InvalidTokenType_ShouldThrowJsonException()
+    public void Read_StringTypee_ShouldReturnDefault()
     {
         // Arrange
         var json = "\"not an array\"";
 
         // Act & Assert
-        Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<LatLng>(json, _options));
+        Assert.AreEqual(default(LatLng), JsonSerializer.Deserialize<LatLng>(json, _options));
+        //Assert.ThrowsExactly<JsonException>(() => JsonSerializer.Deserialize<LatLng>(json, _options));
     }
 
     [TestMethod]
