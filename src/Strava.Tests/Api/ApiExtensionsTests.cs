@@ -38,14 +38,14 @@ public class ApiExtensionsTests
     public void StreamApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        Assert.ThrowsExactly<NotImplementedException>(() => session.StreamApi());
+        Assert.IsInstanceOfType<IStravaApi>(session.StreamsApi());
     }
 
     [TestMethod]
     public void UploadsApiTest()
     {
         var session = new StravaSession(new StravaAuthorization());
-        Assert.ThrowsExactly<NotImplementedException>(() => session.UploadsApi());
+        Assert.IsInstanceOfType<IUploadsApi>(session.UploadsApi());
     }
 
     [TestMethod]

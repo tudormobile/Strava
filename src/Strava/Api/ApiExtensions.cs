@@ -51,13 +51,13 @@ public static class ApiExtensions
     /// Creates or returns the existing StreamApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Streams API.</returns>
-    public static IStreamsApi StreamApi(this StravaSession session) => throw new NotImplementedException("Streams API not implemented yet.");
+    public static IStreamsApi StreamsApi(this StravaSession session) => (IStreamsApi)session.StravaApi();
 
     /// <summary>
     /// Creates or returns the existing UploadsApi interface.
     /// </summary>
     /// <returns>Interface for accessing the Strava Uploads API.</returns>
-    public static IUploadsApi UploadsApi(this StravaSession session) => throw new NotImplementedException("Uploads API not implemented yet.");
+    public static IUploadsApi UploadsApi(this StravaSession session) => (IUploadsApi)session.StravaApi();
 
     /// <summary>
     /// Appends query parameters to a URI string.

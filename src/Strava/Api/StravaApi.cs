@@ -6,7 +6,7 @@ using Tudormobile.Strava.Model;
 
 namespace Tudormobile.Strava.Api;
 
-internal partial class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, ISegmentsApi, IRoutesApi, IDisposable
+internal partial class StravaApiImpl : IActivitiesApi, IAthletesApi, IClubsApi, IGearsApi, ISegmentsApi, IRoutesApi, IUploadsApi, IStreamsApi, IDisposable
 {
     private readonly string STRAVA_API_BASE_URL = "https://www.strava.com/api/v3";
     private readonly StravaSession _session;
