@@ -509,7 +509,7 @@ public class GpxDocumentTests
     }
 
     [TestMethod]
-    public async Task Save_ToFile_SavesSuccessfully()
+    public void Save_ToFile_SavesSuccessfully()
     {
         // Arrange
         var doc = new XDocument(

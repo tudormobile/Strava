@@ -107,11 +107,11 @@ public class TcxTrackpointTests
         var trackpoint = new TcxTrackpoint(element);
 
         // Act
-        var position = trackpoint.Position;
+        var (lat, lon) = trackpoint.Position;
 
         // Assert
-        Assert.AreEqual(-33.8688, position.lat, 0.0001);
-        Assert.AreEqual(151.2093, position.lon, 0.0001);
+        Assert.AreEqual(-33.8688, lat, 0.0001);
+        Assert.AreEqual(151.2093, lon, 0.0001);
     }
 
     [TestMethod]
