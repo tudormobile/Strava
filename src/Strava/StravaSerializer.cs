@@ -24,6 +24,7 @@ public static class StravaSerializer
             new Converters.FrameTypesConverter(),
             new Converters.SportTypesConverter(),
             new Converters.LatLngConverter(),
+            new Converters.SegmentStreamCollectionConverter()
         }
     };
 

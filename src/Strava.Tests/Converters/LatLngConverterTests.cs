@@ -93,7 +93,7 @@ public class LatLngConverterTests
         var json = "\"not an array\"";
 
         // Act & Assert
-        Assert.AreEqual(default(LatLng), JsonSerializer.Deserialize<LatLng>(json, _options));
+        Assert.AreEqual(default, JsonSerializer.Deserialize<LatLng>(json, _options));
     }
 
     [TestMethod]

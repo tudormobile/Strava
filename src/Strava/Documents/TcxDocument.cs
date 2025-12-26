@@ -21,7 +21,7 @@ public class TcxDocument : XmlDocumentBase
     /// <summary>
     /// Gets the collection of activities contained in the TCX document.
     /// </summary>
-    public IEnumerable<TcxActivity> Activities => _root.Element(_root.GetDefaultNamespace() + "Activities")?.Elements(_root.GetDefaultNamespace() + "Activity").Select(x => new TcxActivity(x)) ?? Enumerable.Empty<TcxActivity>();
+    public IEnumerable<TcxActivity> Activities => _root.Element(_root.GetDefaultNamespace() + "Activities")?.Elements(_root.GetDefaultNamespace() + "Activity").Select(x => new TcxActivity(x)) ?? [];
 
     /// <summary>
     /// Represents an activity in a TCX document, containing sport type, identifier, and lap data.

@@ -9,11 +9,11 @@ public interface IStravaClient
     : IActivitiesApi,
     IAthletesApi,
     IClubsApi,
-    IGearsApi,
-    //IRoutesApi,
-    //ISegmentsApi,
-    IStreamsApi,
-    IUploadsApi
+    IGearsApi
+//IRoutesApi,
+//ISegmentsApi,
+//IStreamsApi,
+//IUploadsApi
 {
     /// <summary>
     /// Gets a value indicating whether the client is authenticated.

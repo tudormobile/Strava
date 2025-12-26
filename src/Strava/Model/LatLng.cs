@@ -13,7 +13,7 @@ public struct LatLng
     /// <param name="coords">A tuple where the first element is the latitude and the second element is the longitude, both specified as
     /// double-precision floating-point values.</param>
     public static implicit operator LatLng((double Latitude, double Longitude) coords)
-        => new LatLng
+        => new()
         {
             Latitude = coords.Latitude,
             Longitude = coords.Longitude
