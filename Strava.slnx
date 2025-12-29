@@ -4,6 +4,7 @@
     <Project Path="samples/StravaConsoleApp/StravaConsoleApp.csproj" />
     <Project Path="samples/StravaLogin.WPF/StravaLogin.WPF.csproj" />
   </Folder>
+  <Project Path="src/Strava.Client.Tests/Strava.Client.Tests.csproj" />
   <Project Path="src/Strava.Client/Strava.Client.csproj" />
   <Project Path="src/Strava.Service/Strava.Service.csproj" />
   <Project Path="src/Strava.Tests/Strava.Tests.csproj" />

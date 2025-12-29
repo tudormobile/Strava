@@ -8,17 +8,6 @@ namespace Tudormobile.Strava.Api;
 public interface IStravaApi
 {
     /// <summary>
-    /// Retrieves a stream from the Strava API.
-    /// </summary>
-    /// <param name="requestUri">The URI of the request.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A <see cref="Stream"/> containing the API response.</returns>
-    /// <remarks>
-    /// It is the responsibility of the caller to dispose of the returned stream.
-    /// </remarks>
-    Task<Stream> GetStreamAsync(string requestUri, CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Retrieve Athlete record by Id for logged in user.
     /// </summary>
     /// <param name="athleteId">Optional; Athlete Id (default = logged in user).</param>
@@ -29,6 +18,17 @@ public interface IStravaApi
     /// receive a detailed athlete representation; all others will receive a summary representation.
     /// </remarks>
     Task<ApiResult<Athlete>> GetAthleteAsync(long? athleteId = 0, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Retrieves a stream from the Strava API.
+    /// </summary>
+    /// <param name="requestUri">The URI of the request.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A <see cref="Stream"/> containing the API response.</returns>
+    /// <remarks>
+    /// It is the responsibility of the caller to dispose of the returned stream.
+    /// </remarks>
+    Task<Stream> GetStreamAsync(string requestUri, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sends an asynchronous HTTP request to the specified URI and returns the result as an <see cref="ApiResult{T}"/>.

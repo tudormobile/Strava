@@ -93,3 +93,33 @@ public interface ISegmentEffortsApi
     Task<ApiResult<List<SegmentEffort>>> ListSegmentEffortsAsync(long segmentId, DateTime? startDateLocal = null, DateTime? endDateLocal = null, int? perPage = null, CancellationToken cancellationToken = default);
 }
 
+internal partial class StravaApiImpl
+{
+    /// <inheritdoc/>
+    Task<ApiResult<DetailedSegment>> ISegmentsApi.GetSegmentAsync(long id, CancellationToken cancellationToken)
+        => GetApiResultAsync<DetailedSegment>($"/segments/{id}", cancellationToken);
+
+    /// <inheritdoc/>
+    Task<ApiResult<List<Segment>>> ISegmentsApi.ListStarredSegmentsAsync(int? page, int? perPage, CancellationToken cancellationToken)
+        => GetApiResultAsync<List<Segment>>("/segments/starred", cancellationToken);
+
+    /// <inheritdoc/>
+    Task<ApiResult<SegmentList>> ISegmentsApi.ExploreSegmentsAsync(Bounds bounds, string? activityType, int? minimumCategory, int? maximumCategory, CancellationToken cancellationToken)
+        => GetApiResultAsync<SegmentList>(ApiExtensions.AddQueryToUriString($"/segments/explore",
+            [("bounds", bounds), ("activity_type", activityType), ("min_cat", minimumCategory), ("max_cat", maximumCategory)]),
+            cancellationToken);
+
+    /// <inheritdoc/>
+    Task<ApiResult<Segment>> ISegmentsApi.StarSegmentAsync(long id, bool removeStar, CancellationToken cancellationToken)
+        => PutApiResultAsync<StarState, Segment>($"/segments/{id}/starred", new StarState(!removeStar), cancellationToken);
+
+    /// <inheritdoc/>
+    Task<ApiResult<SegmentEffort>> ISegmentEffortsApi.GetSegmentEffortAsync(long id, CancellationToken cancellationToken)
+        => GetApiResultAsync<SegmentEffort>($"/segment_efforts/{id}", cancellationToken);
+
+    /// <inheritdoc/>
+    Task<ApiResult<List<SegmentEffort>>> ISegmentEffortsApi.ListSegmentEffortsAsync(long segmentId, DateTime? startDateLocal, DateTime? endDateLocal, int? perPage, CancellationToken cancellationToken)
+        => GetApiResultAsync<List<SegmentEffort>>(ApiExtensions.AddQueryToUriString($"/segment_efforts",
+            [("segment_id", segmentId), ("start_date_local", startDateLocal), ("end_date_local", endDateLocal), ("per_page", perPage)]),
+            cancellationToken);
+}

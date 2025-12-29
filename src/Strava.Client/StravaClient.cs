@@ -11,6 +11,16 @@ public class StravaClient : IStravaClient
 {
     private readonly ILogger _logger;
     private readonly StravaSession _session;
+    private readonly IActivitiesApi _activitiesApi;
+    private readonly IAthletesApi _athletesApi;
+    private readonly IClubsApi _clubsApi;
+    private readonly IGearsApi _gearsApi;
+    private readonly IRoutesApi _routesApi;
+    private readonly ISegmentsApi _segmentsApi;
+    private readonly IStreamsApi _streamsApi;
+    private readonly IUploadsApi _uploadsApi;
+
+    private Athlete? _athlete;
 
     /// <summary>
     /// Initializes a new instance of the StravaClient class using the specified HTTP client and client credentials.
@@ -75,13 +85,29 @@ public class StravaClient : IStravaClient
     /// <param name="logger">The logger used for diagnostic and error messages. If null, a no-op logger is used.</param>
     /// <param name="stravaAuthorization">The Strava authorization credentials, including client ID and client secret. Cannot be null, and both ClientId
     /// and ClientSecret must be non-empty strings.</param>
+    /// <param name="activitiesApi">Optional custom implementation of <see cref="IActivitiesApi"/>. If null, the default from session is used.</param>
+    /// <param name="athletesApi">Optional custom implementation of <see cref="IAthletesApi"/>. If null, the default from session is used.</param>
+    /// <param name="clubsApi">Optional custom implementation of <see cref="IClubsApi"/>. If null, the default from session is used.</param>
+    /// <param name="gearsApi">Optional custom implementation of <see cref="IGearsApi"/>. If null, the default from session is used.</param>
+    /// <param name="routesApi">Optional custom implementation of <see cref="IRoutesApi"/>. If null, the default from session is used.</param>
+    /// <param name="segmentsApi">Optional custom implementation of <see cref="ISegmentsApi"/>. If null, the default from session is used.</param>
+    /// <param name="streamsApi">Optional custom implementation of <see cref="IStreamsApi"/>. If null, the default from session is used.</param>
+    /// <param name="uploadsApi">Optional custom implementation of <see cref="IUploadsApi"/>. If null, the default from session is used.</param>
     /// <exception cref="ArgumentNullException">Thrown if httpClient is null, or if stravaAuthorization is null, or if stravaAuthorization.ClientId or
     /// stravaAuthorization.ClientSecret is null.</exception>
     /// <exception cref="ArgumentException">Thrown if stravaAuthorization.ClientId or stravaAuthorization.ClientSecret is an empty or whitespace string.</exception>
     public StravaClient(
         HttpClient httpClient,
         ILogger? logger,
-        StravaAuthorization stravaAuthorization
+        StravaAuthorization stravaAuthorization,
+        IActivitiesApi? activitiesApi = null,
+        IAthletesApi? athletesApi = null,
+        IClubsApi? clubsApi = null,
+        IGearsApi? gearsApi = null,
+        IRoutesApi? routesApi = null,
+        ISegmentsApi? segmentsApi = null,
+        IStreamsApi? streamsApi = null,
+        IUploadsApi? uploadsApi = null
         )
     {
         // Validate required parameters
@@ -97,11 +123,52 @@ public class StravaClient : IStravaClient
         _logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance;
         _session = new StravaSession(stravaAuthorization, httpClient);
 
+        // Optionally set custom API implementations
+        _activitiesApi = activitiesApi ?? _session.ActivitiesApi();
+        _athletesApi = athletesApi ?? _session.AthletesApi();
+        _clubsApi = clubsApi ?? _session.ClubsApi();
+        _gearsApi = gearsApi ?? _session.GearsApi();
+        _routesApi = routesApi ?? _session.RoutesApi();
+        _segmentsApi = segmentsApi ?? _session.SegmentsApi();
+        _streamsApi = streamsApi ?? _session.StreamsApi();
+        _uploadsApi = uploadsApi ?? _session.UploadsApi();
+
         _logger.LogDebug("StravaClient initialized (ClientId = {clientId}.", stravaAuthorization.ClientId); // the Id is NOT a secret
     }
 
     /// <inheritdoc/>
     public bool IsAuthenticated => _session.IsAuthenticated;
+
+    /// <inheritdoc/>
+    public Athlete? Athlete => _athlete;
+
+    /// <inheritdoc/>
+    public StravaSession Session => _session;
+
+    /// <inheritdoc/>
+    public async Task<ApiResult<StravaAuthorization>> RefreshAsync(CancellationToken cancellationToken = default)
+    {
+        var result = await _session.RefreshAsync(cancellationToken).ConfigureAwait(false);
+        if (result.Success && result.Data != null)
+        {
+            var athleteResult = await _session.StravaApi().GetAthleteAsync(result.Data.Id, cancellationToken).ConfigureAwait(false);
+            if (athleteResult.Success)
+            {
+                _athlete = athleteResult.Data;
+                _logger.LogInformation("StravaClient authenticated successfully. Athlete: Username={username}, Name={first} {last}, Id={id}.",
+                    _athlete!.Username, _athlete.FirstName, _athlete.LastName, _athlete.Id);
+            }
+            else
+            {
+                _logger.LogWarning("StravaClient authentication succeeded but failed to retrieve athlete info: {error}", athleteResult.Error?.Message);
+            }
+        }
+        else
+        {
+            _logger.LogError("StravaClient authentication failed: {error}", result.Error?.Message);
+        }
+        return result;
+    }
 
     /// <inheritdoc/>
     public Task<ApiResult<T>> GetApiResultAsync<T>(Uri requestUri, CancellationToken cancellationToken = default)
@@ -134,4 +201,29 @@ public class StravaClient : IStravaClient
     /// <inheritdoc/>
     public Task<ApiResult<TResult>> PostApiResultAsync<TResult>(string uriStringOrPath, HttpContent body, CancellationToken cancellationToken = default)
         => _session.StravaApi().PostApiResultAsync<TResult>(uriStringOrPath, body, cancellationToken);
+
+    /// <inheritdoc/>
+    public IActivitiesApi ActivitiesApi() => _activitiesApi;
+
+    /// <inheritdoc/>
+    public IAthletesApi AthletesApi() => _athletesApi;
+
+    /// <inheritdoc/>
+    public IClubsApi ClubsApi() => _clubsApi;
+
+    /// <inheritdoc/>
+    public IGearsApi GearsApi() => _gearsApi;
+
+    /// <inheritdoc/>
+    public IRoutesApi RoutesApi() => _routesApi;
+
+    /// <inheritdoc/>
+    public ISegmentsApi SegmentsApi() => _segmentsApi;
+
+    /// <inheritdoc/>
+    public IStreamsApi StreamsApi() => _streamsApi;
+
+    /// <inheritdoc/>
+    public IUploadsApi UploadsApi() => _uploadsApi;
+
 }

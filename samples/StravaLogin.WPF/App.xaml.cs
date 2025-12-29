@@ -125,7 +125,7 @@ namespace StravaLogin.WPF
                 _viewModel.StatusMessage = "Loading acivities ...";
 
                 var api = _session.ActivitiesApi();
-                var result = await api.GetAthleteAsync(id);
+                var result = await _session.StravaApi().GetAthleteAsync(id);
                 if (result.Success)
                 {
                     _viewModel.Athlete = result.Data;

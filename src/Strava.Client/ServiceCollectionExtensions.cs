@@ -12,6 +12,21 @@ namespace Tudormobile.Strava.Client;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
+    /// Adds the Strava activity repository and its dependencies to the service collection.
+    /// </summary>
+    /// <remarks>Registers <see cref="IStravaActivityRepository"/> as a singleton service. Call this method
+    /// during application startup to enable dependency injection for Strava activity data access.</remarks>
+    /// <param name="services">The service collection to which the Strava activity repository will be added.</param>
+    /// <returns>The same instance of <see cref="IServiceCollection"/> that was provided, to support method chaining.</returns>
+    public static IServiceCollection AddStravaActivityRepository(
+        this IServiceCollection services)
+    {
+        services.AddSingleton<IStravaActivityRepository, StravaActivityRepository>();
+        services.AddSingleton<IStravaActivityRepositoryContext, StravaActivityRepositoryContext>();
+        return services;
+    }
+
+    /// <summary>
     /// Adds Strava client services to the specified <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add services to.</param>

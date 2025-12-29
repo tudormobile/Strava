@@ -46,22 +46,22 @@ public interface IRoutesApi
     Task<ApiResult<GpxDocument>> ExportRouteGPXAsync(long id, CancellationToken cancellationToken = default);
 }
 
-internal partial class StravaApiImpl : IRoutesApi
+internal partial class StravaApiImpl
 {
     /// <inheritdoc/>
-    public Task<ApiResult<Route>> GetRouteAsync(long id, CancellationToken cancellationToken = default)
-        => GetApiResultAsync<Route>($"/routes/{id}", cancellationToken);
+    Task<ApiResult<Route>> IRoutesApi.GetRouteAsync(long id, CancellationToken cancellationToken)
+       => GetApiResultAsync<Route>($"/routes/{id}", cancellationToken);
 
     /// <inheritdoc/>
-    public Task<ApiResult<List<Route>>> ListAthleteRoutesAsync(long id, int? page = null, int? perPage = null, CancellationToken cancellationToken = default)
+    Task<ApiResult<List<Route>>> IRoutesApi.ListAthleteRoutesAsync(long id, int? page, int? perPage, CancellationToken cancellationToken)
         => GetApiResultAsync<List<Route>>(ApiExtensions.AddQueryToUriString($"/athletes/{id}/routes", [("page", page), ("per_page", perPage)]), cancellationToken);
 
     /// <inheritdoc/>
-    public Task<ApiResult<TcxDocument>> ExportRouteTCXAsync(long id, CancellationToken cancellationToken = default)
+    Task<ApiResult<TcxDocument>> IRoutesApi.ExportRouteTCXAsync(long id, CancellationToken cancellationToken)
         => GetApiResultAsync<TcxDocument>($"/routes/{id}/export_tcx", cancellationToken);
 
     /// <inheritdoc/>
-    public Task<ApiResult<GpxDocument>> ExportRouteGPXAsync(long id, CancellationToken cancellationToken = default)
+    Task<ApiResult<GpxDocument>> IRoutesApi.ExportRouteGPXAsync(long id, CancellationToken cancellationToken)
         => GetApiResultAsync<GpxDocument>($"/routes/{id}/export_gpx", cancellationToken);
 
 }
